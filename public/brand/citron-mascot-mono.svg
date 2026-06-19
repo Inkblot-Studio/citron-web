@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-labelledby="citron-mascot-mono-title citron-mascot-mono-desc">
+  <title id="citron-mascot-mono-title">Citron</title>
+  <desc id="citron-mascot-mono-desc">Single-color face mark; set fill and stroke via currentColor on a parent or the root SVG.</desc>
+  <g id="citron-mascot" stroke-linecap="butt" stroke-linejoin="miter">
+    <g id="mascot-eyes" fill="currentColor" stroke="none">
+      <g id="mascot-eye-left">
+        <rect x="31" y="17" width="13" height="34" />
+      </g>
+      <g id="mascot-eye-right">
+        <rect x="56" y="17" width="13" height="34" />
+      </g>
+    </g>
+    <g id="mascot-smile" fill="none" stroke="currentColor">
+      <path d="M 12 40 A 38 38 0 0 0 88 40" stroke-width="10" />
+    </g>
+  </g>
+</svg>

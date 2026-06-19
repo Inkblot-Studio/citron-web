@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Citron">
+  <rect width="100" height="100" rx="22" fill="#12110e" />
+  <g fill="#d9bc58" stroke="none">
+    <rect x="31" y="21" width="13" height="34" rx="1.5" />
+    <rect x="56" y="21" width="13" height="34" rx="1.5" />
+  </g>
+  <path d="M 14 44 A 38 38 0 0 0 86 44" fill="none" stroke="#d9bc58" stroke-width="10" />
+</svg>

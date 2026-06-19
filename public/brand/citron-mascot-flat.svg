@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-labelledby="t">
+  <title id="t">Citron</title>
+  <desc>Flat fills for raster icons (#c4a030 citron).</desc>
+  <g fill="#c4a030" stroke="none">
+    <rect x="31" y="17" width="13" height="34" />
+    <rect x="56" y="17" width="13" height="34" />
+  </g>
+  <path
+    fill="none"
+    stroke="#c4a030"
+    stroke-width="10"
+    stroke-linecap="butt"
+    stroke-linejoin="miter"
+    d="M 12 40 A 38 38 0 0 0 88 40"
+  />
+</svg>
