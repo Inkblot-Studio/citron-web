@@ -1,42 +1,40 @@
 'use client';
 
-import { acts, TOTAL_SCENES } from '@/lib/experience';
+import { TOTAL_SCENES } from '@/lib/experience';
 import { ExperienceProvider } from './ExperienceContext';
-import { ExperienceBackground } from './ExperienceBackground';
-import { IntelligenceTrunk } from './IntelligenceTrunk';
-import { MascotStage } from './MascotStage';
-import { HeroChapter } from './HeroChapter';
-import { Act } from './Act';
-import { CitronFinale } from './CitronFinale';
-import { InkblotChapter } from './InkblotChapter';
-import { FloatingCta } from './FloatingCta';
+import { MascotGuide } from './MascotGuide';
+import {
+  HeroSection,
+  ProblemSection,
+  CrmSection,
+  PlatformSection,
+  AiSection,
+  AutomationsSection,
+  ImpactSection,
+  WhySection,
+  InkblotSection,
+} from './sections';
 
 /**
- * The Citron experience — one continuous, cinematic descent. Three fixed
- * atmospheric layers (void, the living trunk, the mascot guide) sit behind a
- * single scrolling narrative of acts the visitor arrives at, settles into,
- * and travels beyond — all the way down to the trunk's origin: Inkblot Studio.
+ * Citron — a guided product story in nine chapters. The mascot is the
+ * narrator: a fixed companion (desktop) that travels to a dedicated spot in
+ * each chapter, never sharing space with the content. Clean, spacious,
+ * Apple-level pacing.
  */
 export function Experience() {
   return (
     <ExperienceProvider total={TOTAL_SCENES}>
       <div className="experience-root relative">
-        <ExperienceBackground />
-        <IntelligenceTrunk />
-        <MascotStage />
-
-        <div className="relative">
-          <HeroChapter />
-
-          {acts.map((act, i) => (
-            <Act key={act.id} act={act} position={i} />
-          ))}
-
-          <CitronFinale />
-          <InkblotChapter />
-        </div>
-
-        <FloatingCta />
+        <MascotGuide />
+        <HeroSection />
+        <ProblemSection />
+        <CrmSection />
+        <PlatformSection />
+        <AiSection />
+        <AutomationsSection />
+        <ImpactSection />
+        <WhySection />
+        <InkblotSection />
       </div>
     </ExperienceProvider>
   );

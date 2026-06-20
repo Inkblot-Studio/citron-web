@@ -1,47 +1,48 @@
-# Citron — The Experience
+# Citron — The Story
 
-The flagship interactive experience for **Citron**, the AI-powered Business Operating System, built by [Inkblot Studio](https://inkblotstudio.eu).
+The flagship marketing experience for **Citron**, the AI-powered Business Operating System, built by [Inkblot Studio](https://inkblotstudio.eu).
 
-> Your company. One intelligence.
+> One company. One system.
 
-Not a SaaS website — a guided journey through a living intelligence system. The Citron mascot is your companion the whole way down, travelling a digital intelligence trunk and pausing at ten checkpoints, each a deeper layer of Citron.
+An Apple-style product story told in nine distinct chapters, narrated by the Citron mascot — a living companion that travels to a dedicated place in every chapter and guides you through the platform with calm, deliberate motion.
 
-## The journey
+## The chapters
 
-One page. A guided descent through **ten checkpoints**, each reached as a milestone — the motion settles, a progress ring completes, the layer is named, and then the journey continues:
+1. **Welcome** — the mascot, large and confident, and one message.
+2. **The problem** — business is fragmented across too many tools.
+3. **Citron CRM** — the standalone product: leads, pipelines, opportunities.
+4. **The platform** — beyond CRM: AI, automations, finance, tasks, marketing, ops, collaboration.
+5. **AI in action** — plain-language prompts that do real work.
+6. **Automations** — work that runs itself.
+7. **Real impact** — metrics and proof.
+8. **Why Citron** — built for clarity.
+9. **Inkblot Studio** — the closing chapter: meet the makers.
 
-```
-Intro → 01 Why Citron Exists → 02 One Platform → 03 CRM Intelligence
-→ 04 Marketing Engine → 05 Automations → 06 AI Agents → 07 Finance
-→ 08 Operations → 09 Unified Intelligence → 10 The Future of Business
-→ Citron (Book a Demo) → Created by Inkblot Studio
-```
+The single call to action — **Book a Demo** — lives in the hero (and the nav).
 
-The only destination is **Book a Demo**. The final chapter reveals the maker — Inkblot Studio — as the trunk reaches its origin.
+## The mascot is the guide
 
-### The mascot — the main character
+The mascot is the narrator, never a background element. On desktop a single fixed companion travels to a fresh position each chapter (top-center, upper-right, left, lower-right, …), **always in the half opposite the content so nothing ever overlaps it**. It stays alive between moves — breathing, blinking, swaying, tracking the cursor — and performs an elegant move (spin, flip, pop) on each arrival. On mobile it leads each chapter from the top of the section.
 
-The mascot welcomes the visitor large and centered, then guides the entire journey: it pauses centered at each checkpoint, drifts toward each visual, carries a themed satellite engaged with the active layer, and returns to full scale at the climax. It reacts to the cursor with springed 3D tilt and parallax, breathes, blinks, and never disappears.
+The mascot SVG is the exact brand mark — two bars and a wide smile — animated, never modified.
 
-### The intelligence trunk
+## Design
 
-A living AI spine down the center: it fills with light as you descend, streams energy downward, drifts code fragments up from the data, races system pulses through the depths, and ignites nodes as you pass them.
-
-## Light & dark
-
-Light is the default experience — bright, clean, airy. A premium dark mode is one tap away via an animated toggle that crossfades the whole page with the View Transitions API. Every token is theme-aware; all foreground copy passes WCAG AA contrast in both themes.
+- **Apple/Linear-style Bento** — premium, spacious cards; clean backgrounds; one mood per chapter so each feels distinct.
+- **Light-first**, with a premium dark mode and an animated toggle (View Transitions crossfade). Every token is theme-aware and passes WCAG AA contrast.
+- No technical clutter — no particle fields, no spine. Whitespace, soft gradients, and motion that serves the story.
 
 ## Stack
 
 - **Next.js 15** (App Router, React 19, Server Components)
 - **TypeScript** (strict)
 - **Tailwind CSS v4** — design tokens as CSS variables (`--cine-*`), light + dark
-- **Framer Motion** — scroll-linked storytelling, motion values, springs, a scene-aware mascot
+- **Framer Motion** — the traveling guide, chapter reveals, micro-interactions
 - **Lucide** — iconography
 
 ## Pages
 
-- **`/`** — the Citron experience
+- **`/`** — the Citron story
 - **`/demo`** — Book a Demo
 - **`/legal/*`** — Privacy · Terms · Cookies (utility)
 
@@ -49,21 +50,13 @@ Light is the default experience — bright, clean, airy. A premium dark mode is 
 
 ```
 src/components/experience/
-  Experience.tsx            # orchestrator — provider + fixed layers + journey
-  ExperienceContext.tsx     # active-scene tracking (useScene / useExperience)
-  ExperienceBackground.tsx  # theme-aware void, auroras, grid, particle canvas
-  IntelligenceTrunk.tsx     # the living AI spine — fill, flow, fragments, nodes
-  MascotStage.tsx           # the companion: scene-driven travel + cursor 3D tilt
-  ExperienceMascot.tsx      # the living mascot mark
-  CheckpointMarker.tsx      # the milestone moment (progress ring)
-  CheckpointSection.tsx     # marker + discovery (headline, insight, visual)
-  ChapterVisuals.tsx        # the ten bespoke checkpoint scenes + registry
-  HeroChapter / CitronFinale / InkblotChapter / FloatingCta
-
-src/components/effects/
-  ThemeScript.tsx           # no-FOUC theme (light default)
-  ThemeProvider.tsx         # context + animated View-Transition toggle
-  ScrollProgress.tsx
+  Experience.tsx          # orchestrator — provider + guide + nine chapters
+  ExperienceContext.tsx   # active-chapter tracking (useScene / useExperience)
+  MascotGuide.tsx         # fixed desktop companion that travels per chapter
+  Mascot.tsx              # the exact mascot, alive (breathe, blink, gaze)
+  kit.tsx                 # Stage shell, chapter backgrounds, Bento cards
+  sections.tsx            # the nine chapters
+src/lib/experience.ts     # choreography (anchors, tricks) + chapter content
 ```
 
 ## Develop
@@ -78,15 +71,7 @@ npm run lint
 
 ## Configuration
 
-- `NEXT_PUBLIC_CALENDLY_URL` — when set, the Book a Demo page embeds your live Calendly inline widget. Without it, an elegant native scheduling experience is shown.
-
-## Performance & accessibility
-
-- GPU-only transforms (transform/opacity), capped particle count, paused when the tab is hidden
-- Static prerendering for every route
-- Full `prefers-reduced-motion` fallbacks across mascot, trunk, and every scene
-- Accessible theme toggle (44×44, `aria-label`, `aria-pressed`), visible focus, skip link, `aria-live` confirmation, tabular numerals
-- Per-page metadata, Open Graph + Twitter cards, a generated 1200×630 OG image, JSON-LD, `sitemap.xml`, `robots.txt`, web manifest
+- `NEXT_PUBLIC_CALENDLY_URL` — when set, the Book a Demo page embeds your live Calendly inline widget. Otherwise an elegant native scheduler is shown.
 
 ---
 

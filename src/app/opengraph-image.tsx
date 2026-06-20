@@ -22,9 +22,9 @@ export default function OgImage() {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <svg width="56" height="56" viewBox="0 0 100 100">
-            <rect x="31" y="17" width="13" height="34" rx="2" fill="#d9bc58" />
-            <rect x="56" y="17" width="13" height="34" rx="2" fill="#d9bc58" />
-            <path d="M 12 40 A 38 38 0 0 0 88 40" fill="none" stroke="#d9bc58" strokeWidth="10" />
+            <rect x="36" y="24" width="11" height="32" rx="2" fill="#d9bc58" />
+            <rect x="53" y="24" width="11" height="32" rx="2" fill="#d9bc58" />
+            <path d="M 22 46 A 28 28 0 0 0 78 46" fill="none" stroke="#d9bc58" strokeWidth="9" />
           </svg>
           <span style={{ color: '#f5f4f0', fontSize: 34, fontWeight: 600, letterSpacing: -1 }}>
             Citron
@@ -42,7 +42,7 @@ export default function OgImage() {
               maxWidth: 900,
             }}
           >
-            Your Company. One Intelligence.
+            One company. One system.
           </span>
           <span style={{ color: '#93928a', fontSize: 30, marginTop: 28, maxWidth: 820, lineHeight: 1.4 }}>
             The AI-powered operating system for modern business.
