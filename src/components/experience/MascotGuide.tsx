@@ -5,6 +5,7 @@ import {
   motion,
   useAnimationControls,
   useMotionValue,
+  useScroll,
   useSpring,
   useTransform,
   useReducedMotion,
@@ -16,24 +17,27 @@ import { scenes, ANCHOR_POS, type Trick } from '@/lib/experience';
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /**
- * The mascot guide — desktop only. A single fixed companion that travels to a
- * dedicated position in each chapter (always in the half opposite the
- * content, so it never overlaps anything), performing an elegant move on each
- * arrival and staying quietly alive in between.
+ * The mascot guide — desktop only. It travels continuously across the screen
+ * as you scroll, flowing from each chapter's dedicated anchor to the next
+ * (always in the half opposite the content, so it never overlaps anything),
+ * performing an elegant move on arrival and staying alive throughout.
  */
 export function MascotGuide() {
   const reduce = useReducedMotion();
   const { active } = useExperience();
   const [vp, setVp] = useState({ w: 1440, h: 900 });
+  const { scrollYProgress } = useScroll();
 
-  const idx = Math.min(active, scenes.length - 1);
-  const scene = scenes[idx];
-  const pos = ANCHOR_POS[scene.anchor];
+  const n = scenes.length;
+  const stops = scenes.map((_, i) => (n === 1 ? 0 : i / (n - 1)));
+  const xr = scenes.map((s) => ANCHOR_POS[s.anchor].x * vp.w);
+  const yr = scenes.map((s) => ANCHOR_POS[s.anchor].y * vp.h);
+  const sr = scenes.map((s) => s.scale);
 
-  // Travel — springs with slightly different rates give a natural arc.
-  const x = useSpring(pos.x * vp.w, { stiffness: 48, damping: 17, mass: 1.1 });
-  const y = useSpring(pos.y * vp.h, { stiffness: 42, damping: 16, mass: 1.1 });
-  const scale = useSpring(scene.scale, { stiffness: 60, damping: 16, mass: 1 });
+  // Continuous, scroll-linked travel across the viewport.
+  const x = useSpring(useTransform(scrollYProgress, stops, xr), { stiffness: 60, damping: 18, mass: 0.85 });
+  const y = useSpring(useTransform(scrollYProgress, stops, yr), { stiffness: 52, damping: 18, mass: 0.95 });
+  const scale = useSpring(useTransform(scrollYProgress, stops, sr), { stiffness: 60, damping: 18, mass: 0.85 });
 
   // Cursor → subtle tilt + gaze
   const mx = useMotionValue(0);
@@ -64,7 +68,7 @@ export function MascotGuide() {
     return () => window.removeEventListener('mousemove', onMove);
   }, [mx, my, reduce]);
 
-  // Perform an elegant move on each arrival.
+  // Elegant move when settling into a new chapter.
   useEffect(() => {
     if (reduce) return;
     if (firstRun.current) {

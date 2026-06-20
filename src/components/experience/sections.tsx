@@ -1,7 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Users,
   Sparkles,
@@ -18,6 +19,7 @@ import {
   Compass,
   ArrowRight,
   ArrowUpRight,
+  Check,
   Unplug,
   type LucideIcon,
 } from 'lucide-react';
@@ -29,7 +31,7 @@ import {
   automationFlow,
   impactMetrics,
   impactQuote,
-  whyReasons,
+  comparison,
   inkblotPillars,
 } from '@/lib/experience';
 import { siteConfig } from '@/lib/site';
@@ -177,20 +179,84 @@ export function AiSection() {
         }
         sub="Plain language in. Real work out."
       />
-      <div className="mt-8 space-y-3">
-        {aiActions.map((a, i) => (
-          <Card key={a.prompt} delay={i * 0.06} className="!p-5">
-            <p className="flex items-start gap-2 font-mono text-[0.85rem] text-cine">
-              <span className="text-[var(--cine-amber)]">›</span> {a.prompt}
-            </p>
-            <p className="mt-2 flex items-start gap-2 text-[0.82rem] leading-relaxed text-cine-dim">
-              <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--cine-amber)]" />
-              {a.outcome}
-            </p>
-          </Card>
+      <AiConsole />
+    </Stage>
+  );
+}
+
+/** A live console: the AI types a request, then shows the outcome — on a loop. */
+function AiConsole() {
+  const reduce = useReducedMotion();
+  const [i, setI] = useState(0);
+  const [typed, setTyped] = useState('');
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (reduce) {
+      setTyped(aiActions[0].prompt);
+      setDone(true);
+      return;
+    }
+    const current = aiActions[i];
+    setTyped('');
+    setDone(false);
+    let c = 0;
+    let timer: number;
+    const type = () => {
+      if (c <= current.prompt.length) {
+        setTyped(current.prompt.slice(0, c));
+        c += 1;
+        timer = window.setTimeout(type, 36);
+      } else {
+        timer = window.setTimeout(() => {
+          setDone(true);
+          timer = window.setTimeout(() => setI((p) => (p + 1) % aiActions.length), 2600);
+        }, 450);
+      }
+    };
+    timer = window.setTimeout(type, 320);
+    return () => window.clearTimeout(timer);
+  }, [i, reduce]);
+
+  return (
+    <Card className="mt-8 !p-6">
+      <div className="flex items-center gap-2 text-[var(--cine-amber)]">
+        <Sparkles className="h-4 w-4" />
+        <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-cine-dim">
+          Citron AI
+        </span>
+      </div>
+
+      <p className="mt-4 min-h-[3rem] font-mono text-[0.9rem] leading-relaxed text-cine">
+        <span className="text-[var(--cine-amber)]">›</span> {typed}
+        {!done && !reduce && (
+          <span
+            className="ml-0.5 inline-block h-[1.05em] w-[2px] translate-y-[0.18em] bg-[var(--cine-amber)]"
+            style={{ animation: 'caret-blink 1s step-end infinite' }}
+          />
+        )}
+      </p>
+
+      <motion.div
+        className="mt-3 flex items-start gap-2 rounded-[var(--radius-md)] border border-[rgba(var(--cine-particle),0.2)] bg-[rgba(var(--cine-particle),0.07)] p-3"
+        initial={{ opacity: 0, y: 8 }}
+        animate={done ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+        transition={{ duration: 0.45, ease: EASE }}
+      >
+        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--cine-amber)]" strokeWidth={3} />
+        <span className="text-[0.85rem] leading-relaxed text-cine-dim">{aiActions[i].outcome}</span>
+      </motion.div>
+
+      <div className="mt-4 flex gap-1.5">
+        {aiActions.map((_, k) => (
+          <span
+            key={k}
+            className="h-1 flex-1 rounded-full transition-colors duration-300"
+            style={{ background: k === i ? 'var(--cine-amber-bright)' : 'rgba(var(--cine-particle),0.2)' }}
+          />
         ))}
       </div>
-    </Stage>
+    </Card>
   );
 }
 
@@ -263,21 +329,43 @@ export function ImpactSection() {
 export function WhySection() {
   return (
     <Stage index={7}>
-      <SectionHead eyebrow="Why Citron" title={<>Built for clarity.</>} />
-      <div className="mt-8 grid grid-cols-2 gap-3">
-        {whyReasons.map((r, i) => {
-          const Icon = ICONS[r.icon] ?? Boxes;
-          return (
-            <Card key={r.title} delay={i * 0.06} className="!p-5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(var(--cine-particle),0.14)] text-[var(--cine-amber)]">
-                <Icon className="h-4 w-4" strokeWidth={1.8} />
-              </span>
-              <span className="mt-3 block text-[0.9rem] font-semibold text-cine">{r.title}</span>
-              <p className="mt-1.5 text-[0.82rem] leading-relaxed text-cine-dim">{r.desc}</p>
-            </Card>
-          );
-        })}
-      </div>
+      <SectionHead
+        eyebrow="Why Citron"
+        title={<>Built for clarity.</>}
+        sub="The same business, without the chaos."
+      />
+      <Card className="mt-8 overflow-hidden !p-0">
+        <table className="w-full border-collapse text-left">
+          <thead>
+            <tr className="border-b border-[var(--cine-line)] text-[0.66rem] uppercase tracking-[0.14em] text-cine-faint">
+              <th className="px-4 py-3 font-medium" />
+              <th className="px-4 py-3 font-medium">The old way</th>
+              <th className="px-4 py-3 font-medium text-[var(--cine-amber)]">With Citron</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparison.map((row, i) => (
+              <motion.tr
+                key={row.label}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 0.5, ease: EASE, delay: i * 0.08 }}
+                className="border-b border-[var(--cine-line)] last:border-0"
+              >
+                <td className="px-4 py-3 text-[0.85rem] font-semibold text-cine">{row.label}</td>
+                <td className="px-4 py-3 text-[0.85rem] text-cine-dim">{row.before}</td>
+                <td className="px-4 py-3 text-[0.85rem] text-cine">
+                  <span className="flex items-center gap-2">
+                    <Check className="h-3.5 w-3.5 shrink-0 text-[var(--cine-amber)]" strokeWidth={3} />
+                    {row.after}
+                  </span>
+                </td>
+              </motion.tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
     </Stage>
   );
 }

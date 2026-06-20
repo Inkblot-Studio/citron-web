@@ -518,8 +518,30 @@
 .animate-aura { animation: aura-pan 18s var(--ease-in-out-soft) infinite; }
 
 /* ============================================================
+   Scroll-snap chapters — each section settles before the next
+   ============================================================ */
+html.citron-snap {
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 0;
+}
+@media (max-width: 1023px) {
+  html.citron-snap {
+    scroll-snap-type: y proximity;
+  }
+}
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* ============================================================
    Reduced motion
    ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html.citron-snap {
+    scroll-snap-type: none;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

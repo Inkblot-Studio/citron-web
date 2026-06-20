@@ -48,7 +48,7 @@ export function useScene<T extends Element = HTMLDivElement>(
   index: number
 ): RefObject<T | null> {
   const ref = useRef<T>(null);
-  const inView = useInView(ref, { amount: 0.55, margin: '-20% 0px -20% 0px' });
+  const inView = useInView(ref, { amount: 0.5 });
   const { setActive } = useExperience();
 
   useEffect(() => {

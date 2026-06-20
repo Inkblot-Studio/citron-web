@@ -24,7 +24,8 @@ export function Stage({ index, children }: { index: number; children: ReactNode 
       ref={ref}
       id={scene.id}
       aria-label={scene.id}
-      className="relative w-full overflow-hidden"
+      data-theme={scene.dark ? 'dark' : undefined}
+      className="snap-section relative w-full overflow-hidden"
     >
       <SectionBackground mood={scene.mood} />
 

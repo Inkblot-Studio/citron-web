@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { TOTAL_SCENES } from '@/lib/experience';
 import { ExperienceProvider } from './ExperienceContext';
 import { MascotGuide } from './MascotGuide';
@@ -22,6 +23,11 @@ import {
  * Apple-level pacing.
  */
 export function Experience() {
+  useEffect(() => {
+    document.documentElement.classList.add('citron-snap');
+    return () => document.documentElement.classList.remove('citron-snap');
+  }, []);
+
   return (
     <ExperienceProvider total={TOTAL_SCENES}>
       <div className="experience-root relative">

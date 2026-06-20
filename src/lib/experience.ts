@@ -37,18 +37,20 @@ export type Scene = {
   trick: Trick;
   side: Side;
   mood: Mood;
+  /** Render this chapter as a dark panel (regardless of global theme). */
+  dark?: boolean;
 };
 
 export const scenes: Scene[] = [
   { id: 'hero', anchor: 'top-center', scale: 1.15, trick: 'none', side: 'center', mood: 'dawn' },
-  { id: 'problem', anchor: 'upper-right', scale: 0.8, trick: 'pop', side: 'left', mood: 'plain' },
+  { id: 'problem', anchor: 'upper-right', scale: 0.8, trick: 'pop', side: 'left', mood: 'deep', dark: true },
   { id: 'crm', anchor: 'left', scale: 0.82, trick: 'spin', side: 'right', mood: 'wash' },
-  { id: 'platform', anchor: 'lower-right', scale: 0.8, trick: 'flip', side: 'left', mood: 'surface' },
+  { id: 'platform', anchor: 'lower-right', scale: 0.8, trick: 'flip', side: 'left', mood: 'deep', dark: true },
   { id: 'ai', anchor: 'upper-left', scale: 0.8, trick: 'pop', side: 'right', mood: 'plain' },
-  { id: 'automations', anchor: 'center-right', scale: 0.82, trick: 'spin', side: 'left', mood: 'wash' },
+  { id: 'automations', anchor: 'center-right', scale: 0.82, trick: 'spin', side: 'left', mood: 'deep', dark: true },
   { id: 'impact', anchor: 'lower-left', scale: 0.8, trick: 'flip', side: 'right', mood: 'surface' },
   { id: 'why', anchor: 'upper-right', scale: 0.8, trick: 'pop', side: 'left', mood: 'plain' },
-  { id: 'inkblot', anchor: 'top-center', scale: 0.7, trick: 'spin', side: 'center', mood: 'deep' },
+  { id: 'inkblot', anchor: 'top-center', scale: 0.7, trick: 'spin', side: 'center', mood: 'deep', dark: true },
 ];
 
 export const TOTAL_SCENES = scenes.length;
@@ -109,6 +111,13 @@ export const impactQuote = {
   name: 'Maya Okafor',
   role: 'COO, Meridian Labs',
 };
+
+export const comparison: { label: string; before: string; after: string }[] = [
+  { label: 'Tools', before: '7+ disconnected apps', after: 'One system' },
+  { label: 'Your data', before: 'Scattered in silos', after: 'Single source of truth' },
+  { label: 'Busywork', before: 'Manual, every day', after: 'Automated by AI' },
+  { label: 'Setup', before: 'Weeks of wiring', after: 'Live in a day' },
+];
 
 export const whyReasons: { title: string; desc: string; icon: string }[] = [
   { title: 'One system', desc: 'Everything connected — nothing lost in silos.', icon: 'Boxes' },
