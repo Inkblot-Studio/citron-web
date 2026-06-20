@@ -1,19 +1,24 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
+import { useScene } from './ExperienceContext';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /**
- * The entry point of the journey. The mascot floats at center (rendered by
- * MascotStage); the hero contributes only a whispered headline below it and
- * an invitation to descend. Minimal by design.
+ * The entry point of the journey. The mascot welcomes the visitor — large and
+ * centered (rendered by MascotStage) — and the hero contributes only a
+ * whispered headline below it and an invitation to descend.
  */
 export function HeroChapter() {
   const reduce = useReducedMotion();
+  const ref = useScene<HTMLElement>(0);
 
   return (
-    <section className="relative z-30 flex min-h-[100svh] flex-col items-center justify-end pb-[16vh] text-center">
+    <section
+      ref={ref}
+      className="relative z-30 flex min-h-[100svh] flex-col items-center justify-end pb-[14vh] text-center"
+    >
       <div className="scrim px-6">
         <motion.p
           initial={{ opacity: 0, y: 12 }}

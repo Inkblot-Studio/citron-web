@@ -30,20 +30,21 @@ export default function DemoPage() {
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(120% 80% at 50% -10%, #16130d 0%, #0e0c08 45%, #0a0907 100%)',
+              'radial-gradient(120% 80% at 50% -10%, var(--cine-void-from) 0%, var(--cine-void-mid) 45%, var(--cine-void-to) 100%)',
           }}
         />
         <div
           className="absolute left-1/2 top-0 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle, rgba(217,188,88,0.14), transparent 65%)',
+            background:
+              'radial-gradient(circle, rgba(var(--cine-particle),0.14), transparent 65%)',
           }}
         />
         <div
           className="absolute inset-0 opacity-50"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(217,188,88,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(217,188,88,0.05) 1px, transparent 1px)',
+              'linear-gradient(rgba(var(--cine-particle),0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--cine-particle),0.05) 1px, transparent 1px)',
             backgroundSize: '72px 72px',
             maskImage: 'radial-gradient(70% 50% at 50% 25%, black, transparent 80%)',
             WebkitMaskImage: 'radial-gradient(70% 50% at 50% 25%, black, transparent 80%)',

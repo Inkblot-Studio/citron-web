@@ -23,7 +23,7 @@ export function ExperienceMascot() {
         className="absolute inset-[-30%] rounded-full"
         style={{
           background:
-            'radial-gradient(circle, rgba(217,188,88,0.28) 0%, rgba(196,160,48,0.10) 38%, transparent 68%)',
+            'radial-gradient(circle, rgba(var(--cine-particle),0.30) 0%, rgba(var(--cine-particle),0.10) 38%, transparent 68%)',
         }}
         animate={reduce ? undefined : { scale: [1, 1.08, 1], opacity: [0.75, 1, 0.75] }}
         transition={{ duration: 6, ease: 'easeInOut', repeat: Infinity }}
@@ -37,14 +37,14 @@ export function ExperienceMascot() {
       >
         <defs>
           <radialGradient id="cm-core" cx="50%" cy="42%" r="60%">
-            <stop offset="0%" stopColor="#211d15" />
-            <stop offset="62%" stopColor="#161309" />
-            <stop offset="100%" stopColor="#0c0a06" />
+            <stop offset="0%" stopColor="var(--cine-mascot-0)" />
+            <stop offset="62%" stopColor="var(--cine-mascot-1)" />
+            <stop offset="100%" stopColor="var(--cine-mascot-2)" />
           </radialGradient>
           <linearGradient id="cm-face" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#f3e3a6" />
-            <stop offset="55%" stopColor="#d9bc58" />
-            <stop offset="100%" stopColor="#bd9a2b" />
+            <stop offset="0%" stopColor="var(--cine-amber-bright)" />
+            <stop offset="55%" stopColor="var(--cine-amber-soft)" />
+            <stop offset="100%" stopColor="var(--cine-amber-deep)" />
           </linearGradient>
           <filter id="cm-soft" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="2.2" />
@@ -58,7 +58,7 @@ export function ExperienceMascot() {
           cy="100"
           r="58"
           fill="none"
-          stroke="rgba(217,188,88,0.35)"
+          stroke="rgba(var(--cine-particle),0.4)"
           strokeWidth="1"
         />
 

@@ -1,117 +1,188 @@
 /**
- * The Citron journey — narrative chapters.
- * Each chapter is a discovery, not a section. Copy stays minimal: the
- * visuals carry the story, the words punctuate it.
+ * The Citron journey — a guided descent through ten checkpoints, each a
+ * milestone the visitor reaches, absorbs, and travels beyond. Copy is kept
+ * deliberately short: the visuals and the mascot carry the story.
  */
 
-export type ChapterId =
+export type CheckpointVisual =
   | 'unification'
+  | 'platform'
   | 'crm'
   | 'marketing'
   | 'automations'
   | 'agents'
   | 'finance'
-  | 'operations';
+  | 'operations'
+  | 'convergence'
+  | 'future';
 
-export type Chapter = {
-  id: ChapterId;
-  /** Position of the chapter's content column on desktop. */
-  side: 'left' | 'right';
-  index: string;
-  eyebrow: string;
-  /** The headline — `accent` words within it are highlighted. */
+export type Checkpoint = {
+  number: string;
+  id: string;
+  /** Milestone title shown on the checkpoint marker. */
   title: string;
-  accent: string;
-  line: string;
+  /** Short content headline (≤ 4 words). */
+  headline: string;
+  /** A single concise line (≤ 6 words). */
+  tagline: string;
+  side: 'left' | 'right';
+  visual: CheckpointVisual;
+  /** One floating contextual insight. */
+  insight: { value: string; label: string };
 };
 
-export const chapters: Chapter[] = [
+export const checkpoints: Checkpoint[] = [
   {
-    id: 'unification',
+    number: '01',
+    id: 'why',
+    title: 'Why Citron Exists',
+    headline: 'Too many tools.',
+    tagline: 'Work scattered everywhere.',
     side: 'left',
-    index: '01',
-    eyebrow: 'The shift',
-    title: 'Too many tools. One intelligence.',
-    accent: 'One intelligence.',
-    line: 'A dozen disconnected apps, pulled into a single living system. Nothing falls through the cracks between tabs anymore.',
+    visual: 'unification',
+    insight: { value: '12+', label: 'apps replaced by one' },
   },
   {
+    number: '02',
+    id: 'platform',
+    title: 'One Platform',
+    headline: 'One system.',
+    tagline: 'Everything, connected.',
+    side: 'right',
+    visual: 'platform',
+    insight: { value: '1', label: 'system, not twelve' },
+  },
+  {
+    number: '03',
     id: 'crm',
-    side: 'right',
-    index: '02',
-    eyebrow: 'Relationships',
-    title: 'Every relationship, in context.',
-    accent: 'in context.',
-    line: 'Leads, accounts, and deals flow through the spine as living nodes — scored, enriched, and surfaced the moment they matter.',
+    title: 'CRM Intelligence',
+    headline: 'Relationships, in context.',
+    tagline: 'Every signal, surfaced.',
+    side: 'left',
+    visual: 'crm',
+    insight: { value: '360°', label: 'view of every account' },
   },
   {
+    number: '04',
     id: 'marketing',
-    side: 'left',
-    index: '03',
-    eyebrow: 'Reach',
-    title: 'Signals that find their audience.',
-    accent: 'find their audience.',
-    line: 'Campaigns ripple outward across every channel. Audiences light up. Engagement pulses back through the structure.',
+    title: 'Marketing Engine',
+    headline: 'Reach that resonates.',
+    tagline: 'Signals find their audience.',
+    side: 'right',
+    visual: 'marketing',
+    insight: { value: '4.2×', label: 'return on spend' },
   },
   {
+    number: '05',
     id: 'automations',
-    side: 'right',
-    index: '04',
-    eyebrow: 'Motion',
-    title: 'Workflows that build themselves.',
-    accent: 'build themselves.',
-    line: 'Describe an outcome. Citron assembles the triggers, conditions, and actions — and the paths form in front of you.',
+    title: 'Automations',
+    headline: 'It runs itself.',
+    tagline: 'Describe it. It’s done.',
+    side: 'left',
+    visual: 'automations',
+    insight: { value: '∞', label: 'workflows, no code' },
   },
   {
+    number: '06',
     id: 'agents',
-    side: 'left',
-    index: '05',
-    eyebrow: 'Intelligence',
-    title: 'A teammate for every workflow.',
-    accent: 'every workflow.',
-    line: 'Autonomous agents act across your data — qualifying, drafting, reconciling, and closing loops while you sleep.',
-  },
-  {
-    id: 'finance',
+    title: 'AI Agents',
+    headline: 'A teammate, always on.',
+    tagline: 'Acts on your data.',
     side: 'right',
-    index: '06',
-    eyebrow: 'Revenue',
-    title: 'Money, in motion.',
-    accent: 'in motion.',
-    line: 'Invoices emerge, payments land, and revenue streams flow through the branches — reconciled the moment they arrive.',
+    visual: 'agents',
+    insight: { value: '24/7', label: 'always working' },
   },
   {
-    id: 'operations',
+    number: '07',
+    id: 'finance',
+    title: 'Finance',
+    headline: 'Money, in motion.',
+    tagline: 'Invoiced. Paid. Reconciled.',
     side: 'left',
-    index: '07',
-    eyebrow: 'The whole company',
-    title: 'Everything, in sync.',
-    accent: 'in sync.',
-    line: 'Tasks, teams, and projects converge into one source of truth the entire company can finally trust.',
+    visual: 'finance',
+    insight: { value: '−68%', label: 'admin time' },
+  },
+  {
+    number: '08',
+    id: 'operations',
+    title: 'Operations',
+    headline: 'Everything in sync.',
+    tagline: 'One source of truth.',
+    side: 'right',
+    visual: 'operations',
+    insight: { value: '1', label: 'source of truth' },
+  },
+  {
+    number: '09',
+    id: 'unified',
+    title: 'Unified Intelligence',
+    headline: 'It all connects.',
+    tagline: 'One mind for the company.',
+    side: 'left',
+    visual: 'convergence',
+    insight: { value: '90%', label: 'less tool switching' },
+  },
+  {
+    number: '10',
+    id: 'future',
+    title: 'The Future of Business',
+    headline: 'Where business goes.',
+    tagline: 'Built for what’s next.',
+    side: 'right',
+    visual: 'future',
+    insight: { value: '99.9%', label: 'uptime, always on' },
   },
 ];
 
-/** Floating prompts the AI agent appears to execute, with its reply. */
+/** Scene map that drives the mascot's travel, pauses, and scale. */
+export type Scene = {
+  kind: 'hero' | 'marker' | 'content' | 'citron' | 'inkblot';
+  side?: 'left' | 'right';
+};
+
+export const scenes: Scene[] = (() => {
+  const list: Scene[] = [{ kind: 'hero' }];
+  for (const cp of checkpoints) {
+    list.push({ kind: 'marker' });
+    list.push({ kind: 'content', side: cp.side });
+  }
+  list.push({ kind: 'citron' });
+  list.push({ kind: 'inkblot' });
+  return list;
+})();
+
+export const TOTAL_SCENES = scenes.length;
+export const CITRON_INDEX = TOTAL_SCENES - 2;
+export const INKBLOT_INDEX = TOTAL_SCENES - 1;
+
+export function markerIndex(cpPosition: number) {
+  return 1 + cpPosition * 2;
+}
+export function contentIndex(cpPosition: number) {
+  return 2 + cpPosition * 2;
+}
+
+/** Floating prompts the AI agent appears to execute. */
 export const agentPrompts: { prompt: string; reply: string }[] = [
   {
-    prompt: 'Follow up with every lead that went quiet this week.',
-    reply: 'Drafted 18 personalized follow-ups across 3 segments — ready for review.',
+    prompt: 'Follow up with leads that went quiet.',
+    reply: 'Drafted 18 personalized follow-ups — ready for review.',
   },
   {
-    prompt: 'Create invoices for this month’s active clients.',
-    reply: '12 invoices generated · $148,200 queued with payment links.',
+    prompt: 'Invoice this month’s active clients.',
+    reply: '12 invoices · $148,200 queued with payment links.',
   },
   {
-    prompt: 'Which deals are at risk of slipping this quarter?',
-    reply: '6 deals flagged · $186K at risk — no contact in 12+ days.',
+    prompt: 'Which deals are at risk?',
+    reply: '6 deals flagged · $186K — no contact in 12+ days.',
   },
   {
-    prompt: 'Generate the weekly performance report.',
-    reply: 'Report ready · 4.2× ROAS · 312 MQLs · CAC down 19%.',
+    prompt: 'Generate the weekly report.',
+    reply: 'Ready · 4.2× ROAS · 312 MQLs · CAC down 19%.',
   },
 ];
 
-/** Tools that get absorbed into Citron in the unification chapter. */
+/** Tools absorbed into Citron in the first checkpoint. */
 export const fragmentedTools = [
   'CRM',
   'Spreadsheets',

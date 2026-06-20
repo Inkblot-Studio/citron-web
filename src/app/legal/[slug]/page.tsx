@@ -38,7 +38,7 @@ export default async function LegalPage({
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            'radial-gradient(120% 70% at 50% -10%, #16130d 0%, #0e0c08 45%, #0a0907 100%)',
+            'radial-gradient(120% 70% at 50% -10%, var(--cine-void-from) 0%, var(--cine-void-mid) 45%, var(--cine-void-to) 100%)',
         }}
       />
       <div className="mx-auto w-full max-w-[768px] px-5 sm:px-8 lg:px-10">

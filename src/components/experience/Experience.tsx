@@ -1,62 +1,47 @@
 'use client';
 
-import type { ComponentType } from 'react';
-import { chapters, type ChapterId } from '@/lib/experience';
+import { checkpoints, TOTAL_SCENES } from '@/lib/experience';
+import { ExperienceProvider } from './ExperienceContext';
 import { ExperienceBackground } from './ExperienceBackground';
 import { IntelligenceTrunk } from './IntelligenceTrunk';
 import { MascotStage } from './MascotStage';
-import { ChapterShell } from './ChapterShell';
 import { HeroChapter } from './HeroChapter';
-import { FinaleChapter } from './FinaleChapter';
+import { CheckpointSection } from './CheckpointSection';
+import { CitronFinale } from './CitronFinale';
+import { InkblotChapter } from './InkblotChapter';
 import { FloatingCta } from './FloatingCta';
-import {
-  UnificationVisual,
-  CrmVisual,
-  MarketingVisual,
-  AutomationsVisual,
-  AgentsVisual,
-  FinanceVisual,
-  OperationsVisual,
-} from './ChapterVisuals';
-
-const VISUALS: Record<ChapterId, ComponentType> = {
-  unification: UnificationVisual,
-  crm: CrmVisual,
-  marketing: MarketingVisual,
-  automations: AutomationsVisual,
-  agents: AgentsVisual,
-  finance: FinanceVisual,
-  operations: OperationsVisual,
-};
+import { VISUALS } from './ChapterVisuals';
 
 /**
- * The Citron experience — one continuous descent through the company's
- * intelligence. Three fixed atmospheric layers (void, trunk, mascot) sit
- * behind a single scrolling narrative of discoveries.
+ * The Citron experience — one continuous, guided descent through ten
+ * checkpoints. Three fixed atmospheric layers (void, trunk, mascot) sit
+ * behind a single scrolling narrative; the mascot, tracking the active
+ * scene, plays guide the whole way down to its origin at Inkblot Studio.
  */
 export function Experience() {
   return (
-    <div className="experience-root relative">
-      <ExperienceBackground />
-      <IntelligenceTrunk />
-      <MascotStage />
+    <ExperienceProvider total={TOTAL_SCENES}>
+      <div className="experience-root relative">
+        <ExperienceBackground />
+        <IntelligenceTrunk />
+        <MascotStage />
 
-      <div className="relative">
-        <HeroChapter />
+        <div className="relative">
+          <HeroChapter />
 
-        {chapters.map((chapter) => {
-          const Visual = VISUALS[chapter.id];
-          return (
-            <ChapterShell key={chapter.id} chapter={chapter}>
-              <Visual />
-            </ChapterShell>
-          );
-        })}
+          {checkpoints.map((cp, i) => {
+            const Visual = VISUALS[cp.visual];
+            return (
+              <CheckpointSection key={cp.id} cp={cp} position={i} visual={<Visual />} />
+            );
+          })}
 
-        <FinaleChapter />
+          <CitronFinale />
+          <InkblotChapter />
+        </div>
+
+        <FloatingCta />
       </div>
-
-      <FloatingCta />
-    </div>
+    </ExperienceProvider>
   );
 }

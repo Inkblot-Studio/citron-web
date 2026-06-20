@@ -110,17 +110,30 @@
   --hero-from: #fafaf7;
   --hero-to: #f3eddc;
 
-  /* Cinematic journey tokens — available app-wide */
-  --cine-bg-0: #0a0907;
-  --cine-bg-1: #100e0a;
-  --cine-bg-2: #16130d;
-  --cine-ink: #f6f3ea;
-  --cine-ink-dim: #b8b2a2;
-  --cine-ink-faint: #837e72;
-  --cine-amber: #d9bc58;
-  --cine-amber-soft: #e8d38a;
-  --cine-amber-deep: #c4a030;
-  --cine-line: rgba(217, 188, 88, 0.16);
+  /* Cinematic journey tokens — light (default) */
+  --cine-bg-0: #f7f5ef;
+  --cine-bg-1: #fbfaf6;
+  --cine-bg-2: #ffffff;
+  --cine-void-from: #ffffff;
+  --cine-void-mid: #f7f5ef;
+  --cine-void-to: #efeadd;
+  --cine-ink: #1d1c19;
+  --cine-ink-dim: #4d4c47;
+  --cine-ink-faint: #6b6a63;
+  --cine-amber: #8a6a16;
+  --cine-amber-bright: #c4a030;
+  --cine-amber-soft: #d9bc58;
+  --cine-amber-deep: #6f5817;
+  --cine-line: rgba(160, 125, 28, 0.26);
+  --cine-card: rgba(255, 255, 255, 0.74);
+  --cine-card-border: rgba(29, 28, 25, 0.1);
+  --cine-scrim-strong: rgba(247, 245, 239, 0.94);
+  --cine-scrim-soft: rgba(247, 245, 239, 0.55);
+  --cine-vignette: rgba(70, 58, 28, 0.06);
+  --cine-particle: 176, 138, 30;
+  --cine-mascot-0: #ffffff;
+  --cine-mascot-1: #fbf6e8;
+  --cine-mascot-2: #f1e8cf;
 
   color-scheme: light;
 }
@@ -154,6 +167,31 @@
   --hero-from: #0c0b09;
   --hero-to: #161410;
 
+  /* Cinematic journey tokens — dark */
+  --cine-bg-0: #0a0907;
+  --cine-bg-1: #100e0a;
+  --cine-bg-2: #16130d;
+  --cine-void-from: #16130d;
+  --cine-void-mid: #0e0c08;
+  --cine-void-to: #0a0907;
+  --cine-ink: #f6f3ea;
+  --cine-ink-dim: #b8b2a2;
+  --cine-ink-faint: #837e72;
+  --cine-amber: #e8d38a;
+  --cine-amber-bright: #d9bc58;
+  --cine-amber-soft: #f0dd9a;
+  --cine-amber-deep: #b8962c;
+  --cine-line: rgba(217, 188, 88, 0.18);
+  --cine-card: rgba(20, 18, 13, 0.7);
+  --cine-card-border: rgba(217, 188, 88, 0.16);
+  --cine-scrim-strong: rgba(8, 7, 5, 0.92);
+  --cine-scrim-soft: rgba(8, 7, 5, 0.55);
+  --cine-vignette: rgba(8, 7, 5, 0.55);
+  --cine-particle: 217, 188, 88;
+  --cine-mascot-0: #211d15;
+  --cine-mascot-1: #161309;
+  --cine-mascot-2: #0c0a06;
+
   color-scheme: dark;
 }
 
@@ -172,24 +210,25 @@
   }
 
   body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    background-color: var(--cine-bg-0);
+    color: var(--cine-ink);
     font-family: var(--font-sans);
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    transition: background-color 0.5s var(--ease-out-soft), color 0.5s var(--ease-out-soft);
   }
 
   ::selection {
     background-color: rgba(196, 160, 48, 0.22);
-    color: var(--text-primary);
+    color: var(--cine-ink);
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-sans);
-    color: var(--text-primary);
+    color: var(--cine-ink);
     text-wrap: balance;
   }
 
@@ -353,16 +392,6 @@
    Cinematic experience layer — the Citron journey
    ============================================================ */
 .experience-root {
-  --cine-bg-0: #0a0907;
-  --cine-bg-1: #100e0a;
-  --cine-bg-2: #16130d;
-  --cine-ink: #f6f3ea;
-  --cine-ink-dim: #b8b2a2;
-  --cine-ink-faint: #837e72;
-  --cine-amber: #d9bc58;
-  --cine-amber-soft: #e8d38a;
-  --cine-amber-deep: #c4a030;
-  --cine-line: rgba(217, 188, 88, 0.16);
   color: var(--cine-ink);
 }
 
@@ -378,8 +407,8 @@
   z-index: -1;
   background: radial-gradient(
     62% 62% at 50% 50%,
-    rgba(8, 7, 5, 0.92) 0%,
-    rgba(8, 7, 5, 0.62) 46%,
+    var(--cine-scrim-strong) 0%,
+    var(--cine-scrim-soft) 46%,
     transparent 80%
   );
   pointer-events: none;
@@ -402,25 +431,45 @@
 }
 
 .gradient-amber {
-  background: linear-gradient(180deg, #f3e3a6 0%, #d9bc58 48%, #be9b2c 100%);
+  background: linear-gradient(
+    175deg,
+    var(--cine-amber) 0%,
+    var(--cine-amber-deep) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .amber-glow {
-  filter: drop-shadow(0 0 18px rgba(217, 188, 88, 0.45));
+  filter: drop-shadow(0 0 18px rgba(var(--cine-particle), 0.4));
 }
 
 .cine-card {
-  background: linear-gradient(
-    180deg,
-    rgba(33, 30, 22, 0.72) 0%,
-    rgba(20, 18, 13, 0.72) 100%
-  );
-  border: 1px solid rgba(217, 188, 88, 0.14);
+  background: var(--cine-card);
+  border: 1px solid var(--cine-card-border);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* Smooth, animated light/dark crossfade via the View Transitions API */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.5s;
+  animation-timing-function: var(--ease-out-soft);
+}
+
+@keyframes data-rise {
+  from { transform: translateY(0); opacity: 0; }
+  10% { opacity: var(--rise-opacity, 0.5); }
+  90% { opacity: var(--rise-opacity, 0.5); }
+  to { transform: translateY(var(--rise-distance, -120px)); opacity: 0; }
+}
+@keyframes pulse-down {
+  from { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  to { top: 100%; opacity: 0; }
 }
 
 @keyframes trunk-flow {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ComponentType } from 'react';
 import { motion, useInView, useReducedMotion, type Variants } from 'framer-motion';
 import {
   Users,
@@ -10,8 +10,9 @@ import {
   ReceiptText,
   ListChecks,
   Sparkles,
+  ArrowUpRight,
 } from 'lucide-react';
-import { agentPrompts, fragmentedTools } from '@/lib/experience';
+import { agentPrompts, fragmentedTools, type CheckpointVisual } from '@/lib/experience';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -489,3 +490,237 @@ export function OperationsVisual() {
     </Stage>
   );
 }
+
+/* ============================================================
+   02 — One Platform: modules orbiting a single core
+   ============================================================ */
+const PLATFORM_NODES = ['CRM', 'Sales', 'Marketing', 'Tasks', 'Invoicing', 'Analytics', 'Agents', 'Inbox'];
+
+export function PlatformVisual() {
+  const reduce = useReducedMotion();
+  const R = 130;
+  return (
+    <Stage>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <svg viewBox="0 0 360 360" className="absolute inset-0 h-full w-full">
+          {PLATFORM_NODES.map((_, i) => {
+            const a = (i / PLATFORM_NODES.length) * Math.PI * 2 - Math.PI / 2;
+            return (
+              <motion.line
+                key={i}
+                x1="180"
+                y1="180"
+                x2={180 + Math.cos(a) * R}
+                y2={180 + Math.sin(a) * R}
+                stroke="var(--cine-line)"
+                strokeWidth="1"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, ease: EASE, delay: i * 0.06 }}
+              />
+            );
+          })}
+        </svg>
+
+        {/* core */}
+        <motion.div
+          className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full cine-card"
+          initial={{ scale: 0.6, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6, ease: EASE }}
+          style={{ boxShadow: '0 0 40px -6px rgba(var(--cine-particle),0.5)' }}
+        >
+          <Sparkles className="h-6 w-6 text-[var(--cine-amber)]" strokeWidth={1.6} />
+        </motion.div>
+
+        {/* module nodes */}
+        {PLATFORM_NODES.map((label, i) => {
+          const a = (i / PLATFORM_NODES.length) * Math.PI * 2 - Math.PI / 2;
+          return (
+            <motion.span
+              key={label}
+              className="absolute rounded-full cine-card px-3 py-1.5 text-[0.7rem] font-medium text-cine-dim"
+              style={{
+                left: `calc(50% + ${Math.cos(a) * R}px)`,
+                top: `calc(50% + ${Math.sin(a) * R}px)`,
+                transform: 'translate(-50%, -50%)',
+              }}
+              initial={{ opacity: 0, scale: 0.7 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.5, ease: EASE, delay: 0.3 + i * 0.06 }}
+            >
+              {!reduce && (
+                <motion.span
+                  className="pointer-events-none absolute inset-0 -z-10 rounded-full"
+                  animate={{ opacity: [0.2, 0.5, 0.2] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: i * 0.3 }}
+                  style={{ boxShadow: '0 0 16px -4px rgba(var(--cine-particle),0.6)' }}
+                />
+              )}
+              {label}
+            </motion.span>
+          );
+        })}
+      </div>
+    </Stage>
+  );
+}
+
+/* ============================================================
+   09 — Unified Intelligence: the network resolving into one
+   ============================================================ */
+const NET = [20, 70, 130, 200, 250, 310];
+
+export function ConvergenceVisual() {
+  const reduce = useReducedMotion();
+  const R = 132;
+  return (
+    <Stage>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <svg viewBox="0 0 360 360" className="absolute inset-0 h-full w-full">
+          {NET.map((deg, i) => {
+            const a = (deg * Math.PI) / 180;
+            const x = 180 + Math.cos(a) * R;
+            const y = 180 + Math.sin(a) * R;
+            return (
+              <g key={deg}>
+                <motion.line
+                  x1={x}
+                  y1={y}
+                  x2="180"
+                  y2="180"
+                  stroke="var(--cine-line)"
+                  strokeWidth="1"
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.7, ease: EASE, delay: i * 0.08 }}
+                />
+                {!reduce && (
+                  <motion.circle
+                    r="3"
+                    fill="var(--cine-amber-bright)"
+                    initial={{ cx: x, cy: y, opacity: 0 }}
+                    animate={{ cx: 180, cy: 180, opacity: [0, 1, 0] }}
+                    transition={{
+                      duration: 2.4,
+                      ease: 'easeInOut',
+                      repeat: Infinity,
+                      delay: i * 0.4,
+                    }}
+                  />
+                )}
+              </g>
+            );
+          })}
+        </svg>
+
+        {NET.map((deg) => {
+          const a = (deg * Math.PI) / 180;
+          return (
+            <span
+              key={deg}
+              className="absolute h-3 w-3 rounded-full bg-[var(--cine-amber-soft)]"
+              style={{
+                left: `calc(50% + ${Math.cos(a) * R}px)`,
+                top: `calc(50% + ${Math.sin(a) * R}px)`,
+                marginLeft: -6,
+                marginTop: -6,
+                boxShadow: '0 0 12px 2px rgba(var(--cine-particle),0.5)',
+              }}
+            />
+          );
+        })}
+
+        <motion.div
+          className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full"
+          initial={{ scale: 0.6, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.7, ease: EASE, delay: 0.4 }}
+          style={{
+            background:
+              'radial-gradient(circle, rgba(var(--cine-particle),0.35), transparent 70%)',
+            boxShadow: '0 0 50px 4px rgba(var(--cine-particle),0.4)',
+          }}
+        >
+          <Sparkles className="h-7 w-7 text-[var(--cine-amber)]" strokeWidth={1.6} />
+        </motion.div>
+      </div>
+    </Stage>
+  );
+}
+
+/* ============================================================
+   10 — The Future of Business: a horizon opening forward
+   ============================================================ */
+export function FutureVisual() {
+  const reduce = useReducedMotion();
+  return (
+    <Stage>
+      <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+        {/* horizon glow */}
+        <div
+          className="absolute bottom-[34%] h-40 w-[120%] blur-2xl"
+          style={{
+            background:
+              'radial-gradient(60% 100% at 50% 100%, rgba(var(--cine-particle),0.35), transparent 70%)',
+          }}
+        />
+        {/* receding rings */}
+        {!reduce &&
+          [0, 1, 2, 3].map((i) => (
+            <span
+              key={i}
+              className="absolute bottom-[34%] h-24 w-24 rounded-full border border-[var(--cine-amber-bright)]"
+              style={{ animation: `ring-expand 4s ease-out ${i}s infinite` }}
+            />
+          ))}
+        {/* forward beam */}
+        <motion.div
+          className="absolute bottom-[34%] flex h-12 w-12 items-center justify-center rounded-full cine-card text-[var(--cine-amber)]"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.7, ease: EASE }}
+          style={{ boxShadow: '0 0 30px -4px rgba(var(--cine-particle),0.6)' }}
+        >
+          <ArrowUpRight className="h-5 w-5" strokeWidth={1.8} />
+        </motion.div>
+        {/* rising sparks */}
+        {!reduce &&
+          [12, 38, 62, 88].map((left, i) => (
+            <span
+              key={left}
+              className="absolute bottom-[36%] h-1 w-1 rounded-full bg-[var(--cine-amber-soft)]"
+              style={{
+                left: `${left}%`,
+                ['--rise-distance' as string]: '-150px',
+                ['--rise-opacity' as string]: '0.6',
+                animation: `data-rise ${3 + i * 0.4}s ease-out ${i * 0.5}s infinite`,
+              }}
+            />
+          ))}
+      </div>
+    </Stage>
+  );
+}
+
+/* ============================================================
+   Registry — checkpoint visual key → component
+   ============================================================ */
+export const VISUALS: Record<CheckpointVisual, ComponentType> = {
+  unification: UnificationVisual,
+  platform: PlatformVisual,
+  crm: CrmVisual,
+  marketing: MarketingVisual,
+  automations: AutomationsVisual,
+  agents: AgentsVisual,
+  finance: FinanceVisual,
+  operations: OperationsVisual,
+  convergence: ConvergenceVisual,
+  future: FutureVisual,
+};

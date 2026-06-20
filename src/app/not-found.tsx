@@ -9,7 +9,7 @@ export default function NotFound() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            'radial-gradient(110% 70% at 50% 30%, #16130d 0%, #0e0c08 45%, #0a0907 100%)',
+            'radial-gradient(110% 70% at 50% 30%, var(--cine-void-from) 0%, var(--cine-void-mid) 45%, var(--cine-void-to) 100%)',
         }}
       />
       <div className="scrim">
@@ -30,13 +30,13 @@ export default function NotFound() {
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
             href="/"
-            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] bg-[var(--cine-amber)] px-7 text-[0.9375rem] font-semibold text-[#1d1c19] transition-colors hover:bg-[var(--cine-amber-soft)]"
+            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-7 text-[0.9375rem] font-semibold text-[#1d1c19] transition-[filter] hover:brightness-105"
           >
             Back to the journey
           </Link>
           <Link
             href="/demo"
-            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[0.9375rem] font-medium text-cine transition-colors hover:border-[var(--cine-amber)]"
+            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[0.9375rem] font-medium text-cine transition-colors hover:border-[var(--cine-amber-bright)]"
           >
             Book a Demo
           </Link>

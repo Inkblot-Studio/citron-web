@@ -1,15 +1,21 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/lib/site';
 import { Logo } from '@/components/ui/Logo';
 
 /**
- * A quiet coda. The finale carries the call to action; the footer only
- * signs the work and links the essentials.
+ * A quiet coda for the utility pages. On the home journey the Inkblot Studio
+ * chapter is the closing, so the footer steps aside there.
  */
 export function Footer() {
+  const pathname = usePathname();
+  if (pathname === '/') return null;
+
   const year = new Date().getFullYear();
   return (
-    <footer className="relative z-30 border-t border-[var(--cine-line)] bg-[#0a0907]">
+    <footer className="relative z-30 border-t border-[var(--cine-line)] bg-[var(--cine-bg-1)]">
       <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-6 px-5 py-10 sm:flex-row sm:px-8 lg:px-10">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-6">
           <Logo />

@@ -30,7 +30,7 @@ export function FloatingCta() {
         >
           <Link
             href="/demo"
-            className="group inline-flex items-center gap-2 rounded-full border border-[var(--cine-line)] bg-[rgba(16,14,10,0.7)] px-5 py-2.5 text-[0.875rem] font-medium text-cine backdrop-blur-md transition-colors duration-200 hover:border-[var(--cine-amber)] hover:text-[#f3e3a6]"
+            className="group inline-flex items-center gap-2 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-5 py-2.5 text-[0.875rem] font-medium text-cine backdrop-blur-md transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
           >
             <Calendar className="h-4 w-4 text-[var(--cine-amber)]" />
             Book a Demo
