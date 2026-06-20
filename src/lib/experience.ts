@@ -1,7 +1,8 @@
 /**
- * The Citron journey — a guided descent through ten checkpoints, each a
- * milestone the visitor reaches, absorbs, and travels beyond. Copy is kept
- * deliberately short: the visuals and the mascot carry the story.
+ * The Citron journey — a cinematic, guided descent. No visible checkpoints:
+ * each act is an "arrival" the visitor settles into (sticky pacing) while the
+ * mascot pauses, then the journey flows on. Copy stays concise; visuals and
+ * motion carry the story.
  */
 
 export type CheckpointVisual =
@@ -16,173 +17,237 @@ export type CheckpointVisual =
   | 'convergence'
   | 'future';
 
-export type Checkpoint = {
-  number: string;
+export type Trick = 'none' | 'spin' | 'flip' | 'pop';
+
+export type ActKind = 'feature' | 'product' | 'ai' | 'cases' | 'testimonials';
+
+export type Act = {
   id: string;
-  /** Milestone title shown on the checkpoint marker. */
-  title: string;
-  /** Short content headline (≤ 4 words). */
-  headline: string;
-  /** A single concise line (≤ 6 words). */
-  tagline: string;
+  kind: ActKind;
   side: 'left' | 'right';
-  visual: CheckpointVisual;
-  /** One floating contextual insight. */
-  insight: { value: string; label: string };
+  eyebrow: string;
+  headline: string;
+  body?: string;
+  points?: string[];
+  product?: 'CRM' | 'PLATFORM';
+  chips?: string[];
+  note?: string;
+  visual?: CheckpointVisual;
+  trick?: Trick;
+  /** Taller sticky dwell for moments that need reading time. */
+  dwell?: 'short' | 'long';
 };
 
-export const checkpoints: Checkpoint[] = [
+export const acts: Act[] = [
   {
-    number: '01',
-    id: 'why',
-    title: 'Why Citron Exists',
-    headline: 'Too many tools.',
-    tagline: 'Work scattered everywhere.',
+    id: 'problem',
+    kind: 'feature',
     side: 'left',
+    eyebrow: 'Why Citron exists',
+    headline: 'Business runs on too many tools.',
+    body: 'The average company juggles a dozen disconnected apps. Data scatters, context is lost between tabs, and work slips through the cracks.',
+    points: [
+      '12+ tools that don’t talk to each other',
+      'Hours lost to copy-paste and context-switching',
+      'No single source of truth',
+    ],
     visual: 'unification',
-    insight: { value: '12+', label: 'apps replaced by one' },
+    trick: 'none',
   },
   {
-    number: '02',
-    id: 'platform',
-    title: 'One Platform',
-    headline: 'One system.',
-    tagline: 'Everything, connected.',
+    id: 'what',
+    kind: 'feature',
     side: 'right',
+    eyebrow: 'What Citron is',
+    headline: 'One intelligence for the whole company.',
+    body: 'Citron unifies everything a business runs on into a single living system — with AI woven through every part of it.',
+    points: ['Every team, one platform', 'One source of truth', 'AI in every workflow'],
     visual: 'platform',
-    insight: { value: '1', label: 'system, not twelve' },
+    trick: 'pop',
   },
   {
-    number: '03',
     id: 'crm',
-    title: 'CRM Intelligence',
-    headline: 'Relationships, in context.',
-    tagline: 'Every signal, surfaced.',
+    kind: 'product',
+    product: 'CRM',
     side: 'left',
+    eyebrow: 'A product on its own',
+    headline: 'Citron CRM',
+    body: 'Start with the relationship layer. Citron CRM gives sales teams everything to manage customers and close deals — beautifully simple, quietly intelligent.',
+    chips: [
+      'Customer management',
+      'Sales pipelines',
+      'Lead tracking',
+      'Sales visibility',
+      'Relationship intelligence',
+    ],
     visual: 'crm',
-    insight: { value: '360°', label: 'view of every account' },
+    trick: 'pop',
+    dwell: 'long',
   },
   {
-    number: '04',
-    id: 'marketing',
-    title: 'Marketing Engine',
-    headline: 'Reach that resonates.',
-    tagline: 'Signals find their audience.',
+    id: 'platform',
+    kind: 'product',
+    product: 'PLATFORM',
     side: 'right',
-    visual: 'marketing',
-    insight: { value: '4.2×', label: 'return on spend' },
+    eyebrow: 'The complete operating system',
+    headline: 'Citron Platform',
+    body: 'Then it becomes everything. The Platform wraps your CRM in a full business operating system — every function, one intelligence.',
+    chips: [
+      'CRM included',
+      'AI agents',
+      'Automations',
+      'Finance & accounting',
+      'Marketing',
+      'Operations',
+      'Collaboration',
+      'Workflows',
+      'Business intelligence',
+    ],
+    note: 'CRM is one product. Platform is all of them — working as one.',
+    visual: 'platform',
+    trick: 'spin',
+    dwell: 'long',
   },
   {
-    number: '05',
-    id: 'automations',
-    title: 'Automations',
-    headline: 'It runs itself.',
-    tagline: 'Describe it. It’s done.',
+    id: 'ai',
+    kind: 'ai',
     side: 'left',
-    visual: 'automations',
-    insight: { value: '∞', label: 'workflows, no code' },
-  },
-  {
-    number: '06',
-    id: 'agents',
-    title: 'AI Agents',
-    headline: 'A teammate, always on.',
-    tagline: 'Acts on your data.',
-    side: 'right',
+    eyebrow: 'AI in action',
+    headline: 'Just ask.',
+    body: 'Citron’s AI doesn’t just store your data — it acts on it. Type a request in plain language and watch the work happen.',
     visual: 'agents',
-    insight: { value: '24/7', label: 'always working' },
+    trick: 'none',
+    dwell: 'long',
   },
   {
-    number: '07',
+    id: 'automations',
+    kind: 'feature',
+    side: 'right',
+    eyebrow: 'Automations & workflows',
+    headline: 'Describe it. It runs itself.',
+    body: 'Build workflows in plain language. Citron assembles the triggers, conditions, and actions across every module — and runs them while you sleep.',
+    points: [
+      'Natural-language builder',
+      'Cross-module triggers',
+      'Human-in-the-loop approvals',
+    ],
+    visual: 'automations',
+    trick: 'flip',
+  },
+  {
     id: 'finance',
-    title: 'Finance',
-    headline: 'Money, in motion.',
-    tagline: 'Invoiced. Paid. Reconciled.',
+    kind: 'feature',
     side: 'left',
+    eyebrow: 'Finance & accounting',
+    headline: 'Money that runs itself.',
+    body: 'Invoices send themselves, payments reconcile automatically, and your books stay closed — all from the same place you win the deal.',
+    points: ['Automated invoicing', 'Real-time P&L', 'AI-assisted reconciliation'],
     visual: 'finance',
-    insight: { value: '−68%', label: 'admin time' },
+    trick: 'none',
   },
   {
-    number: '08',
-    id: 'operations',
-    title: 'Operations',
-    headline: 'Everything in sync.',
-    tagline: 'One source of truth.',
+    id: 'collaboration',
+    kind: 'feature',
     side: 'right',
+    eyebrow: 'Teams & operations',
+    headline: 'Your team, perfectly in sync.',
+    body: 'Tasks, projects, docs, and conversations live next to the work — so the whole company moves on one source of truth, with data flowing everywhere it’s needed.',
+    points: ['Shared context', 'Tasks & projects', 'Data flows everywhere'],
     visual: 'operations',
-    insight: { value: '1', label: 'source of truth' },
+    trick: 'pop',
   },
   {
-    number: '09',
-    id: 'unified',
-    title: 'Unified Intelligence',
-    headline: 'It all connects.',
-    tagline: 'One mind for the company.',
+    id: 'cases',
+    kind: 'cases',
     side: 'left',
+    eyebrow: 'Who it’s for',
+    headline: 'Built for how you work.',
     visual: 'convergence',
-    insight: { value: '90%', label: 'less tool switching' },
+    trick: 'none',
+    dwell: 'long',
   },
   {
-    number: '10',
-    id: 'future',
-    title: 'The Future of Business',
-    headline: 'Where business goes.',
-    tagline: 'Built for what’s next.',
+    id: 'proof',
+    kind: 'testimonials',
     side: 'right',
+    eyebrow: 'Proof',
+    headline: 'Teams that made the switch.',
     visual: 'future',
-    insight: { value: '99.9%', label: 'uptime, always on' },
+    trick: 'none',
+    dwell: 'long',
   },
 ];
 
-/** Scene map that drives the mascot's travel, pauses, and scale. */
-export type Scene = {
-  kind: 'hero' | 'marker' | 'content' | 'citron' | 'inkblot';
-  side?: 'left' | 'right';
-};
-
-export const scenes: Scene[] = (() => {
-  const list: Scene[] = [{ kind: 'hero' }];
-  for (const cp of checkpoints) {
-    list.push({ kind: 'marker' });
-    list.push({ kind: 'content', side: cp.side });
-  }
-  list.push({ kind: 'citron' });
-  list.push({ kind: 'inkblot' });
-  return list;
-})();
-
-export const TOTAL_SCENES = scenes.length;
-export const CITRON_INDEX = TOTAL_SCENES - 2;
-export const INKBLOT_INDEX = TOTAL_SCENES - 1;
-
-export function markerIndex(cpPosition: number) {
-  return 1 + cpPosition * 2;
-}
-export function contentIndex(cpPosition: number) {
-  return 2 + cpPosition * 2;
-}
-
-/** Floating prompts the AI agent appears to execute. */
+/** AI prompts the agent appears to execute, with practical replies. */
 export const agentPrompts: { prompt: string; reply: string }[] = [
   {
-    prompt: 'Follow up with leads that went quiet.',
-    reply: 'Drafted 18 personalized follow-ups — ready for review.',
+    prompt: 'Generate this month’s revenue report',
+    reply: 'Done · $487K revenue · +18% MoM · top channel: organic',
   },
   {
-    prompt: 'Invoice this month’s active clients.',
-    reply: '12 invoices · $148,200 queued with payment links.',
+    prompt: 'Follow up with all inactive leads',
+    reply: '42 follow-ups drafted across 4 segments — ready to send',
   },
   {
-    prompt: 'Which deals are at risk?',
-    reply: '6 deals flagged · $186K — no contact in 12+ days.',
+    prompt: 'Create invoices for unpaid clients',
+    reply: '9 invoices · $63,400 issued with payment links',
   },
   {
-    prompt: 'Generate the weekly report.',
-    reply: 'Ready · 4.2× ROAS · 312 MQLs · CAC down 19%.',
+    prompt: 'Find opportunities at risk',
+    reply: '5 deals flagged · $214K — stalled 14+ days',
   },
 ];
 
-/** Tools absorbed into Citron in the first checkpoint. */
+/** Real-world scenarios and the outcome each team gets. */
+export const useCases: { role: string; outcome: string; metric: string }[] = [
+  { role: 'Agency Owner', outcome: 'Every client, project, and invoice in one place.', metric: '2 days/wk saved' },
+  { role: 'Sales Team', outcome: 'A pipeline that updates itself and flags risk early.', metric: '+32% win rate' },
+  { role: 'Marketing Team', outcome: 'Campaigns, audiences, and attribution that add up.', metric: '4.2× ROAS' },
+  { role: 'Operations Manager', outcome: 'One control room for the entire business.', metric: '1 source of truth' },
+  { role: 'Consultancy', outcome: 'Institutional knowledge, instantly accessible.', metric: '−68% admin' },
+  { role: 'Startup Founder', outcome: 'Run lean from day one, without tool sprawl.', metric: '7→1 tools' },
+  { role: 'Service Business', outcome: 'From first booking to final invoice, automated.', metric: 'Paid 2× faster' },
+];
+
+/** Testimonials that emerge with their headline metric. */
+export const proofs: {
+  quote: string;
+  name: string;
+  role: string;
+  company: string;
+  metric: string;
+  metricLabel: string;
+}[] = [
+  {
+    quote:
+      'We replaced seven tools with Citron in a month. The team stopped switching tabs and started shipping.',
+    name: 'Maya Okafor',
+    role: 'COO',
+    company: 'Meridian Labs',
+    metric: '7→1',
+    metricLabel: 'tools consolidated',
+  },
+  {
+    quote:
+      'The AI doesn’t just store our data — it acts on it. Deals at risk get flagged before I’d have noticed.',
+    name: 'Daniel Reyes',
+    role: 'VP Sales',
+    company: 'Northwind',
+    metric: '+32%',
+    metricLabel: 'win rate',
+  },
+  {
+    quote:
+      'Onboarding used to take three weeks of context. Now Citron answers instantly. Our knowledge left people’s heads.',
+    name: 'Sofia Lindqvist',
+    role: 'Founder',
+    company: 'Atlas Consulting',
+    metric: '−68%',
+    metricLabel: 'admin time',
+  },
+];
+
+/** Tools absorbed into Citron in the opening act. */
 export const fragmentedTools = [
   'CRM',
   'Spreadsheets',
@@ -195,3 +260,46 @@ export const fragmentedTools = [
   'Docs',
   'Support',
 ];
+
+/* ============================================================
+   Mascot choreography — a pose per scene (hero · acts · finale · origin)
+   ============================================================ */
+export type ScenePose = {
+  x: number; // -1..1 (× horizontal amplitude)
+  y: number; // -1..1 (× vertical amplitude)
+  scale: number;
+  rotate: number; // degrees of lean
+  opacity: number;
+  trick: Trick;
+  visual?: CheckpointVisual;
+};
+
+export const scenes: ScenePose[] = (() => {
+  const hero: ScenePose = { x: 0, y: 0.06, scale: 1.34, rotate: 0, opacity: 1, trick: 'none' };
+
+  const actPoses: ScenePose[] = acts.map((a, i) => {
+    const centered = a.kind === 'cases' || a.kind === 'testimonials' || a.kind === 'ai';
+    const visualDir = a.side === 'left' ? 1 : -1; // mascot drifts toward the visual
+    return {
+      x: centered ? (a.kind === 'ai' ? visualDir * 0.55 : 0) : visualDir * 0.92,
+      y: i % 2 === 0 ? -0.55 : 0.55,
+      scale: centered ? 0.52 : 0.6,
+      rotate: centered ? 0 : visualDir * -6,
+      opacity: a.kind === 'cases' || a.kind === 'testimonials' ? 0.62 : 0.9,
+      trick: a.trick ?? 'none',
+      visual: a.visual,
+    };
+  });
+
+  const citron: ScenePose = { x: 0, y: 0, scale: 1.28, rotate: 0, opacity: 1, trick: 'spin' };
+  const inkblot: ScenePose = { x: 0, y: 0.05, scale: 0.96, rotate: 0, opacity: 1, trick: 'none' };
+
+  return [hero, ...actPoses, citron, inkblot];
+})();
+
+export const TOTAL_SCENES = scenes.length;
+export const HERO_INDEX = 0;
+export const CITRON_INDEX = TOTAL_SCENES - 2;
+export const INKBLOT_INDEX = TOTAL_SCENES - 1;
+/** Scene index for the act at position `i` in `acts`. */
+export const actIndex = (i: number) => 1 + i;

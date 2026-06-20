@@ -1,22 +1,21 @@
 'use client';
 
-import { checkpoints, TOTAL_SCENES } from '@/lib/experience';
+import { acts, TOTAL_SCENES } from '@/lib/experience';
 import { ExperienceProvider } from './ExperienceContext';
 import { ExperienceBackground } from './ExperienceBackground';
 import { IntelligenceTrunk } from './IntelligenceTrunk';
 import { MascotStage } from './MascotStage';
 import { HeroChapter } from './HeroChapter';
-import { CheckpointSection } from './CheckpointSection';
+import { Act } from './Act';
 import { CitronFinale } from './CitronFinale';
 import { InkblotChapter } from './InkblotChapter';
 import { FloatingCta } from './FloatingCta';
-import { VISUALS } from './ChapterVisuals';
 
 /**
- * The Citron experience — one continuous, guided descent through ten
- * checkpoints. Three fixed atmospheric layers (void, trunk, mascot) sit
- * behind a single scrolling narrative; the mascot, tracking the active
- * scene, plays guide the whole way down to its origin at Inkblot Studio.
+ * The Citron experience — one continuous, cinematic descent. Three fixed
+ * atmospheric layers (void, the living trunk, the mascot guide) sit behind a
+ * single scrolling narrative of acts the visitor arrives at, settles into,
+ * and travels beyond — all the way down to the trunk's origin: Inkblot Studio.
  */
 export function Experience() {
   return (
@@ -29,12 +28,9 @@ export function Experience() {
         <div className="relative">
           <HeroChapter />
 
-          {checkpoints.map((cp, i) => {
-            const Visual = VISUALS[cp.visual];
-            return (
-              <CheckpointSection key={cp.id} cp={cp} position={i} visual={<Visual />} />
-            );
-          })}
+          {acts.map((act, i) => (
+            <Act key={act.id} act={act} position={i} />
+          ))}
 
           <CitronFinale />
           <InkblotChapter />
