@@ -2,7 +2,7 @@ export const siteConfig = {
   name: 'Citron',
   tagline: 'The Business Operating System',
   description:
-    'Replace dozens of disconnected tools with one AI-powered operating system built for modern business. CRM, marketing, finance, automation, and AI agents — unified.',
+    'Your company. One intelligence. Citron replaces dozens of disconnected tools with a single AI-powered operating system — CRM, marketing, automations, finance, and AI agents, unified.',
   url: 'https://citron.inkblotstudio.eu',
   ogImage: '/og.png',
   studio: {
@@ -20,60 +20,6 @@ export const siteConfig = {
     github: 'https://github.com',
   },
 } as const;
-
-export type NavLink = {
-  label: string;
-  href: string;
-  description?: string;
-};
-
-export const primaryNav: { label: string; href: string }[] = [
-  { label: 'Platform', href: '/platform' },
-  { label: 'AI', href: '/ai' },
-  { label: 'Solutions', href: '/solutions' },
-  { label: 'Pricing', href: '/pricing' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'About', href: '/about' },
-];
-
-export const footerNav: { title: string; links: NavLink[] }[] = [
-  {
-    title: 'Product',
-    links: [
-      { label: 'Platform', href: '/platform' },
-      { label: 'AI', href: '/ai' },
-      { label: 'Solutions', href: '/solutions' },
-      { label: 'Pricing', href: '/pricing' },
-      { label: 'Book a Demo', href: '/demo' },
-    ],
-  },
-  {
-    title: 'Company',
-    links: [
-      { label: 'About', href: '/about' },
-      { label: 'Blog', href: '/blog' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Inkblot Studio', href: 'https://inkblotstudio.eu' },
-    ],
-  },
-  {
-    title: 'Resources',
-    links: [
-      { label: 'Documentation', href: '/blog' },
-      { label: 'Changelog', href: '/blog' },
-      { label: 'Status', href: '/contact' },
-      { label: 'Security', href: '/legal/privacy' },
-    ],
-  },
-  {
-    title: 'Legal',
-    links: [
-      { label: 'Privacy', href: '/legal/privacy' },
-      { label: 'Terms', href: '/legal/terms' },
-      { label: 'Cookies', href: '/legal/cookies' },
-    ],
-  },
-];
 
 export type Module = {
   slug: string;

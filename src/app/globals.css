@@ -110,6 +110,18 @@
   --hero-from: #fafaf7;
   --hero-to: #f3eddc;
 
+  /* Cinematic journey tokens — available app-wide */
+  --cine-bg-0: #0a0907;
+  --cine-bg-1: #100e0a;
+  --cine-bg-2: #16130d;
+  --cine-ink: #f6f3ea;
+  --cine-ink-dim: #b8b2a2;
+  --cine-ink-faint: #837e72;
+  --cine-amber: #d9bc58;
+  --cine-amber-soft: #e8d38a;
+  --cine-amber-deep: #c4a030;
+  --cine-line: rgba(217, 188, 88, 0.16);
+
   color-scheme: light;
 }
 
@@ -336,6 +348,125 @@
   background-size: 200% 100%;
   animation: shimmer 2.4s ease-in-out infinite;
 }
+
+/* ============================================================
+   Cinematic experience layer — the Citron journey
+   ============================================================ */
+.experience-root {
+  --cine-bg-0: #0a0907;
+  --cine-bg-1: #100e0a;
+  --cine-bg-2: #16130d;
+  --cine-ink: #f6f3ea;
+  --cine-ink-dim: #b8b2a2;
+  --cine-ink-faint: #837e72;
+  --cine-amber: #d9bc58;
+  --cine-amber-soft: #e8d38a;
+  --cine-amber-deep: #c4a030;
+  --cine-line: rgba(217, 188, 88, 0.16);
+  color: var(--cine-ink);
+}
+
+/* Radial scrim behind text — guarantees legibility over any layer */
+.scrim {
+  position: relative;
+  isolation: isolate;
+}
+.scrim::before {
+  content: '';
+  position: absolute;
+  inset: -14% -10%;
+  z-index: -1;
+  background: radial-gradient(
+    62% 62% at 50% 50%,
+    rgba(8, 7, 5, 0.92) 0%,
+    rgba(8, 7, 5, 0.62) 46%,
+    transparent 80%
+  );
+  pointer-events: none;
+}
+
+.text-cine {
+  color: var(--cine-ink);
+}
+.text-cine-dim {
+  color: var(--cine-ink-dim);
+}
+.text-cine-faint {
+  color: var(--cine-ink-faint);
+}
+
+.eyebrow-cine {
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cine-amber);
+}
+
+.gradient-amber {
+  background: linear-gradient(180deg, #f3e3a6 0%, #d9bc58 48%, #be9b2c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.amber-glow {
+  filter: drop-shadow(0 0 18px rgba(217, 188, 88, 0.45));
+}
+
+.cine-card {
+  background: linear-gradient(
+    180deg,
+    rgba(33, 30, 22, 0.72) 0%,
+    rgba(20, 18, 13, 0.72) 100%
+  );
+  border: 1px solid rgba(217, 188, 88, 0.14);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+@keyframes trunk-flow {
+  to {
+    background-position: 0 240px;
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.12;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+@keyframes aura-pan {
+  0%,
+  100% {
+    transform: translate3d(-3%, -2%, 0) scale(1.04);
+  }
+  50% {
+    transform: translate3d(3%, 2%, 0) scale(1.12);
+  }
+}
+@keyframes ring-expand {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+@keyframes caret-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-aura { animation: aura-pan 18s var(--ease-in-out-soft) infinite; }
 
 /* ============================================================
    Reduced motion

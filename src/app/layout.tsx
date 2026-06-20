@@ -2,10 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { siteConfig } from '@/lib/site';
-import { ThemeScript } from '@/components/effects/ThemeScript';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { CursorGlow } from '@/components/effects/CursorGlow';
 import { ScrollProgress } from '@/components/effects/ScrollProgress';
 
 const inter = Inter({
@@ -73,13 +71,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fafaf7' },
-    { media: '(prefers-color-scheme: dark)', color: '#12110e' },
-  ],
+  themeColor: '#0a0907',
   width: 'device-width',
   initialScale: 1,
-  colorScheme: 'light dark',
+  colorScheme: 'dark',
 };
 
 const orgJsonLd = {
@@ -113,9 +108,12 @@ const softwareJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable}`}>
+    <html
+      lang="en"
+      data-theme="dark"
+      className={`${inter.variable} ${jetbrains.variable}`}
+    >
       <head>
-        <ThemeScript />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
@@ -125,7 +123,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
         />
       </head>
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen bg-[#0a0907] antialiased">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-[var(--accent)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#1d1c19]"
@@ -133,7 +131,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <ScrollProgress />
-        <CursorGlow />
         <Navbar />
         <main id="main">{children}</main>
         <Footer />
