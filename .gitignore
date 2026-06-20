@@ -32,3 +32,7 @@ yarn-error.log*
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+# agent skills (local tooling, not part of the site)
+/.agents/
+skills-lock.json
