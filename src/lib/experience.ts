@@ -274,25 +274,48 @@ export type ScenePose = {
   visual?: CheckpointVisual;
 };
 
-export const scenes: ScenePose[] = (() => {
-  const hero: ScenePose = { x: 0, y: 0.06, scale: 1.34, rotate: 0, opacity: 1, trick: 'none' };
+// A ring of fresh positions across the whole viewport — every feature reveal
+// lands somewhere different (upper-left, lower-right, center-right, …).
+const RING: { x: number; y: number; scale: number }[] = [
+  { x: -0.82, y: -0.55, scale: 0.64 }, // upper left, closer
+  { x: 0.82, y: -0.5, scale: 0.58 }, // upper right, further
+  { x: 0.9, y: 0.55, scale: 0.66 }, // lower right, closer
+  { x: -0.9, y: 0.52, scale: 0.56 }, // lower left, further
+  { x: 0.98, y: 0.02, scale: 0.62 }, // center right
+  { x: -0.98, y: 0.04, scale: 0.6 }, // center left
+];
+const RING_TRICKS: Trick[] = ['pop', 'spin', 'flip'];
 
-  const actPoses: ScenePose[] = acts.map((a, i) => {
-    const centered = a.kind === 'cases' || a.kind === 'testimonials' || a.kind === 'ai';
-    const visualDir = a.side === 'left' ? 1 : -1; // mascot drifts toward the visual
+export const scenes: ScenePose[] = (() => {
+  const hero: ScenePose = { x: 0, y: 0.04, scale: 1.34, rotate: 0, opacity: 1, trick: 'none' };
+
+  let ring = 0;
+  const actPoses: ScenePose[] = acts.map((a) => {
+    // Centered acts (AI, use-cases, testimonials) keep the mascot out of the
+    // way of the content so it never distracts while the visitor reads.
+    if (a.kind === 'ai') {
+      const dir = a.side === 'left' ? -1 : 1;
+      return { x: dir * 0.58, y: -0.08, scale: 0.54, rotate: dir * 4, opacity: 0.85, trick: 'none', visual: a.visual };
+    }
+    if (a.kind === 'cases' || a.kind === 'testimonials') {
+      return { x: 0, y: -0.62, scale: 0.46, rotate: 0, opacity: 0.55, trick: 'none', visual: a.visual };
+    }
+    const p = RING[ring % RING.length];
+    const trick = a.trick && a.trick !== 'none' ? a.trick : RING_TRICKS[ring % RING_TRICKS.length];
+    ring += 1;
     return {
-      x: centered ? (a.kind === 'ai' ? visualDir * 0.55 : 0) : visualDir * 0.92,
-      y: i % 2 === 0 ? -0.55 : 0.55,
-      scale: centered ? 0.52 : 0.6,
-      rotate: centered ? 0 : visualDir * -6,
-      opacity: a.kind === 'cases' || a.kind === 'testimonials' ? 0.62 : 0.9,
-      trick: a.trick ?? 'none',
+      x: p.x,
+      y: p.y,
+      scale: p.scale,
+      rotate: p.x < 0 ? 6 : -6, // lean inward, toward the content
+      opacity: 0.92,
+      trick,
       visual: a.visual,
     };
   });
 
   const citron: ScenePose = { x: 0, y: 0, scale: 1.28, rotate: 0, opacity: 1, trick: 'spin' };
-  const inkblot: ScenePose = { x: 0, y: 0.05, scale: 0.96, rotate: 0, opacity: 1, trick: 'none' };
+  const inkblot: ScenePose = { x: 0, y: 0.05, scale: 0.96, rotate: 0, opacity: 1, trick: 'pop' };
 
   return [hero, ...actPoses, citron, inkblot];
 })();
