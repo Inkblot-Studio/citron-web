@@ -27,14 +27,22 @@ export function MascotGuide() {
   const { active } = useExperience();
   const [vp, setVp] = useState({ w: 1440, h: 900 });
 
-  const idx = Math.min(active, scenes.length - 1);
-  const scene = scenes[idx];
-  const pos = ANCHOR_POS[scene.anchor];
-
   // Travel to the active chapter's anchor (exact centering on settle).
-  const x = useSpring(pos.x * vp.w, { stiffness: 52, damping: 18, mass: 1.05 });
-  const y = useSpring(pos.y * vp.h, { stiffness: 46, damping: 18, mass: 1.1 });
-  const scale = useSpring(scene.scale, { stiffness: 60, damping: 17, mass: 1 });
+  const targetX = useMotionValue(0);
+  const targetY = useMotionValue(0);
+  const targetScale = useMotionValue(1);
+  const x = useSpring(targetX, { stiffness: 52, damping: 18, mass: 1.05 });
+  const y = useSpring(targetY, { stiffness: 46, damping: 18, mass: 1.1 });
+  const scale = useSpring(targetScale, { stiffness: 60, damping: 17, mass: 1 });
+
+  useEffect(() => {
+    const idx = Math.min(active, scenes.length - 1);
+    const scene = scenes[idx];
+    const pos = ANCHOR_POS[scene.anchor];
+    targetX.set(pos.x * vp.w);
+    targetY.set(pos.y * vp.h);
+    targetScale.set(scene.scale);
+  }, [active, vp, targetX, targetY, targetScale]);
 
   // Cursor → subtle tilt + gaze
   const mx = useMotionValue(0);
