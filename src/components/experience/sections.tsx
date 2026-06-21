@@ -13,8 +13,6 @@ import {
   Building2,
   MessagesSquare,
   Boxes,
-  ShieldCheck,
-  Zap,
   Layers,
   Compass,
   ArrowRight,
@@ -27,6 +25,7 @@ import {
   problemTools,
   crmFeatures,
   platformModules,
+  platformPoints,
   aiActions,
   automationFlow,
   impactMetrics,
@@ -35,7 +34,7 @@ import {
   inkblotPillars,
 } from '@/lib/experience';
 import { siteConfig } from '@/lib/site';
-import { Stage, Card, SectionHead } from './kit';
+import { Stage, SplitStage, Card, SectionHead } from './kit';
 import { Magnetic } from './ambient/Magnetic';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -50,13 +49,11 @@ const ICONS: Record<string, LucideIcon> = {
   Building2,
   MessagesSquare,
   Boxes,
-  ShieldCheck,
-  Zap,
   Layers,
   Compass,
 };
 
-/* ---------- 1 · Hero ---------- */
+/* ---------- 1 · What is Citron? ---------- */
 export function HeroSection() {
   return (
     <Stage index={0}>
@@ -69,11 +66,13 @@ export function HeroSection() {
           The Business Operating System
         </span>
         <h1 className="mx-auto mt-5 max-w-3xl text-[2.9rem] font-semibold leading-[1.02] tracking-[-0.04em] text-cine sm:text-[4.25rem]">
-          One company. <span className="gradient-amber">One system.</span>
+          Run your whole company on{' '}
+          <span className="gradient-amber">one system.</span>
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-[1.125rem] leading-relaxed text-cine-dim">
-          Run sales, finance, and operations on a single intelligent platform —
-          calm, connected, and built to scale.
+          Citron unifies sales, finance, and operations into a single
+          intelligent platform — so your business runs as one, not as seven
+          disconnected tools.
         </p>
         <div className="mt-9 flex justify-center">
           <Magnetic strength={0.45}>
@@ -91,14 +90,18 @@ export function HeroSection() {
   );
 }
 
-/* ---------- 2 · The problem ---------- */
+/* ---------- 2 · Why are the old tools broken? ---------- */
 export function ProblemSection() {
   return (
     <Stage index={1}>
       <SectionHead
         eyebrow="The problem"
-        title={<>Business is fragmented.</>}
-        sub="Too many tools. Too many tabs. Nothing talks to each other."
+        title={
+          <>
+            Your business is <span className="gradient-amber">fragmented.</span>
+          </>
+        }
+        sub="Every tool holds a piece of the truth, and none of them talk. Teams lose hours to copy-paste, tab-switching, and numbers that never quite match."
       />
       <div className="mt-8 grid grid-cols-2 gap-3">
         {problemTools.map((tool, i) => (
@@ -114,7 +117,7 @@ export function ProblemSection() {
   );
 }
 
-/* ---------- 3 · Citron CRM ---------- */
+/* ---------- 3 · What is Citron CRM? ---------- */
 export function CrmSection() {
   return (
     <Stage index={2}>
@@ -122,10 +125,11 @@ export function CrmSection() {
         eyebrow="Citron CRM"
         title={
           <>
-            Relationships, <span className="gradient-amber">handled.</span>
+            The CRM your team will{' '}
+            <span className="gradient-amber">actually use.</span>
           </>
         }
-        sub="A standalone product for the people who close the deals."
+        sub="A focused, standalone product for the people who close the deals — built to be lived in, not fought with."
       />
       <div className="mt-8 grid grid-cols-2 gap-3">
         <Card className="col-span-2">
@@ -143,33 +147,58 @@ export function CrmSection() {
   );
 }
 
-/* ---------- 4 · The complete platform ---------- */
+/* ---------- 4 · What is Citron Platform? (centerpiece) ---------- */
 export function PlatformSection() {
   return (
-    <Stage index={3}>
-      <SectionHead
-        eyebrow="Citron Platform"
-        title={<>Beyond CRM.</>}
-        sub="Everything your company runs on, in one intelligent system."
-      />
-      <div className="mt-8 grid grid-cols-2 gap-3">
-        {platformModules.map((m, i) => {
-          const Icon = ICONS[m.icon] ?? Boxes;
-          return (
-            <Card key={m.name} delay={i * 0.04} className="!p-5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(var(--cine-particle),0.14)] text-[var(--cine-amber)]">
-                <Icon className="h-4 w-4" strokeWidth={1.8} />
-              </span>
-              <span className="mt-3 block text-[0.9rem] font-semibold text-cine">{m.name}</span>
-            </Card>
-          );
-        })}
-      </div>
-    </Stage>
+    <SplitStage
+      index={3}
+      left={
+        <>
+          <SectionHead
+            eyebrow="Citron Platform"
+            title={
+              <>
+                Bigger than a <span className="gradient-amber">CRM.</span>
+              </>
+            }
+            sub="CRM is only where it starts. Citron Platform runs everything else your company does, too — on the very same foundation."
+          />
+          <div className="mt-7 space-y-3">
+            {platformPoints.map((p, i) => {
+              const Icon = ICONS[p.icon] ?? Boxes;
+              return (
+                <Card key={p.title} delay={0.1 + i * 0.08} className="!p-5">
+                  <div className="flex items-center justify-end gap-2">
+                    <span className="text-[0.9rem] font-semibold text-cine">{p.title}</span>
+                    <Icon className="h-4 w-4 text-[var(--cine-amber)]" strokeWidth={1.8} />
+                  </div>
+                  <p className="mt-1.5 text-[0.82rem] leading-relaxed text-cine-dim">{p.desc}</p>
+                </Card>
+              );
+            })}
+          </div>
+        </>
+      }
+      right={
+        <div className="grid grid-cols-2 gap-3">
+          {platformModules.map((m, i) => {
+            const Icon = ICONS[m.icon] ?? Boxes;
+            return (
+              <Card key={m.name} delay={i * 0.04} className="!p-4">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(var(--cine-particle),0.14)] text-[var(--cine-amber)]">
+                  <Icon className="h-4 w-4" strokeWidth={1.8} />
+                </span>
+                <span className="mt-3 block text-[0.88rem] font-semibold text-cine">{m.name}</span>
+              </Card>
+            );
+          })}
+        </div>
+      }
+    />
   );
 }
 
-/* ---------- 5 · AI in action ---------- */
+/* ---------- 5 · How does AI help? ---------- */
 export function AiSection() {
   return (
     <Stage index={4}>
@@ -180,7 +209,7 @@ export function AiSection() {
             Just <span className="gradient-amber">ask.</span>
           </>
         }
-        sub="Plain language in. Real work out."
+        sub="Citron AI lives inside every workflow — drafting, summarizing, and doing real work across your whole business. Plain language in, finished work out."
       />
       <AiConsole />
     </Stage>
@@ -263,7 +292,7 @@ function AiConsole() {
   );
 }
 
-/* ---------- 6 · Automations ---------- */
+/* ---------- 6 · How does automation help? ---------- */
 export function AutomationsSection() {
   return (
     <Stage index={5}>
@@ -274,7 +303,7 @@ export function AutomationsSection() {
             Work that <span className="gradient-amber">runs itself.</span>
           </>
         }
-        sub="Set it once. Citron handles the rest."
+        sub="Connect a trigger to the work that should follow. Set it once, and Citron handles the rest — every time, without a missed step."
       />
       <div className="mt-8 space-y-2">
         {automationFlow.map((step, i) => (
@@ -303,39 +332,63 @@ export function AutomationsSection() {
   );
 }
 
-/* ---------- 7 · Real business impact ---------- */
+/* ---------- 7 · How does it impact businesses? (centerpiece) ---------- */
 export function ImpactSection() {
   return (
-    <Stage index={6}>
-      <SectionHead eyebrow="Real impact" title={<>Results, not promises.</>} />
-      <div className="mt-8 grid grid-cols-3 gap-3">
-        {impactMetrics.map((m, i) => (
-          <Card key={m.label} delay={i * 0.06} className="!p-5 text-center">
-            <div className="font-mono text-[1.6rem] font-semibold tabular-nums text-[var(--cine-amber)]">
-              {m.value}
-            </div>
-            <div className="mt-1 text-[0.72rem] leading-snug text-cine-faint">{m.label}</div>
-          </Card>
-        ))}
-      </div>
-      <Card delay={0.2} className="mt-3">
-        <blockquote className="text-[0.95rem] leading-relaxed text-cine">“{impactQuote.quote}”</blockquote>
-        <figcaption className="mt-3 text-[0.8125rem] text-cine-faint">
-          {impactQuote.name} · {impactQuote.role}
-        </figcaption>
-      </Card>
-    </Stage>
+    <SplitStage
+      index={6}
+      left={
+        <>
+          <SectionHead
+            eyebrow="Real impact"
+            title={
+              <>
+                Fewer tools.{' '}
+                <span className="gradient-amber">More momentum.</span>
+              </>
+            }
+            sub="What changes when a company finally runs on one system."
+          />
+          <div className="mt-7 grid grid-cols-3 gap-3 text-center">
+            {impactMetrics.map((m, i) => (
+              <Card key={m.label} delay={0.1 + i * 0.06} className="!p-4">
+                <div className="font-mono text-[1.5rem] font-semibold tabular-nums text-[var(--cine-amber)]">
+                  {m.value}
+                </div>
+                <div className="mt-1 text-[0.7rem] leading-snug text-cine-faint">{m.label}</div>
+              </Card>
+            ))}
+          </div>
+        </>
+      }
+      right={
+        <Card className="!p-7">
+          <div className="text-[2.5rem] leading-none text-[var(--cine-amber)]">“</div>
+          <blockquote className="mt-1 text-[1.05rem] leading-relaxed text-cine">
+            {impactQuote.quote}
+          </blockquote>
+          <figcaption className="mt-4 text-[0.8125rem] text-cine-faint">
+            <span className="font-semibold text-cine">{impactQuote.name}</span> · {impactQuote.role}
+          </figcaption>
+        </Card>
+      }
+    />
   );
 }
 
-/* ---------- 8 · Why Citron ---------- */
+/* ---------- 8 · Why is Citron different? ---------- */
 export function WhySection() {
   return (
     <Stage index={7}>
       <SectionHead
         eyebrow="Why Citron"
-        title={<>Built for clarity.</>}
-        sub="The same business, without the chaos."
+        title={
+          <>
+            The same business, without the{' '}
+            <span className="gradient-amber">chaos.</span>
+          </>
+        }
+        sub="One system instead of ten. AI by default. Your data, truly yours. Live in a day."
       />
       <Card className="mt-8 overflow-hidden !p-0">
         <table className="w-full border-collapse text-left">
@@ -373,7 +426,7 @@ export function WhySection() {
   );
 }
 
-/* ---------- 9 · Inkblot Studio (closing chapter) ---------- */
+/* ---------- 9 · Who built it & how to start? (closing centerpiece) ---------- */
 export function InkblotSection() {
   const year = new Date().getFullYear();
   return (
@@ -413,13 +466,22 @@ export function InkblotSection() {
         })}
       </div>
 
-      <div className="mt-8 flex justify-center">
+      <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <Magnetic strength={0.4}>
+          <Link
+            href="/demo"
+            className="group inline-flex h-[3.25rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-7 text-[0.9375rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)]"
+          >
+            Get started
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+          </Link>
+        </Magnetic>
+        <Magnetic strength={0.35}>
           <Link
             href={siteConfig.studio.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-6 py-3 text-[0.9375rem] font-semibold text-cine backdrop-blur-md transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
+            className="group inline-flex h-[3.25rem] items-center gap-2 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-6 text-[0.9375rem] font-semibold text-cine backdrop-blur-md transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
           >
             Explore Inkblot Studio
             <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

@@ -8,23 +8,32 @@ import {
   useMotionTemplate,
   useReducedMotion,
 } from 'framer-motion';
-import { scenes, type Mood, type Side } from '@/lib/experience';
+import { scenes, type Mood } from '@/lib/experience';
 import { useScene } from './ExperienceContext';
 import { AliveMascot } from './Mascot';
 import { cn } from '@/lib/cn';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/**
- * A chapter shell. Reserves the mascot's half of the stage (desktop) so
- * content never overlaps it, sets the chapter's background mood, and shows an
- * in-flow mascot on mobile where the fixed guide is hidden.
- */
-export function Stage({ index, children }: { index: number; children: ReactNode }) {
+/** The mobile, in-flow mascot — the fixed desktop guide is hidden < lg. */
+function MobileMascot() {
+  return (
+    <div className="flex justify-center pt-28 lg:hidden">
+      <AliveMascot className="h-40 w-40" />
+    </div>
+  );
+}
+
+/** Shared <section> wrapper: mood background, dark panel flag, snap target. */
+function Chapter({
+  index,
+  children,
+}: {
+  index: number;
+  children: ReactNode;
+}) {
   const scene = scenes[index];
   const ref = useScene<HTMLElement>(index);
-  const center = scene.side === 'center';
-
   return (
     <section
       ref={ref}
@@ -34,32 +43,68 @@ export function Stage({ index, children }: { index: number; children: ReactNode 
       className="snap-section relative w-full overflow-hidden"
     >
       <SectionBackground mood={scene.mood} />
-
       <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-10">
-        {/* Mobile mascot — the fixed guide is desktop-only */}
-        <div className="flex justify-center pt-28 lg:hidden">
-          <AliveMascot className="h-36 w-36" />
-        </div>
-
-        <div
-          className={cn(
-            'flex min-h-[80vh] flex-col py-16 lg:min-h-screen',
-            center
-              ? 'items-center justify-center text-center lg:justify-end lg:pb-[12vh] lg:pt-[36vh]'
-              : 'justify-center'
-          )}
-        >
-          <div className={cn('w-full', sideInner(scene.side))}>{children}</div>
-        </div>
+        {children}
       </div>
     </section>
   );
 }
 
-function sideInner(side: Side) {
-  if (side === 'left') return 'lg:max-w-[46%]';
-  if (side === 'right') return 'lg:ml-auto lg:max-w-[46%]';
-  return 'mx-auto max-w-[760px]';
+/**
+ * A chapter shell for the `above` / `left` / `right` layouts. Reserves the
+ * mascot's region (desktop) so content never overlaps it.
+ */
+export function Stage({ index, children }: { index: number; children: ReactNode }) {
+  const layout = scenes[index].layout;
+  const above = layout === 'above';
+
+  return (
+    <Chapter index={index}>
+      <MobileMascot />
+      <div
+        className={cn(
+          'flex min-h-[80vh] flex-col py-16 lg:min-h-screen',
+          above
+            ? 'items-center justify-center text-center lg:justify-end lg:pb-[12vh] lg:pt-[42vh]'
+            : 'justify-center'
+        )}
+      >
+        <div className={cn('w-full', laneFor(layout))}>{children}</div>
+      </div>
+    </Chapter>
+  );
+}
+
+function laneFor(layout: string) {
+  if (layout === 'left') return 'lg:ml-auto lg:max-w-[46%]'; // mascot left → content right
+  if (layout === 'right') return 'lg:max-w-[46%]'; //            mascot right → content left
+  return 'mx-auto max-w-[760px]'; //                            above → centered column
+}
+
+/**
+ * The centerpiece (`split`) layout — the mascot sits dead-center and is flanked
+ * by two balanced content columns, keynote-style. The center grid track is left
+ * empty so the fixed mascot has the stage to itself.
+ */
+export function SplitStage({
+  index,
+  left,
+  right,
+}: {
+  index: number;
+  left: ReactNode;
+  right: ReactNode;
+}) {
+  return (
+    <Chapter index={index}>
+      <MobileMascot />
+      <div className="flex min-h-[80vh] flex-col justify-center gap-12 py-16 lg:grid lg:min-h-screen lg:grid-cols-[1fr_clamp(17rem,23vw,25rem)_1fr] lg:items-center lg:gap-6">
+        <div className="lg:pr-4 lg:text-right">{left}</div>
+        <div aria-hidden className="hidden lg:block" />
+        <div className="lg:pl-4">{right}</div>
+      </div>
+    </Chapter>
+  );
 }
 
 /* ============================================================

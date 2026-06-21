@@ -1,77 +1,75 @@
 /**
- * The Citron story — nine distinct chapters. The mascot is the guide: it
- * travels to a dedicated position in each chapter (and never shares space
- * with content). This file holds the choreography and the chapter content.
+ * The Citron story — nine chapters, each answering one question. The mascot is
+ * the guide: it is intentionally placed in every chapter (never on a predictable
+ * left-right loop), and several chapters make it the centerpiece with content
+ * balanced around it. This file holds the choreography and the chapter content.
  */
 
-export type Anchor =
-  | 'top-center'
-  | 'upper-right'
-  | 'left'
-  | 'lower-right'
-  | 'upper-left'
-  | 'center-right'
-  | 'lower-left'
-  | 'center';
-
 export type Trick = 'none' | 'spin' | 'flip' | 'pop';
-export type Side = 'left' | 'right' | 'center';
 export type Mood = 'dawn' | 'plain' | 'wash' | 'surface' | 'deep';
 
-/** Mascot anchor as a fraction of the viewport (desktop guide). */
-export const ANCHOR_POS: Record<Anchor, { x: number; y: number }> = {
-  'top-center': { x: 0.5, y: 0.17 },
-  'upper-right': { x: 0.75, y: 0.28 },
-  left: { x: 0.24, y: 0.5 },
-  'lower-right': { x: 0.76, y: 0.7 },
-  'upper-left': { x: 0.25, y: 0.28 },
-  'center-right': { x: 0.78, y: 0.5 },
-  'lower-left': { x: 0.24, y: 0.72 },
-  center: { x: 0.5, y: 0.44 },
-};
+/**
+ * Where the content sits relative to the mascot:
+ *  · above — mascot floats high & centered, content reads below it (centerpiece)
+ *  · left  — mascot on the left,  content on the right
+ *  · right — mascot on the right, content on the left
+ *  · split — mascot dead-center, content balanced in two columns around it
+ */
+export type Layout = 'above' | 'left' | 'right' | 'split';
 
 export type Scene = {
   id: string;
-  anchor: Anchor;
+  layout: Layout;
+  /** Mascot position as a fraction of the viewport (desktop guide). */
+  pos: { x: number; y: number };
   scale: number;
   trick: Trick;
-  side: Side;
   mood: Mood;
   /** Render this chapter as a dark panel (regardless of global theme). */
   dark?: boolean;
 };
 
 export const scenes: Scene[] = [
-  { id: 'hero', anchor: 'top-center', scale: 1.22, trick: 'none', side: 'center', mood: 'dawn' },
-  { id: 'problem', anchor: 'upper-right', scale: 0.9, trick: 'pop', side: 'left', mood: 'deep', dark: true },
-  { id: 'crm', anchor: 'left', scale: 0.92, trick: 'spin', side: 'right', mood: 'wash' },
-  { id: 'platform', anchor: 'lower-right', scale: 0.9, trick: 'flip', side: 'left', mood: 'deep', dark: true },
-  { id: 'ai', anchor: 'upper-left', scale: 0.9, trick: 'pop', side: 'right', mood: 'plain' },
-  { id: 'automations', anchor: 'center-right', scale: 0.92, trick: 'spin', side: 'left', mood: 'deep', dark: true },
-  { id: 'impact', anchor: 'lower-left', scale: 0.9, trick: 'flip', side: 'right', mood: 'surface' },
-  { id: 'why', anchor: 'upper-right', scale: 0.9, trick: 'pop', side: 'left', mood: 'plain' },
-  { id: 'inkblot', anchor: 'top-center', scale: 0.72, trick: 'spin', side: 'center', mood: 'deep', dark: true },
+  // 1 · What is Citron?            — centerpiece intro
+  { id: 'hero', layout: 'above', pos: { x: 0.5, y: 0.3 }, scale: 1.25, trick: 'none', mood: 'dawn' },
+  // 2 · Why are tools broken?      — mascot right, content left
+  { id: 'problem', layout: 'right', pos: { x: 0.8, y: 0.34 }, scale: 0.92, trick: 'pop', mood: 'deep', dark: true },
+  // 3 · What is Citron CRM?        — mascot left (low), content right
+  { id: 'crm', layout: 'left', pos: { x: 0.2, y: 0.6 }, scale: 0.95, trick: 'spin', mood: 'wash' },
+  // 4 · What is Citron Platform?   — CENTERPIECE, modules flank the mascot
+  { id: 'platform', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.86, trick: 'flip', mood: 'deep', dark: true },
+  // 5 · How does AI help?          — mascot right, console left
+  { id: 'ai', layout: 'right', pos: { x: 0.8, y: 0.4 }, scale: 0.92, trick: 'pop', mood: 'plain' },
+  // 6 · How does automation help?  — mascot left, flow right
+  { id: 'automations', layout: 'left', pos: { x: 0.2, y: 0.5 }, scale: 0.95, trick: 'spin', mood: 'deep', dark: true },
+  // 7 · How does it impact?        — CENTERPIECE, metrics vs. voice
+  { id: 'impact', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.86, trick: 'flip', mood: 'surface' },
+  // 8 · Why is it different?       — mascot right (high), table left
+  { id: 'why', layout: 'right', pos: { x: 0.78, y: 0.33 }, scale: 0.92, trick: 'pop', mood: 'plain' },
+  // 9 · Who built it / start       — closing centerpiece
+  { id: 'inkblot', layout: 'above', pos: { x: 0.5, y: 0.3 }, scale: 0.78, trick: 'spin', mood: 'deep', dark: true },
 ];
 
 export const TOTAL_SCENES = scenes.length;
 
 /* ---------- chapter content ---------- */
 
+/** The scattered stack — the everyday reality Citron replaces. */
 export const problemTools = [
   'CRM',
   'Spreadsheets',
-  'Email',
-  'Invoicing',
-  'Chat',
-  'Calendar',
+  'Email threads',
+  'Invoicing app',
+  'Team chat',
+  'Shared calendar',
 ];
 
 export const crmFeatures: { title: string; desc: string }[] = [
-  { title: 'Leads', desc: 'Capture and route every inbound automatically.' },
-  { title: 'Pipelines', desc: 'Visual stages that update from real signals.' },
-  { title: 'Opportunities', desc: 'See the deals worth your time.' },
-  { title: 'Customers', desc: 'Every relationship, in full context.' },
-  { title: 'Sales visibility', desc: 'Forecast with quiet confidence.' },
+  { title: 'Leads', desc: 'Capture every inbound and route it in seconds — nothing slips.' },
+  { title: 'Pipelines', desc: 'Visual stages that move themselves as deals progress.' },
+  { title: 'Opportunities', desc: 'Always know which deals truly deserve your time.' },
+  { title: 'Customers', desc: 'Every conversation, contract, and detail in one view.' },
+  { title: 'Forecasting', desc: 'Predict revenue with numbers you can actually trust.' },
 ];
 
 export const platformModules: { name: string; icon: string }[] = [
@@ -85,24 +83,30 @@ export const platformModules: { name: string; icon: string }[] = [
   { name: 'Collaboration', icon: 'MessagesSquare' },
 ];
 
+/** Two highlight points for the platform centerpiece (left column). */
+export const platformPoints: { title: string; desc: string; icon: string }[] = [
+  { title: 'One source of truth', desc: 'Every team works from the same live data — no more reconciling.', icon: 'Boxes' },
+  { title: 'Every function, connected', desc: 'Sales to finance to ops, woven into a single system.', icon: 'Workflow' },
+];
+
 export const aiActions: { prompt: string; outcome: string }[] = [
-  { prompt: 'Create invoices for unpaid customers', outcome: '9 invoices · $63,400 sent with payment links' },
-  { prompt: 'Generate a monthly report', outcome: 'Revenue, churn and runway — ready to share' },
-  { prompt: 'Follow up with inactive leads', outcome: '42 personalized emails drafted for review' },
-  { prompt: 'Summarize this meeting', outcome: 'Notes, decisions and action items captured' },
+  { prompt: 'Invoice every customer with an overdue balance', outcome: '9 invoices · $63,400 sent with payment links' },
+  { prompt: 'Build this month’s revenue report', outcome: 'Revenue, churn and runway — ready to share' },
+  { prompt: 'Re-engage leads that have gone quiet', outcome: '42 personalized emails drafted for your review' },
+  { prompt: 'Turn this meeting into next steps', outcome: 'Notes, decisions and owners captured automatically' },
 ];
 
 export const automationFlow: { label: string; kind: 'trigger' | 'action' }[] = [
-  { label: 'When a deal is won', kind: 'trigger' },
-  { label: 'Create the invoice', kind: 'action' },
-  { label: 'Notify the team', kind: 'action' },
-  { label: 'Schedule onboarding', kind: 'action' },
+  { label: 'A deal is marked won', kind: 'trigger' },
+  { label: 'Generate and send the invoice', kind: 'action' },
+  { label: 'Alert the delivery team', kind: 'action' },
+  { label: 'Kick off customer onboarding', kind: 'action' },
 ];
 
 export const impactMetrics: { value: string; label: string }[] = [
-  { value: '7→1', label: 'tools consolidated' },
-  { value: '+32%', label: 'win rate' },
-  { value: '−68%', label: 'admin time' },
+  { value: '7→1', label: 'tools consolidated into one' },
+  { value: '+32%', label: 'higher sales win rate' },
+  { value: '−68%', label: 'less time on admin' },
 ];
 
 export const impactQuote = {
@@ -113,17 +117,10 @@ export const impactQuote = {
 };
 
 export const comparison: { label: string; before: string; after: string }[] = [
-  { label: 'Tools', before: '7+ disconnected apps', after: 'One system' },
-  { label: 'Your data', before: 'Scattered in silos', after: 'Single source of truth' },
-  { label: 'Busywork', before: 'Manual, every day', after: 'Automated by AI' },
-  { label: 'Setup', before: 'Weeks of wiring', after: 'Live in a day' },
-];
-
-export const whyReasons: { title: string; desc: string; icon: string }[] = [
-  { title: 'One system', desc: 'Everything connected — nothing lost in silos.', icon: 'Boxes' },
-  { title: 'AI-native', desc: 'Intelligence in every workflow, by default.', icon: 'Sparkles' },
-  { title: 'Yours alone', desc: 'Your data stays private and never trains shared models.', icon: 'ShieldCheck' },
-  { title: 'Live in a day', desc: 'Set up fast, with no integration debt.', icon: 'Zap' },
+  { label: 'Your tools', before: '7+ apps that don’t talk', after: 'One connected system' },
+  { label: 'Your data', before: 'Scattered across silos', after: 'A single source of truth' },
+  { label: 'Busywork', before: 'Manual, every single day', after: 'Handled by AI' },
+  { label: 'Time to value', before: 'Weeks of wiring tools together', after: 'Live in a day' },
 ];
 
 export const inkblotPillars: { title: string; desc: string; icon: string }[] = [

@@ -11,7 +11,7 @@ import {
 } from 'framer-motion';
 import { AliveMascot } from './Mascot';
 import { useExperience } from './ExperienceContext';
-import { scenes, ANCHOR_POS, type Trick } from '@/lib/experience';
+import { scenes, type Trick } from '@/lib/experience';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -38,9 +38,8 @@ export function MascotGuide() {
   useEffect(() => {
     const idx = Math.min(active, scenes.length - 1);
     const scene = scenes[idx];
-    const pos = ANCHOR_POS[scene.anchor];
-    targetX.set(pos.x * vp.w);
-    targetY.set(pos.y * vp.h);
+    targetX.set(scene.pos.x * vp.w);
+    targetY.set(scene.pos.y * vp.h);
     targetScale.set(scene.scale);
   }, [active, vp, targetX, targetY, targetScale]);
 
