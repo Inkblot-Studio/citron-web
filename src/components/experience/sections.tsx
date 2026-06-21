@@ -382,32 +382,35 @@ export function InkblotSection() {
         transition={{ duration: 0.8, ease: EASE }}
       >
         <span className="eyebrow-cine text-[0.72rem] font-semibold">The makers</span>
-        <h2 className="mx-auto mt-5 max-w-2xl text-[2.25rem] font-semibold leading-[1.08] tracking-[-0.03em] text-cine sm:text-[3rem]">
+        <h2 className="mx-auto mt-4 max-w-2xl text-[2rem] font-semibold leading-[1.08] tracking-[-0.03em] text-cine sm:text-[2.6rem]">
           Built by <span className="gradient-amber">Inkblot Studio</span>
         </h2>
-        <p className="mx-auto mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-cine-dim">
-          A small studio with a large ambition: to build the intelligent
-          software modern companies actually deserve — and to sweat every detail
-          until it feels alive.
+        <p className="mx-auto mt-4 max-w-lg text-[1rem] leading-relaxed text-cine-dim">
+          A small studio with a large ambition — building the intelligent
+          software modern companies actually deserve.
         </p>
       </motion.div>
 
-      <div className="mx-auto mt-10 grid max-w-2xl gap-3 sm:grid-cols-3">
+      <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5">
         {inkblotPillars.map((p, i) => {
           const Icon = ICONS[p.icon] ?? Sparkles;
           return (
-            <Card key={p.title} delay={i * 0.08} className="!p-5 text-center">
-              <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(var(--cine-particle),0.14)] text-[var(--cine-amber)]">
-                <Icon className="h-4 w-4" strokeWidth={1.7} />
-              </span>
-              <span className="mt-3 block text-[0.875rem] font-semibold text-cine">{p.title}</span>
-              <p className="mt-1.5 text-[0.78rem] leading-relaxed text-cine-dim">{p.desc}</p>
-            </Card>
+            <motion.span
+              key={p.title}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.5, ease: EASE, delay: i * 0.08 }}
+              className="inline-flex items-center gap-2 rounded-full cine-card px-3.5 py-1.5 text-[0.8rem] font-medium text-cine"
+            >
+              <Icon className="h-3.5 w-3.5 text-[var(--cine-amber)]" strokeWidth={1.8} />
+              {p.title}
+            </motion.span>
           );
         })}
       </div>
 
-      <div className="mt-10 flex justify-center">
+      <div className="mt-8 flex justify-center">
         <Link
           href={siteConfig.studio.url}
           target="_blank"
@@ -419,7 +422,7 @@ export function InkblotSection() {
         </Link>
       </div>
 
-      <div className="mt-12 flex flex-col items-center gap-3 text-[0.8125rem] text-cine-faint">
+      <div className="mt-8 flex flex-col items-center gap-2 text-[0.8125rem] text-cine-faint">
         <div className="flex items-center gap-6">
           <Link href="/legal/privacy" className="transition-colors hover:text-cine">Privacy</Link>
           <Link href="/legal/terms" className="transition-colors hover:text-cine">Terms</Link>

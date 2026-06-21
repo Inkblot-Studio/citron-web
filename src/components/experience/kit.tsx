@@ -38,7 +38,9 @@ export function Stage({ index, children }: { index: number; children: ReactNode 
         <div
           className={cn(
             'flex min-h-[80vh] flex-col py-16 lg:min-h-screen',
-            center ? 'items-center justify-end pb-[12vh] text-center lg:pb-[14vh]' : 'justify-center'
+            center
+              ? 'items-center justify-center text-center lg:justify-end lg:pb-[12vh] lg:pt-[36vh]'
+              : 'justify-center'
           )}
         >
           <div className={cn('w-full', sideInner(scene.side))}>{children}</div>

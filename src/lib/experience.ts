@@ -50,7 +50,7 @@ export const scenes: Scene[] = [
   { id: 'automations', anchor: 'center-right', scale: 0.82, trick: 'spin', side: 'left', mood: 'deep', dark: true },
   { id: 'impact', anchor: 'lower-left', scale: 0.8, trick: 'flip', side: 'right', mood: 'surface' },
   { id: 'why', anchor: 'upper-right', scale: 0.8, trick: 'pop', side: 'left', mood: 'plain' },
-  { id: 'inkblot', anchor: 'top-center', scale: 0.7, trick: 'spin', side: 'center', mood: 'deep', dark: true },
+  { id: 'inkblot', anchor: 'top-center', scale: 0.62, trick: 'spin', side: 'center', mood: 'deep', dark: true },
 ];
 
 export const TOTAL_SCENES = scenes.length;
