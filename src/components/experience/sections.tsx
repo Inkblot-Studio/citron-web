@@ -36,6 +36,7 @@ import {
 } from '@/lib/experience';
 import { siteConfig } from '@/lib/site';
 import { Stage, Card, SectionHead } from './kit';
+import { Magnetic } from './ambient/Magnetic';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -75,13 +76,15 @@ export function HeroSection() {
           calm, connected, and built to scale.
         </p>
         <div className="mt-9 flex justify-center">
-          <Link
-            href="/demo"
-            className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow] duration-200 hover:brightness-105"
-          >
-            Book a Demo
-            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-          </Link>
+          <Magnetic strength={0.45}>
+            <Link
+              href="/demo"
+              className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)]"
+            >
+              Book a Demo
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+          </Magnetic>
         </div>
       </motion.div>
     </Stage>
@@ -411,15 +414,17 @@ export function InkblotSection() {
       </div>
 
       <div className="mt-8 flex justify-center">
-        <Link
-          href={siteConfig.studio.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group inline-flex items-center gap-2 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-6 py-3 text-[0.9375rem] font-semibold text-cine backdrop-blur-md transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
-        >
-          Explore Inkblot Studio
-          <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </Link>
+        <Magnetic strength={0.4}>
+          <Link
+            href={siteConfig.studio.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-6 py-3 text-[0.9375rem] font-semibold text-cine backdrop-blur-md transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
+          >
+            Explore Inkblot Studio
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
+        </Magnetic>
       </div>
 
       <div className="mt-8 flex flex-col items-center gap-2 text-[0.8125rem] text-cine-faint">

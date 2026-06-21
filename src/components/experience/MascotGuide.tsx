@@ -92,7 +92,7 @@ export function MascotGuide() {
         >
           <motion.div animate={trick} style={{ transformPerspective: 900 }}>
             <AliveMascot
-              className="h-[clamp(15rem,21vw,23rem)] w-[clamp(15rem,21vw,23rem)]"
+              className="h-[clamp(18rem,26vw,30rem)] w-[clamp(18rem,26vw,30rem)]"
               lookX={reduce ? undefined : lookX}
               lookY={reduce ? undefined : lookY}
             />

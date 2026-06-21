@@ -42,15 +42,15 @@ export type Scene = {
 };
 
 export const scenes: Scene[] = [
-  { id: 'hero', anchor: 'top-center', scale: 1.15, trick: 'none', side: 'center', mood: 'dawn' },
-  { id: 'problem', anchor: 'upper-right', scale: 0.8, trick: 'pop', side: 'left', mood: 'deep', dark: true },
-  { id: 'crm', anchor: 'left', scale: 0.82, trick: 'spin', side: 'right', mood: 'wash' },
-  { id: 'platform', anchor: 'lower-right', scale: 0.8, trick: 'flip', side: 'left', mood: 'deep', dark: true },
-  { id: 'ai', anchor: 'upper-left', scale: 0.8, trick: 'pop', side: 'right', mood: 'plain' },
-  { id: 'automations', anchor: 'center-right', scale: 0.82, trick: 'spin', side: 'left', mood: 'deep', dark: true },
-  { id: 'impact', anchor: 'lower-left', scale: 0.8, trick: 'flip', side: 'right', mood: 'surface' },
-  { id: 'why', anchor: 'upper-right', scale: 0.8, trick: 'pop', side: 'left', mood: 'plain' },
-  { id: 'inkblot', anchor: 'top-center', scale: 0.62, trick: 'spin', side: 'center', mood: 'deep', dark: true },
+  { id: 'hero', anchor: 'top-center', scale: 1.22, trick: 'none', side: 'center', mood: 'dawn' },
+  { id: 'problem', anchor: 'upper-right', scale: 0.9, trick: 'pop', side: 'left', mood: 'deep', dark: true },
+  { id: 'crm', anchor: 'left', scale: 0.92, trick: 'spin', side: 'right', mood: 'wash' },
+  { id: 'platform', anchor: 'lower-right', scale: 0.9, trick: 'flip', side: 'left', mood: 'deep', dark: true },
+  { id: 'ai', anchor: 'upper-left', scale: 0.9, trick: 'pop', side: 'right', mood: 'plain' },
+  { id: 'automations', anchor: 'center-right', scale: 0.92, trick: 'spin', side: 'left', mood: 'deep', dark: true },
+  { id: 'impact', anchor: 'lower-left', scale: 0.9, trick: 'flip', side: 'right', mood: 'surface' },
+  { id: 'why', anchor: 'upper-right', scale: 0.9, trick: 'pop', side: 'left', mood: 'plain' },
+  { id: 'inkblot', anchor: 'top-center', scale: 0.72, trick: 'spin', side: 'center', mood: 'deep', dark: true },
 ];
 
 export const TOTAL_SCENES = scenes.length;

@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { TOTAL_SCENES } from '@/lib/experience';
 import { ExperienceProvider } from './ExperienceContext';
 import { MascotGuide } from './MascotGuide';
+import { CursorGlow } from './ambient/CursorGlow';
 import {
   HeroSection,
   ProblemSection,
@@ -31,6 +32,7 @@ export function Experience() {
   return (
     <ExperienceProvider total={TOTAL_SCENES}>
       <div className="experience-root relative">
+        <CursorGlow />
         <MascotGuide />
         <HeroSection />
         <ProblemSection />
