@@ -7,6 +7,13 @@ import { Logo } from '@/components/ui/Logo';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { cn } from '@/lib/cn';
 
+const NAV_LINKS = [
+  { label: 'Product', href: '/#product' },
+  { label: 'Solutions', href: '/solutions' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Customers', href: '/#customers' },
+];
+
 /**
  * Minimal, near-invisible chrome. The journey is the interface — the nav only
  * offers the brand, the light/dark switch, and the one destination that
@@ -32,6 +39,18 @@ export function Navbar() {
         )}
       >
         <Logo />
+
+        <nav className="hidden items-center gap-1 md:flex">
+          {NAV_LINKS.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="rounded-full px-3.5 py-2 text-[0.8125rem] font-medium text-cine-dim transition-colors duration-200 hover:text-cine"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
 
         <div className="flex items-center gap-2">
           <ThemeToggle />

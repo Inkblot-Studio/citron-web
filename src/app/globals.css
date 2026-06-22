@@ -521,17 +521,11 @@
    Scroll-snap chapters — each section settles before the next
    ============================================================ */
 html.citron-snap {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   scroll-padding-top: 0;
-}
-@media (max-width: 1023px) {
-  html.citron-snap {
-    scroll-snap-type: y proximity;
-  }
 }
 .snap-section {
   scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 /* ============================================================

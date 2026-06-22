@@ -108,52 +108,41 @@ export function SplitStage({
 }
 
 /* ============================================================
-   Ambient — floating orbs + drifting particles. Gives every
-   chapter depth and life so nothing reads as empty or flat-white.
+   Ambient — restrained depth. A soft orb or two and, only on the
+   dark chapters where it earns its place, a few drifting motes.
+   Whitespace is the default; activity is the exception.
    ============================================================ */
 
 // Deterministic so server and client render identically (no hydration drift).
 const PARTICLES = [
-  { x: 8, y: 18, s: 4, dur: 9, delay: 0, o: 0.5 },
-  { x: 22, y: 64, s: 3, dur: 11, delay: 1.4, o: 0.35 },
-  { x: 34, y: 32, s: 5, dur: 8, delay: 0.7, o: 0.45 },
-  { x: 47, y: 78, s: 3, dur: 12, delay: 2.1, o: 0.3 },
-  { x: 58, y: 22, s: 4, dur: 10, delay: 0.4, o: 0.5 },
-  { x: 66, y: 56, s: 6, dur: 9, delay: 1.8, o: 0.4 },
-  { x: 73, y: 84, s: 3, dur: 13, delay: 0.2, o: 0.3 },
-  { x: 81, y: 38, s: 5, dur: 8.5, delay: 1.1, o: 0.5 },
-  { x: 89, y: 70, s: 4, dur: 11.5, delay: 2.6, o: 0.4 },
-  { x: 14, y: 88, s: 3, dur: 10.5, delay: 0.9, o: 0.32 },
-  { x: 41, y: 12, s: 4, dur: 9.5, delay: 1.6, o: 0.45 },
-  { x: 94, y: 16, s: 3, dur: 12.5, delay: 0.5, o: 0.34 },
+  { x: 18, y: 26, s: 3, dur: 11, delay: 0, o: 0.32 },
+  { x: 38, y: 70, s: 4, dur: 13, delay: 1.6, o: 0.26 },
+  { x: 64, y: 34, s: 3, dur: 12, delay: 0.7, o: 0.3 },
+  { x: 82, y: 64, s: 4, dur: 14, delay: 2.2, o: 0.24 },
+  { x: 50, y: 16, s: 3, dur: 12.5, delay: 1.1, o: 0.28 },
 ] as const;
 
-function Ambient({ orbs, particles }: { orbs: ReactNode; particles: boolean }) {
+function Particles() {
   return (
-    <div aria-hidden className="absolute inset-0 overflow-hidden">
-      {orbs}
-      {particles && (
-        <div className="absolute inset-0">
-          {PARTICLES.map((p, i) => (
-            <span
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                left: `${p.x}%`,
-                top: `${p.y}%`,
-                width: p.s,
-                height: p.s,
-                background: 'rgba(var(--cine-particle),1)',
-                opacity: p.o,
-                filter: 'blur(0.5px)',
-                animation: `float-slow ${p.dur}s var(--ease-in-out-soft) ${p.delay}s infinite, twinkle ${
-                  p.dur * 0.6
-                }s ease-in-out ${p.delay}s infinite`,
-              }}
-            />
-          ))}
-        </div>
-      )}
+    <div aria-hidden className="absolute inset-0">
+      {PARTICLES.map((p, i) => (
+        <span
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.s,
+            height: p.s,
+            background: 'rgba(var(--cine-particle),1)',
+            opacity: p.o,
+            filter: 'blur(0.5px)',
+            animation: `float-slow ${p.dur}s var(--ease-in-out-soft) ${p.delay}s infinite, twinkle ${
+              p.dur * 0.7
+            }s ease-in-out ${p.delay}s infinite`,
+          }}
+        />
+      ))}
     </div>
   );
 }
@@ -161,7 +150,7 @@ function Ambient({ orbs, particles }: { orbs: ReactNode; particles: boolean }) {
 function Orb({
   className,
   size,
-  opacity = 0.5,
+  opacity = 0.4,
 }: {
   className?: string;
   size: number;
@@ -175,8 +164,8 @@ function Orb({
         height: size,
         opacity,
         background:
-          'radial-gradient(circle, rgba(var(--cine-particle),0.5) 0%, rgba(var(--cine-particle),0.12) 40%, transparent 70%)',
-        filter: 'blur(40px)',
+          'radial-gradient(circle, rgba(var(--cine-particle),0.45) 0%, rgba(var(--cine-particle),0.1) 42%, transparent 72%)',
+        filter: 'blur(48px)',
       }}
     />
   );
@@ -185,16 +174,8 @@ function Orb({
 export function SectionBackground({ mood }: { mood: Mood }) {
   if (mood === 'plain') {
     return (
-      <div aria-hidden className="absolute inset-0" style={{ background: 'var(--cine-bg-0)' }}>
-        <Ambient
-          particles
-          orbs={
-            <>
-              <Orb size={520} opacity={0.4} className="-left-32 top-10" />
-              <Orb size={460} opacity={0.32} className="-right-24 bottom-0" />
-            </>
-          }
-        />
+      <div aria-hidden className="absolute inset-0 overflow-hidden" style={{ background: 'var(--cine-bg-0)' }}>
+        <Orb size={560} opacity={0.28} className="-left-40 top-1/4" />
       </div>
     );
   }
@@ -202,41 +183,24 @@ export function SectionBackground({ mood }: { mood: Mood }) {
     return (
       <div
         aria-hidden
-        className="absolute inset-0 border-y border-[var(--cine-line)]"
+        className="absolute inset-0 overflow-hidden border-y border-[var(--cine-line)]"
         style={{ background: 'var(--cine-bg-1)' }}
       >
-        <div className="absolute inset-0 bg-dots opacity-60" />
-        <Ambient
-          particles
-          orbs={
-            <>
-              <Orb size={560} opacity={0.4} className="left-1/4 -top-24" />
-              <Orb size={420} opacity={0.3} className="right-0 bottom-10" />
-            </>
-          }
-        />
+        <Orb size={520} opacity={0.26} className="right-0 -top-24" />
       </div>
     );
   }
   if (mood === 'wash') {
     return (
-      <div aria-hidden className="absolute inset-0" style={{ background: 'var(--cine-bg-0)' }}>
+      <div aria-hidden className="absolute inset-0 overflow-hidden" style={{ background: 'var(--cine-bg-0)' }}>
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(70% 80% at 50% 50%, rgba(var(--cine-particle),0.09), transparent 62%)',
+              'radial-gradient(60% 70% at 50% 45%, rgba(var(--cine-particle),0.07), transparent 64%)',
           }}
         />
-        <Ambient
-          particles
-          orbs={
-            <>
-              <Orb size={640} opacity={0.5} className="left-1/2 top-1/3 -translate-x-1/2" />
-              <Orb size={380} opacity={0.32} className="right-10 top-16" />
-            </>
-          }
-        />
+        <Orb size={600} opacity={0.32} className="left-1/2 top-1/3 -translate-x-1/2" />
       </div>
     );
   }
@@ -244,7 +208,7 @@ export function SectionBackground({ mood }: { mood: Mood }) {
     return (
       <div
         aria-hidden
-        className="absolute inset-0"
+        className="absolute inset-0 overflow-hidden"
         style={{
           background: 'linear-gradient(180deg, var(--cine-bg-0) 0%, var(--cine-bg-1) 100%)',
         }}
@@ -253,42 +217,27 @@ export function SectionBackground({ mood }: { mood: Mood }) {
           className="absolute inset-x-0 top-0 h-1/2"
           style={{
             background:
-              'radial-gradient(60% 70% at 50% 0%, rgba(var(--cine-particle),0.16), transparent 65%)',
+              'radial-gradient(58% 68% at 50% 0%, rgba(var(--cine-particle),0.14), transparent 66%)',
           }}
         />
-        <Ambient
-          particles
-          orbs={
-            <>
-              <Orb size={620} opacity={0.6} className="left-1/3 -top-20" />
-              <Orb size={480} opacity={0.45} className="-right-20 bottom-0" />
-              <Orb size={320} opacity={0.4} className="left-10 bottom-16" />
-            </>
-          }
-        />
+        <Orb size={620} opacity={0.42} className="left-1/3 -top-24" />
+        <Orb size={420} opacity={0.3} className="-right-20 bottom-0" />
+        <Particles />
       </div>
     );
   }
   // dawn (hero)
   return (
-    <div aria-hidden className="absolute inset-0" style={{ background: 'var(--cine-bg-0)' }}>
+    <div aria-hidden className="absolute inset-0 overflow-hidden" style={{ background: 'var(--cine-bg-0)' }}>
       <div
         className="absolute inset-x-0 top-0 h-2/3"
         style={{
           background:
-            'radial-gradient(70% 60% at 50% 0%, rgba(var(--cine-particle),0.16), transparent 62%)',
+            'radial-gradient(70% 58% at 50% 0%, rgba(var(--cine-particle),0.14), transparent 64%)',
         }}
       />
-      <Ambient
-        particles
-        orbs={
-          <>
-            <Orb size={680} opacity={0.55} className="left-1/2 -top-32 -translate-x-1/2" />
-            <Orb size={420} opacity={0.4} className="left-8 bottom-24" />
-            <Orb size={420} opacity={0.4} className="right-8 bottom-24" />
-          </>
-        }
-      />
+      <Orb size={640} opacity={0.36} className="left-1/2 -top-36 -translate-x-1/2" />
+      <Particles />
     </div>
   );
 }

@@ -24,7 +24,7 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  */
 export function MascotGuide() {
   const reduce = useReducedMotion();
-  const { active } = useExperience();
+  const { active, mascotVisible } = useExperience();
   const [vp, setVp] = useState({ w: 1440, h: 900 });
 
   // Travel to the active chapter's anchor (exact centering on settle).
@@ -83,7 +83,12 @@ export function MascotGuide() {
   }, [active, reduce, trick]);
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-20 hidden lg:block">
+    <motion.div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 z-20 hidden lg:block"
+      animate={{ opacity: mascotVisible ? 1 : 0 }}
+      transition={{ duration: 0.5, ease: EASE }}
+    >
       <motion.div className="absolute left-0 top-0" style={{ x, y }}>
         <motion.div
           className="-translate-x-1/2 -translate-y-1/2"
@@ -98,7 +103,7 @@ export function MascotGuide() {
           </motion.div>
         </motion.div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -13,7 +14,10 @@ import { useInView } from 'framer-motion';
 type Ctx = {
   active: number;
   total: number;
+  /** True while at least one mascot chapter is on screen (hides the guide over Act 2). */
+  mascotVisible: boolean;
   setActive: (i: number) => void;
+  setVisibleIndex: (i: number, visible: boolean) => void;
 };
 
 const ExperienceCtx = createContext<Ctx | null>(null);
@@ -26,8 +30,18 @@ export function ExperienceProvider({
   children: React.ReactNode;
 }) {
   const [active, setActive] = useState(0);
+  const visibleRef = useRef<Set<number>>(new Set());
+  const [mascotVisible, setMascotVisible] = useState(true);
+
+  const setVisibleIndex = useCallback((i: number, visible: boolean) => {
+    const s = visibleRef.current;
+    if (visible) s.add(i);
+    else s.delete(i);
+    setMascotVisible(s.size > 0);
+  }, []);
+
   return (
-    <ExperienceCtx.Provider value={{ active, total, setActive }}>
+    <ExperienceCtx.Provider value={{ active, total, mascotVisible, setActive, setVisibleIndex }}>
       {children}
     </ExperienceCtx.Provider>
   );
@@ -40,20 +54,21 @@ export function useExperience() {
 }
 
 /**
- * Registers a scene: when its element is centered in the viewport it becomes
- * the active scene, which the mascot and trunk respond to. Returns a ref to
- * attach to the scene's root element.
+ * Registers a mascot chapter: when its element is centered in the viewport it
+ * becomes the active scene (which the guide travels to) and marks the guide
+ * visible. Returns a ref to attach to the chapter's root element.
  */
 export function useScene<T extends Element = HTMLDivElement>(
   index: number
 ): RefObject<T | null> {
   const ref = useRef<T>(null);
   const inView = useInView(ref, { amount: 0.5 });
-  const { setActive } = useExperience();
+  const { setActive, setVisibleIndex } = useExperience();
 
   useEffect(() => {
     if (inView) setActive(index);
-  }, [inView, index, setActive]);
+    setVisibleIndex(index, inView);
+  }, [inView, index, setActive, setVisibleIndex]);
 
   return ref;
 }

@@ -5,6 +5,8 @@ import { TOTAL_SCENES } from '@/lib/experience';
 import { ExperienceProvider } from './ExperienceContext';
 import { MascotGuide } from './MascotGuide';
 import { CursorTrail } from './ambient/CursorTrail';
+import { DemoNudge } from './ambient/DemoNudge';
+import { Intro } from './Intro';
 import {
   HeroSection,
   ProblemSection,
@@ -16,12 +18,20 @@ import {
   WhySection,
   InkblotSection,
 } from './sections';
+import {
+  TrustBar,
+  ProductShowcase,
+  StackComparison,
+  Testimonials,
+  FinalCta,
+} from './homeSections';
 
 /**
- * Citron — a guided product story in nine chapters. The mascot is the
- * narrator: a fixed companion (desktop) that travels to a dedicated spot in
- * each chapter, never sharing space with the content. Clean, spacious,
- * Apple-level pacing.
+ * Citron — a guided product story. Act one is the mascot's nine-chapter
+ * journey (the guide travels chapter to chapter, never overlapping content).
+ * Act two is the product website proper — trust, product, comparison, voices,
+ * and a close — each section a distinct experience. The guide steps aside for
+ * act two and returns for the finale.
  */
 export function Experience() {
   useEffect(() => {
@@ -31,9 +41,12 @@ export function Experience() {
 
   return (
     <ExperienceProvider total={TOTAL_SCENES}>
+      <Intro />
       <div className="experience-root relative">
         <CursorTrail />
         <MascotGuide />
+
+        {/* Act one — the mascot's journey */}
         <HeroSection />
         <ProblemSection />
         <CrmSection />
@@ -42,7 +55,18 @@ export function Experience() {
         <AutomationsSection />
         <ImpactSection />
         <WhySection />
+
+        {/* Act two — the product, in depth */}
+        <TrustBar />
+        <ProductShowcase />
+        <StackComparison />
+        <Testimonials />
+        <FinalCta />
+
+        {/* Finale — the makers, the guide returns */}
         <InkblotSection />
+
+        <DemoNudge />
       </div>
     </ExperienceProvider>
   );
