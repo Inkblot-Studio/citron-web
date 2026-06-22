@@ -5,13 +5,13 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { AliveMascot } from './Mascot';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-const STORAGE_KEY = 'citron-intro-seen-v3';
+const STORAGE_KEY = 'citron-intro-seen-v4';
 
 /**
- * The Citron entrance. A pitch-warm iris opens, the mascot zooms from far,
- * lands with a light-burst, the wordmark resolves underneath, and a tall
- * vertical curtain wipes upward to reveal the Hero. ~2.2s of cinema, then
- * the page takes over. Always skippable, plays once per session.
+ * The Citron entrance — a calm, dark, cinematic open. A warm glow blooms from
+ * black, the mascot eases in and settles, a single ring breathes outward, the
+ * wordmark resolves over a drawn gold line, and the whole stage dissolves
+ * upward into the page. ~2.4s, always skippable, plays once per session.
  */
 export function Intro() {
   const reduce = useReducedMotion();
@@ -35,16 +35,16 @@ export function Intro() {
     root.style.overflow = 'hidden';
 
     const dismiss = () => setVisible(false);
-    const timer = window.setTimeout(dismiss, 2400);
+    const timer = window.setTimeout(dismiss, 2600);
 
-    // Skip on intent, but ignore the very first events (some browsers fire a
-    // synthetic scroll on load that would dismiss before anything plays).
+    // Skip on intent, but ignore the very first events (browsers sometimes fire
+    // a synthetic scroll on load that would dismiss before anything plays).
     const armSkip = window.setTimeout(() => {
       window.addEventListener('wheel', dismiss, { passive: true, once: true });
       window.addEventListener('touchstart', dismiss, { passive: true, once: true });
       window.addEventListener('keydown', dismiss, { once: true });
       window.addEventListener('pointerdown', dismiss, { once: true });
-    }, 200);
+    }, 250);
 
     return () => {
       window.clearTimeout(timer);
@@ -73,136 +73,112 @@ export function Intro() {
       {visible && (
         <motion.div
           key="intro"
-          className="fixed inset-0 z-[100] overflow-hidden"
-          style={{ background: 'var(--cine-bg-0)' }}
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden"
+          style={{ background: '#070605' }}
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.45, ease: EASE }}
+          exit={{ opacity: 0, scale: 1.06, filter: 'blur(10px)' }}
+          transition={{ duration: 0.7, ease: EASE }}
         >
-          {/* warm vignette */}
+          {/* warm glow blooming from black */}
           <motion.div
             aria-hidden
             className="pointer-events-none absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, ease: EASE }}
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.1, ease: EASE }}
             style={{
               background:
-                'radial-gradient(60% 60% at 50% 42%, rgba(var(--cine-particle),0.22), transparent 70%)',
+                'radial-gradient(50% 50% at 50% 46%, rgba(236,205,116,0.20), rgba(236,205,116,0.05) 45%, transparent 72%)',
             }}
           />
-
-          {/* curtain wipe — slides upward to reveal the page */}
-          <motion.div
+          {/* deep vignette to frame the stage */}
+          <div
             aria-hidden
-            className="absolute inset-x-0 top-0 origin-top"
+            className="pointer-events-none absolute inset-0"
             style={{
-              background: 'var(--cine-bg-0)',
-              height: '100%',
+              background:
+                'radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0,0,0,0.7) 100%)',
             }}
-            initial={{ scaleY: 1 }}
-            animate={{ scaleY: 1 }}
-            exit={{ scaleY: 0 }}
-            transition={{ duration: 0.8, ease: EASE, delay: 0.05 }}
           />
 
           {/* center stage */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            {/* expanding light rings — fire as the mascot lands */}
+          <div className="relative flex flex-col items-center justify-center">
+            {/* single breathing ring on reveal */}
             <motion.span
               aria-hidden
-              className="pointer-events-none absolute rounded-full border-2 border-[var(--cine-amber-bright)]"
-              initial={{ width: 0, height: 0, opacity: 0 }}
-              animate={{ width: 480, height: 480, opacity: [0, 0.7, 0] }}
-              transition={{ duration: 1.1, ease: EASE, delay: 0.55, times: [0, 0.25, 1] }}
+              className="pointer-events-none absolute rounded-full border border-[rgba(236,205,116,0.5)]"
+              initial={{ width: 120, height: 120, opacity: 0 }}
+              animate={{ width: 560, height: 560, opacity: [0, 0.55, 0] }}
+              transition={{ duration: 1.8, ease: EASE, delay: 0.4, times: [0, 0.3, 1] }}
             />
             <motion.span
               aria-hidden
-              className="pointer-events-none absolute rounded-full border border-[var(--cine-amber-bright)]"
+              className="pointer-events-none absolute rounded-full"
               initial={{ width: 0, height: 0, opacity: 0 }}
-              animate={{ width: 760, height: 760, opacity: [0, 0.4, 0] }}
-              transition={{ duration: 1.4, ease: EASE, delay: 0.65, times: [0, 0.3, 1] }}
+              animate={{ width: 360, height: 360, opacity: [0, 0.4, 0] }}
+              transition={{ duration: 1.4, ease: EASE, delay: 0.35 }}
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(236,205,116,0.18), transparent 70%)',
+              }}
             />
 
-            {/* radial particle burst at the landing moment */}
-            <Burst />
-
-            {/* mascot: rushes in from far, lands with a punch, then settles */}
+            {/* mascot — eases in and settles, smooth and weightless */}
             <motion.div
-              initial={{ scale: 0.08, opacity: 0, filter: 'blur(14px)', y: -20 }}
-              animate={{
-                scale: [0.08, 1.18, 0.96, 1.04, 1],
-                opacity: [0, 1, 1, 1, 1],
-                filter: ['blur(14px)', 'blur(0px)', 'blur(0px)', 'blur(0px)', 'blur(0px)'],
-                y: [-20, 0, 0, 0, 0],
-                rotate: [-22, 6, -3, 1, 0],
-              }}
-              transition={{
-                duration: 1.5,
-                ease: EASE,
-                times: [0, 0.42, 0.62, 0.82, 1],
-              }}
-              exit={{ scale: 0.92, opacity: 0, y: -10 }}
+              initial={{ scale: 0.7, opacity: 0, y: 14 }}
+              animate={{ scale: [0.7, 1.05, 1], opacity: 1, y: 0 }}
+              exit={{ scale: 0.96, opacity: 0, y: -8 }}
+              transition={{ duration: 1.15, ease: EASE, times: [0, 0.62, 1] }}
               style={{ transformOrigin: '50% 50%' }}
             >
-              <AliveMascot className="h-[clamp(11rem,28vw,15rem)] w-[clamp(11rem,28vw,15rem)]" />
+              <AliveMascot className="h-[clamp(10rem,26vw,14rem)] w-[clamp(10rem,26vw,14rem)]" />
             </motion.div>
 
-            {/* wordmark resolves underneath */}
+            {/* wordmark over a drawn gold line */}
             <motion.div
-              className="mt-6 flex flex-col items-center"
-              initial={{ opacity: 0, y: 14 }}
+              className="mt-7 flex flex-col items-center"
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.55, ease: EASE, delay: 0.95 }}
+              transition={{ duration: 0.6, ease: EASE, delay: 0.95 }}
             >
-              <span className="text-[2rem] font-semibold tracking-[-0.03em] text-cine sm:text-[2.6rem]">
+              <span className="text-[2.1rem] font-semibold tracking-[-0.03em] text-[#f4efe2] sm:text-[2.7rem]">
                 Citron
               </span>
               <motion.span
-                className="mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.34em] text-[var(--cine-amber)]"
-                initial={{ opacity: 0, letterSpacing: '0.12em' }}
+                aria-hidden
+                className="mt-2 block h-px w-40 origin-center"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.7, ease: EASE, delay: 1.1 }}
+                style={{
+                  background:
+                    'linear-gradient(90deg, transparent, rgba(236,205,116,0.9), transparent)',
+                }}
+              />
+              <motion.span
+                className="mt-3 text-[0.62rem] font-semibold uppercase tracking-[0.34em] text-[rgba(236,205,116,0.9)]"
+                initial={{ opacity: 0, letterSpacing: '0.14em' }}
                 animate={{ opacity: 1, letterSpacing: '0.34em' }}
-                transition={{ duration: 0.7, ease: EASE, delay: 1.2 }}
+                transition={{ duration: 0.7, ease: EASE, delay: 1.25 }}
               >
                 The Business Operating System
               </motion.span>
             </motion.div>
-
-            <motion.button
-              type="button"
-              onClick={() => setVisible(false)}
-              className="absolute bottom-6 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-cine-faint transition-colors hover:text-cine"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 1.6 }}
-            >
-              Skip
-            </motion.button>
           </div>
+
+          <motion.button
+            type="button"
+            onClick={() => setVisible(false)}
+            className="absolute bottom-7 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-[rgba(244,239,226,0.45)] transition-colors hover:text-[#f4efe2]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 1.6 }}
+          >
+            Skip
+          </motion.button>
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-/** A radial burst of tiny amber sparks fired the instant the mascot lands. */
-function Burst() {
-  const sparks = Array.from({ length: 14 }, (_, i) => {
-    const angle = (i / 14) * Math.PI * 2;
-    return { dx: Math.cos(angle) * 220, dy: Math.sin(angle) * 220 };
-  });
-  return (
-    <div aria-hidden className="pointer-events-none absolute">
-      {sparks.map((s, i) => (
-        <motion.span
-          key={i}
-          className="absolute h-1.5 w-1.5 rounded-full bg-[var(--cine-amber-bright)]"
-          initial={{ x: 0, y: 0, opacity: 0, scale: 1 }}
-          animate={{ x: s.dx, y: s.dy, opacity: [0, 1, 0], scale: [1, 1, 0.4] }}
-          transition={{ duration: 1, ease: EASE, delay: 0.55, times: [0, 0.25, 1] }}
-        />
-      ))}
-    </div>
   );
 }

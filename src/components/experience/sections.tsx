@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useInView, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   Users,
   Sparkles,
@@ -18,19 +18,13 @@ import {
   ArrowRight,
   ArrowUpRight,
   Check,
-  Unplug,
-  Play,
-  Pause,
   type LucideIcon,
 } from 'lucide-react';
 import {
-  problemTools,
   crmStages,
   platformModules,
   platformPoints,
   aiActions,
-  impactMetrics,
-  impactQuote,
   inkblotPillars,
 } from '@/lib/experience';
 import { siteConfig } from '@/lib/site';
@@ -93,48 +87,8 @@ export function HeroSection() {
             Try it free
           </Link>
         </div>
-
-        {/* 7→1 collapse — quick visual story */}
-        <SevenToOne />
       </motion.div>
     </Stage>
-  );
-}
-
-function SevenToOne() {
-  return (
-    <div className="mx-auto mt-12 flex max-w-[42rem] items-center justify-center gap-3 sm:gap-5">
-      <div className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
-        {problemTools.map((t, i) => (
-          <motion.span
-            key={t}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 0.65, y: 0 }}
-            transition={{ duration: 0.5, ease: EASE, delay: 0.6 + i * 0.05 }}
-            className="inline-flex items-center gap-1 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-2 py-1 text-[0.7rem] text-cine-dim sm:text-[0.75rem]"
-          >
-            <Unplug className="h-3 w-3 text-cine-faint" strokeWidth={1.8} />
-            {t}
-          </motion.span>
-        ))}
-      </div>
-      <motion.div
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--cine-amber-bright)] text-[#1d1c19]"
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: EASE, delay: 0.95 }}
-      >
-        <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.7 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: EASE, delay: 1.1 }}
-        className="shrink-0 rounded-full bg-[rgba(var(--cine-particle),0.14)] px-3 py-1.5 text-[0.8rem] font-semibold text-[var(--cine-amber)]"
-      >
-        Citron
-      </motion.div>
-    </div>
   );
 }
 
@@ -246,13 +200,14 @@ export function PlatformSection() {
       left={
         <>
           <SectionHead
-            eyebrow="Citron Platform"
+            eyebrow="Platform + AI"
             title={
               <>
-                Bigger than a <span className="gradient-amber">CRM.</span>
+                Bigger than a CRM.{' '}
+                <span className="gradient-amber">Driven by AI.</span>
               </>
             }
-            sub="CRM is where it starts. Citron runs everything else your company does — on the very same foundation."
+            sub="CRM is where it starts. Citron runs everything else your company does — on one foundation, with intelligence woven through every module."
           />
           <div className="mt-7 space-y-3">
             {platformPoints.map((p, i) => {
@@ -268,44 +223,31 @@ export function PlatformSection() {
               );
             })}
           </div>
+          <div className="mt-4 flex flex-wrap justify-end gap-1.5">
+            {platformModules.map((m) => {
+              const Icon = ICONS[m.icon] ?? Boxes;
+              return (
+                <span
+                  key={m.name}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-2.5 py-1 text-[0.72rem] font-medium text-cine-dim"
+                >
+                  <Icon className="h-3 w-3 text-[var(--cine-amber)]" strokeWidth={1.8} />
+                  {m.name}
+                </span>
+              );
+            })}
+          </div>
         </>
       }
       right={
-        <div className="grid grid-cols-2 gap-3">
-          {platformModules.map((m, i) => {
-            const Icon = ICONS[m.icon] ?? Boxes;
-            return (
-              <Card key={m.name} delay={i * 0.04} className="!p-4">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(var(--cine-particle),0.14)] text-[var(--cine-amber)]">
-                  <Icon className="h-4 w-4" strokeWidth={1.8} />
-                </span>
-                <span className="mt-3 block text-[0.88rem] font-semibold text-cine">{m.name}</span>
-              </Card>
-            );
-          })}
+        <div>
+          <p className="mb-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-cine-faint">
+            Just ask — finished work out
+          </p>
+          <AiConsole />
         </div>
       }
     />
-  );
-}
-
-/* ============================================================
-   4 · AI  — interactive console with clickable suggestion chips
-   ============================================================ */
-export function AiSection() {
-  return (
-    <Stage index={3}>
-      <SectionHead
-        eyebrow="AI in action"
-        title={
-          <>
-            Just <span className="gradient-amber">ask.</span>
-          </>
-        }
-        sub="Plain language in. Finished work out. Click a prompt — see exactly what Citron does."
-      />
-      <AiConsole />
-    </Stage>
   );
 }
 
@@ -314,13 +256,7 @@ function AiConsole() {
   const [i, setI] = useState(0);
   const [typed, setTyped] = useState('');
   const [done, setDone] = useState(false);
-  const [running, setRunning] = useState(true);
   const timerRef = useRef<number | null>(null);
-
-  const advance = (next: number) => {
-    if (timerRef.current) window.clearTimeout(timerRef.current);
-    setI(next);
-  };
 
   useEffect(() => {
     if (reduce) {
@@ -343,38 +279,25 @@ function AiConsole() {
       } else {
         timerRef.current = window.setTimeout(() => {
           setDone(true);
-          if (running) {
-            timerRef.current = window.setTimeout(
-              () => setI((p) => (p + 1) % aiActions.length),
-              2600
-            );
-          }
+          timerRef.current = window.setTimeout(
+            () => setI((p) => (p + 1) % aiActions.length),
+            2600
+          );
         }, 360);
       }
     };
     timerRef.current = window.setTimeout(type, 240);
     return clear;
-  }, [i, reduce, running]);
+  }, [i, reduce]);
 
   return (
-    <div className="mt-8 rounded-[var(--radius-2xl)] cine-card overflow-hidden">
-      {/* console */}
+    <div className="rounded-[var(--radius-2xl)] cine-card overflow-hidden">
       <div className="p-6">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-[var(--cine-amber)]">
-            <Sparkles className="h-4 w-4" />
-            <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-cine-dim">
-              Citron AI · {aiActions[i].outcome.split(' ')[0]}
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setRunning((r) => !r)}
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--cine-line)] text-cine-dim transition-colors hover:text-cine"
-            aria-label={running ? 'Pause autoplay' : 'Resume autoplay'}
-          >
-            {running ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
-          </button>
+        <div className="flex items-center gap-2 text-[var(--cine-amber)]">
+          <Sparkles className="h-4 w-4" />
+          <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-cine-dim">
+            Citron AI · {aiActions[i].outcome.split(' ')[0]}
+          </span>
         </div>
 
         <p className="mt-4 min-h-[3.25rem] font-mono text-[0.92rem] leading-relaxed text-cine">
@@ -399,104 +322,17 @@ function AiConsole() {
           </span>
         </motion.div>
       </div>
-
-      {/* clickable suggestion chips */}
-      <div className="border-t border-[var(--cine-card-border)] bg-[rgba(var(--cine-particle),0.04)] px-5 py-3">
-        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-cine-faint">
-          Try a prompt
-        </p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {aiActions.map((a, k) => (
-            <button
-              key={k}
-              type="button"
-              onClick={() => advance(k)}
-              className={
-                'rounded-full border px-3 py-1.5 text-left text-[0.76rem] transition-all duration-200 ' +
-                (k === i
-                  ? 'border-transparent bg-[var(--cine-amber-bright)] text-[#1d1c19]'
-                  : 'border-[var(--cine-line)] text-cine-dim hover:text-cine')
-              }
-            >
-              {a.prompt.length > 42 ? a.prompt.slice(0, 40) + '…' : a.prompt}
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
 
 /* ============================================================
-   5 · IMPACT  — centerpiece close of Act 1
-   ============================================================ */
-export function ImpactSection() {
-  return (
-    <SplitStage
-      index={4}
-      left={
-        <>
-          <SectionHead
-            eyebrow="Real impact"
-            title={
-              <>
-                Fewer tools.{' '}
-                <span className="gradient-amber">More momentum.</span>
-              </>
-            }
-            sub="What changes when a company finally runs on one system."
-          />
-          <div className="mt-7 grid grid-cols-3 gap-3 text-center">
-            {impactMetrics.map((m, i) => (
-              <CountUpCard key={m.label} value={m.value} label={m.label} delay={0.1 + i * 0.06} />
-            ))}
-          </div>
-        </>
-      }
-      right={
-        <Card className="!p-7">
-          <div className="text-[2.5rem] leading-none text-[var(--cine-amber)]">“</div>
-          <blockquote className="mt-1 text-[1.05rem] leading-relaxed text-cine">
-            {impactQuote.quote}
-          </blockquote>
-          <figcaption className="mt-4 text-[0.8125rem] text-cine-faint">
-            <span className="font-semibold text-cine">{impactQuote.name}</span> · {impactQuote.role}
-          </figcaption>
-        </Card>
-      }
-    />
-  );
-}
-
-function CountUpCard({ value, label, delay }: { value: string; label: string; delay: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.5 });
-  return (
-    <Card delay={delay} className="!p-4">
-      <div
-        ref={ref}
-        className="font-mono text-[1.5rem] font-semibold tabular-nums text-[var(--cine-amber)]"
-      >
-        <motion.span
-          initial={{ opacity: 0, y: 8 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: EASE }}
-        >
-          {value}
-        </motion.span>
-      </div>
-      <div className="mt-1 text-[0.7rem] leading-snug text-cine-faint">{label}</div>
-    </Card>
-  );
-}
-
-/* ============================================================
-   6 · INKBLOT  — closing centerpiece (after Act 2)
+   4 · INKBLOT  — closing centerpiece (after Act 2)
    ============================================================ */
 export function InkblotSection() {
   const year = new Date().getFullYear();
   return (
-    <Stage index={5}>
+    <Stage index={3}>
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

@@ -139,6 +139,36 @@
 }
 
 /* ============================================================
+   Section-scoped dark — only 1–2 chapters use this wrapper.
+   Light tokens stay on :root; dark overrides live on the section.
+   ============================================================ */
+.cine-section-dark {
+  --cine-bg-0: #0b0a08;
+  --cine-bg-1: #100e0b;
+  --cine-bg-2: #171410;
+  --cine-void-from: #171410;
+  --cine-void-mid: #0e0c09;
+  --cine-void-to: #060504;
+  --cine-ink: #f4efe2;
+  --cine-ink-dim: #c7c0ae;
+  --cine-ink-faint: #8c8677;
+  --cine-amber: #eccd74;
+  --cine-amber-bright: #f1cf6d;
+  --cine-amber-soft: #dcc066;
+  --cine-amber-deep: #c9a945;
+  --cine-line: rgba(236, 205, 116, 0.16);
+  --cine-card: rgba(255, 255, 255, 0.045);
+  --cine-card-border: rgba(255, 255, 255, 0.09);
+  --cine-scrim-strong: rgba(11, 10, 8, 0.94);
+  --cine-scrim-soft: rgba(11, 10, 8, 0.5);
+  --cine-vignette: rgba(0, 0, 0, 0.5);
+  --cine-particle: 236, 205, 116;
+
+  color-scheme: dark;
+  background-color: var(--cine-bg-0);
+}
+
+/* ============================================================
    Base
    ============================================================ */
 @layer base {

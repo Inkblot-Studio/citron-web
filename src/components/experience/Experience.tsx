@@ -11,25 +11,21 @@ import {
   HeroSection,
   CrmSection,
   PlatformSection,
-  AiSection,
-  ImpactSection,
   InkblotSection,
 } from './sections';
 import {
   TrustBar,
-  ProductShowcase,
-  StackComparison,
   RoiCalculator,
   Testimonials,
   FinalCta,
 } from './homeSections';
 
 /**
- * Citron — a compact guided product story. Act one is the mascot's five-chapter
- * journey (the guide travels chapter to chapter, never overlapping content).
- * Act two is the product website proper — trust, product, comparison, ROI,
- * voices, and a close — each section a distinct experience. The guide steps
- * aside for act two and returns for the finale.
+ * Citron — a compact guided product story. Act one is the mascot's three-chapter
+ * journey (hero, CRM, platform+AI) — the guide roams the hero, then travels
+ * chapter to chapter, never overlapping content. Act two is the product website
+ * proper — trust & impact, product, comparison, ROI, voices, and a close. The
+ * guide steps aside for act two and returns for the finale.
  */
 export function Experience() {
   useEffect(() => {
@@ -44,17 +40,13 @@ export function Experience() {
         <CursorTrail />
         <MascotGuide />
 
-        {/* Act one — the mascot's journey (compact, 5 beats) */}
+        {/* Act one — the mascot's journey (compact, 3 beats) */}
         <HeroSection />
         <CrmSection />
         <PlatformSection />
-        <AiSection />
-        <ImpactSection />
 
         {/* Act two — the product, in depth */}
         <TrustBar />
-        <ProductShowcase />
-        <StackComparison />
         <RoiCalculator />
         <Testimonials />
         <FinalCta />

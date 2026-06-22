@@ -46,7 +46,7 @@ function Section({
   children,
 }: {
   id?: string;
-  tone?: 'base' | 'surface';
+  tone?: 'base' | 'surface' | 'dark';
   className?: string;
   children: ReactNode;
 }) {
@@ -54,11 +54,16 @@ function Section({
     <section
       id={id}
       className={cn(
-        'relative w-full overflow-hidden py-24 sm:py-32',
+        'snap-section relative w-full overflow-hidden py-24 sm:py-32',
         tone === 'surface' && 'border-y border-[var(--cine-line)]',
+        tone === 'dark' && 'cine-section-dark',
         className
       )}
-      style={{ background: tone === 'surface' ? 'var(--cine-bg-1)' : 'var(--cine-bg-0)' }}
+      style={
+        tone === 'dark'
+          ? undefined
+          : { background: tone === 'surface' ? 'var(--cine-bg-1)' : 'var(--cine-bg-0)' }
+      }
     >
       <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6 lg:px-10">{children}</div>
     </section>
@@ -100,7 +105,10 @@ function Counter({ value, run }: { value: string; run: boolean }) {
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    if (!run) return;
+    if (!run) {
+      setDisplay(0);
+      return;
+    }
     if (reduce) {
       setDisplay(num);
       return;
@@ -129,10 +137,10 @@ function Counter({ value, run }: { value: string; run: boolean }) {
 
 export function TrustBar() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const inView = useInView(ref, { once: true, amount: 0.45 });
 
   return (
-    <Section tone="surface">
+    <Section id="trust" tone="surface">
       <div ref={ref} className="text-center">
         <Eyebrow>Trusted to run the business</Eyebrow>
         <Title className="mx-auto max-w-2xl">Numbers teams feel in the first week.</Title>
@@ -500,7 +508,7 @@ export function RoiCalculator() {
   const totalImpact = yearlySavings + valueOfTime;
 
   return (
-    <Section id="roi">
+    <Section id="roi" tone="dark">
       <div className="mx-auto max-w-2xl text-center">
         <Eyebrow>The math</Eyebrow>
         <Title>See what Citron saves your team.</Title>
@@ -624,7 +632,7 @@ function RoiTile({
 
 export function FinalCta() {
   return (
-    <Section>
+    <Section id="cta">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

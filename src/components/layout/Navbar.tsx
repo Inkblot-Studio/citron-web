@@ -7,7 +7,7 @@ import { Logo } from '@/components/ui/Logo';
 import { cn } from '@/lib/cn';
 
 const NAV_LINKS = [
-  { label: 'Product', href: '/#product' },
+  { label: 'Platform', href: '/#platform' },
   { label: 'Solutions', href: '/solutions' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'Customers', href: '/#customers' },

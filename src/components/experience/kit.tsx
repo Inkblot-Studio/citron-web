@@ -39,7 +39,10 @@ function Chapter({
       ref={ref}
       id={scene.id}
       aria-label={scene.id}
-      className="snap-section relative w-full overflow-hidden"
+      className={cn(
+        'snap-section relative w-full overflow-hidden',
+        scene.theme === 'dark' && 'cine-section-dark'
+      )}
     >
       <SectionBackground mood={scene.mood} />
       <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-10">

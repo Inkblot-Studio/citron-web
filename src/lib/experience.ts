@@ -7,6 +7,7 @@
 
 export type Trick = 'none' | 'spin' | 'flip' | 'pop';
 export type Mood = 'dawn' | 'plain' | 'wash' | 'surface' | 'deep';
+export type SectionTheme = 'light' | 'dark';
 
 /**
  * Where the content sits relative to the mascot:
@@ -25,21 +26,19 @@ export type Scene = {
   scale: number;
   trick: Trick;
   mood: Mood;
+  /** When dark, the section wraps itself in `.cine-section-dark`. */
+  theme: SectionTheme;
 };
 
 export const scenes: Scene[] = [
-  // 1 · Hero — opens the story, embeds the 7→1 collapse
-  { id: 'hero', layout: 'above', pos: { x: 0.5, y: 0.24 }, scale: 1.15, trick: 'none', mood: 'dawn' },
+  // 1 · Hero — light opening; the mascot roams this chapter freely
+  { id: 'hero', layout: 'above', pos: { x: 0.5, y: 0.2 }, scale: 1.12, trick: 'none', mood: 'dawn', theme: 'light' },
   // 2 · CRM — mascot left, interactive pipeline right
-  { id: 'crm', layout: 'left', pos: { x: 0.2, y: 0.5 }, scale: 1.05, trick: 'spin', mood: 'plain' },
-  // 3 · Platform — CENTERPIECE, modules flank the mascot
-  { id: 'platform', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.92, trick: 'flip', mood: 'wash' },
-  // 4 · AI — mascot right, interactive console left
-  { id: 'ai', layout: 'right', pos: { x: 0.8, y: 0.4 }, scale: 1.0, trick: 'pop', mood: 'plain' },
-  // 5 · Impact — CENTERPIECE close of Act 1
-  { id: 'impact', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.92, trick: 'flip', mood: 'wash' },
-  // 6 · Inkblot — closing centerpiece (after Act 2)
-  { id: 'inkblot', layout: 'above', pos: { x: 0.5, y: 0.26 }, scale: 0.85, trick: 'spin', mood: 'surface' },
+  { id: 'crm', layout: 'left', pos: { x: 0.21, y: 0.5 }, scale: 1.0, trick: 'pop', mood: 'plain', theme: 'light' },
+  // 3 · Platform + AI — CENTERPIECE, narrative & console flank the mascot
+  { id: 'platform', layout: 'split', pos: { x: 0.5, y: 0.5 }, scale: 0.84, trick: 'flip', mood: 'wash', theme: 'light' },
+  // 4 · Inkblot — closing centerpiece (after Act 2)
+  { id: 'inkblot', layout: 'above', pos: { x: 0.5, y: 0.24 }, scale: 0.8, trick: 'spin', mood: 'surface', theme: 'light' },
 ];
 
 export const TOTAL_SCENES = scenes.length;

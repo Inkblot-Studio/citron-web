@@ -4,11 +4,10 @@ import { useEffect, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
 
 /**
- * A refined cursor trail. As the pointer moves it leaves a sparse wake of soft
- * amber dots that drift upward and fade out within ~0.8s — the kind of detail
- * you notice subconsciously, never a flashy particle burst. The native cursor
- * is kept for usability. The render loop sleeps when nothing is moving, so it
- * costs nothing at rest.
+ * An elegant cursor ribbon. A smooth gold filament trails the pointer with an
+ * eased lag, tapering from a soft glowing head to nothing at the tail — a
+ * single flowing line drawn through the recent path, never a spray of dots.
+ * The render loop sleeps when the pointer is still, so it costs nothing at rest.
  *
  * Desktop, fine-pointer only; disabled entirely for reduced motion.
  */
@@ -41,69 +40,74 @@ export function CursorTrail() {
     resize();
     window.addEventListener('resize', resize);
 
-    type Dot = { x: number; y: number; vx: number; vy: number; life: number; r: number };
-    const dots: Dot[] = [];
+    const GOLD = '236, 205, 116';
+    const MAX_POINTS = 28;
+    const HEAD_WIDTH = 5.5;
+
+    type Pt = { x: number; y: number };
+    const pts: Pt[] = [];
 
     let mx = -100;
     let my = -100;
-    let lastX = mx;
-    let lastY = my;
-    let moved = false;
-    let spawnAcc = 0;
-    let last = 0;
+    let head = { x: mx, y: my };
+    let seeded = false;
+    let lastMove = 0;
     let raf = 0;
     let running = false;
 
-    const step = (t: number) => {
-      const dt = last ? Math.min(t - last, 40) : 16;
-      last = t;
-
-      const dx = mx - lastX;
-      const dy = my - lastY;
-      const dist = Math.hypot(dx, dy);
-      lastX = mx;
-      lastY = my;
-
-      if (moved && dist > 0.4) {
-        spawnAcc += dist;
-        while (spawnAcc > 16 && dots.length < 60) {
-          spawnAcc -= 16;
-          dots.push({
-            x: mx + (Math.random() - 0.5) * 5,
-            y: my + (Math.random() - 0.5) * 5,
-            vx: (Math.random() - 0.5) * 0.012,
-            vy: -0.02 - Math.random() * 0.04,
-            life: 1,
-            r: 1.6 + Math.random() * 2.2,
-          });
-        }
-      }
-      moved = false;
-
+    const draw = () => {
       ctx.clearRect(0, 0, w, h);
-      for (let i = dots.length - 1; i >= 0; i--) {
-        const d = dots[i];
-        d.life -= dt / 820;
-        if (d.life <= 0) {
-          dots.splice(i, 1);
-          continue;
-        }
-        d.x += d.vx * dt;
-        d.y += d.vy * dt;
-        const alpha = d.life * d.life * 0.34;
-        const radius = d.r * (0.55 + d.life * 0.7);
-        const outer = radius * 3.4;
-        const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, outer);
-        g.addColorStop(0, `rgba(168, 132, 28, ${alpha})`);
-        g.addColorStop(1, 'rgba(168, 132, 28, 0)');
-        ctx.fillStyle = g;
+      const n = pts.length;
+      if (n < 2) return;
+
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Draw tail → head so the brightest, widest part lands on top.
+      for (let i = 1; i < n; i++) {
+        const t = i / (n - 1); // 0 at tail, 1 at head
+        const prev = pts[i - 1];
+        const cur = pts[i];
+        const mid = { x: (prev.x + cur.x) / 2, y: (prev.y + cur.y) / 2 };
+
+        ctx.strokeStyle = `rgba(${GOLD}, ${0.42 * t * t})`;
+        ctx.lineWidth = HEAD_WIDTH * t + 0.4;
         ctx.beginPath();
-        ctx.arc(d.x, d.y, outer, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(prev.x, prev.y);
+        ctx.quadraticCurveTo(prev.x, prev.y, mid.x, mid.y);
+        ctx.lineTo(cur.x, cur.y);
+        ctx.stroke();
       }
 
-      // Sleep when there's nothing left to draw.
-      if (dots.length === 0) {
+      // A soft luminous head.
+      const headPt = pts[n - 1];
+      const glow = ctx.createRadialGradient(headPt.x, headPt.y, 0, headPt.x, headPt.y, 14);
+      glow.addColorStop(0, `rgba(${GOLD}, 0.5)`);
+      glow.addColorStop(1, `rgba(${GOLD}, 0)`);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(headPt.x, headPt.y, 14, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    const step = (t: number) => {
+      const idle = t - lastMove > 90;
+
+      // Ease the head toward the pointer for a smooth, weighted trail.
+      head.x += (mx - head.x) * 0.3;
+      head.y += (my - head.y) * 0.3;
+
+      if (!idle) {
+        pts.push({ x: head.x, y: head.y });
+        while (pts.length > MAX_POINTS) pts.shift();
+      } else if (pts.length > 0) {
+        // Drain the ribbon gracefully once the pointer rests.
+        pts.shift();
+      }
+
+      draw();
+
+      if (idle && pts.length === 0) {
         running = false;
         ctx.clearRect(0, 0, w, h);
         return;
@@ -114,14 +118,17 @@ export function CursorTrail() {
     const wake = () => {
       if (running) return;
       running = true;
-      last = 0;
       raf = requestAnimationFrame(step);
     };
 
     const onMove = (e: MouseEvent) => {
       mx = e.clientX;
       my = e.clientY;
-      moved = true;
+      lastMove = performance.now();
+      if (!seeded) {
+        head = { x: mx, y: my };
+        seeded = true;
+      }
       wake();
     };
     window.addEventListener('mousemove', onMove, { passive: true });
