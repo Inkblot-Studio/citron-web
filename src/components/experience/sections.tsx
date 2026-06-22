@@ -65,11 +65,11 @@ export function HeroSection() {
         <span className="eyebrow-cine text-[0.72rem] font-semibold">
           The Business Operating System
         </span>
-        <h1 className="mx-auto mt-5 max-w-3xl text-[2.9rem] font-semibold leading-[1.02] tracking-[-0.04em] text-cine sm:text-[4.25rem]">
+        <h1 className="mx-auto mt-5 max-w-[16ch] text-[clamp(2.7rem,8.4vw,5.5rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-cine">
           Run your whole company on{' '}
           <span className="gradient-amber">one system.</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-xl text-[1.125rem] leading-relaxed text-cine-dim">
+        <p className="mx-auto mt-7 max-w-xl text-[1.1875rem] leading-relaxed text-cine-dim">
           Citron unifies sales, finance, and operations into a single
           intelligent platform — so your business runs as one, not as seven
           disconnected tools.

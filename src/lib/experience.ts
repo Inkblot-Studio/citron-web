@@ -25,29 +25,27 @@ export type Scene = {
   scale: number;
   trick: Trick;
   mood: Mood;
-  /** Render this chapter as a dark panel (regardless of global theme). */
-  dark?: boolean;
 };
 
 export const scenes: Scene[] = [
   // 1 · What is Citron?            — centerpiece intro
-  { id: 'hero', layout: 'above', pos: { x: 0.5, y: 0.3 }, scale: 1.25, trick: 'none', mood: 'dawn' },
+  { id: 'hero', layout: 'above', pos: { x: 0.5, y: 0.24 }, scale: 1.15, trick: 'none', mood: 'dawn' },
   // 2 · Why are tools broken?      — mascot right, content left
-  { id: 'problem', layout: 'right', pos: { x: 0.8, y: 0.34 }, scale: 0.92, trick: 'pop', mood: 'deep', dark: true },
+  { id: 'problem', layout: 'right', pos: { x: 0.8, y: 0.36 }, scale: 1.0, trick: 'pop', mood: 'wash' },
   // 3 · What is Citron CRM?        — mascot left (low), content right
-  { id: 'crm', layout: 'left', pos: { x: 0.2, y: 0.6 }, scale: 0.95, trick: 'spin', mood: 'wash' },
+  { id: 'crm', layout: 'left', pos: { x: 0.2, y: 0.56 }, scale: 1.05, trick: 'spin', mood: 'plain' },
   // 4 · What is Citron Platform?   — CENTERPIECE, modules flank the mascot
-  { id: 'platform', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.86, trick: 'flip', mood: 'deep', dark: true },
+  { id: 'platform', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.92, trick: 'flip', mood: 'wash' },
   // 5 · How does AI help?          — mascot right, console left
-  { id: 'ai', layout: 'right', pos: { x: 0.8, y: 0.4 }, scale: 0.92, trick: 'pop', mood: 'plain' },
+  { id: 'ai', layout: 'right', pos: { x: 0.8, y: 0.4 }, scale: 1.0, trick: 'pop', mood: 'plain' },
   // 6 · How does automation help?  — mascot left, flow right
-  { id: 'automations', layout: 'left', pos: { x: 0.2, y: 0.5 }, scale: 0.95, trick: 'spin', mood: 'deep', dark: true },
+  { id: 'automations', layout: 'left', pos: { x: 0.2, y: 0.5 }, scale: 1.05, trick: 'spin', mood: 'surface' },
   // 7 · How does it impact?        — CENTERPIECE, metrics vs. voice
-  { id: 'impact', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.86, trick: 'flip', mood: 'surface' },
+  { id: 'impact', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.92, trick: 'flip', mood: 'wash' },
   // 8 · Why is it different?       — mascot right (high), table left
-  { id: 'why', layout: 'right', pos: { x: 0.78, y: 0.33 }, scale: 0.92, trick: 'pop', mood: 'plain' },
+  { id: 'why', layout: 'right', pos: { x: 0.78, y: 0.34 }, scale: 1.0, trick: 'pop', mood: 'plain' },
   // 9 · Who built it / start       — closing centerpiece
-  { id: 'inkblot', layout: 'above', pos: { x: 0.5, y: 0.3 }, scale: 0.78, trick: 'spin', mood: 'deep', dark: true },
+  { id: 'inkblot', layout: 'above', pos: { x: 0.5, y: 0.26 }, scale: 0.85, trick: 'spin', mood: 'surface' },
 ];
 
 export const TOTAL_SCENES = scenes.length;

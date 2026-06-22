@@ -5,8 +5,6 @@ import { siteConfig } from '@/lib/site';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollProgress } from '@/components/effects/ScrollProgress';
-import { ThemeScript } from '@/components/effects/ThemeScript';
-import { ThemeProvider } from '@/components/effects/ThemeProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -73,13 +71,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f7f5ef' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0907' },
-  ],
+  themeColor: '#f7f5ef',
   width: 'device-width',
   initialScale: 1,
-  colorScheme: 'light dark',
+  colorScheme: 'light',
 };
 
 const orgJsonLd = {
@@ -115,11 +110,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      suppressHydrationWarning
+      data-theme="light"
       className={`${inter.variable} ${jetbrains.variable}`}
     >
       <head>
-        <ThemeScript />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
@@ -136,12 +130,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
-        <ThemeProvider>
-          <ScrollProgress />
-          <Navbar />
-          <main id="main">{children}</main>
-          <Footer />
-        </ThemeProvider>
+        <ScrollProgress />
+        <Navbar />
+        <main id="main">{children}</main>
+        <Footer />
       </body>
     </html>
   );

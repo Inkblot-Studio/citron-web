@@ -34,7 +34,7 @@ export function Intro() {
     root.style.overflow = 'hidden';
 
     const dismiss = () => setVisible(false);
-    const timer = window.setTimeout(dismiss, 3200);
+    const timer = window.setTimeout(dismiss, 1650);
     window.addEventListener('wheel', dismiss, { passive: true, once: true });
     window.addEventListener('touchstart', dismiss, { passive: true, once: true });
     window.addEventListener('keydown', dismiss, { once: true });
@@ -81,30 +81,30 @@ export function Intro() {
             }}
           />
 
-          {/* mascot entrance + playful turn */}
+          {/* mascot: snappy entrance + a quick playful turn */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.6, y: 18 }}
+            initial={{ opacity: 0, scale: 0.55, y: 16 }}
             animate={{
               opacity: 1,
-              scale: [0.6, 1.06, 1, 1, 1.08, 1],
+              scale: [0.55, 1.1, 0.98, 1.04, 1],
               y: 0,
-              rotate: [0, 0, -9, 9, 0, 0],
+              rotate: [0, -10, 9, 0, 0],
             }}
             transition={{
-              duration: 2.4,
+              duration: 1.15,
               ease: EASE,
-              times: [0, 0.18, 0.32, 0.5, 0.7, 0.86],
+              times: [0, 0.28, 0.52, 0.76, 1],
             }}
           >
-            <AliveMascot className="h-[clamp(11rem,30vw,17rem)] w-[clamp(11rem,30vw,17rem)]" />
+            <AliveMascot className="h-[clamp(11rem,30vw,16rem)] w-[clamp(11rem,30vw,16rem)]" />
           </motion.div>
 
           {/* wordmark resolves */}
           <motion.div
-            className="mt-8 overflow-hidden"
-            initial={{ opacity: 0, y: 14 }}
+            className="mt-7"
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: EASE, delay: 1.5 }}
+            transition={{ duration: 0.45, ease: EASE, delay: 0.55 }}
           >
             <span className="text-[2rem] font-semibold tracking-[-0.03em] text-cine sm:text-[2.6rem]">
               Citron
@@ -114,7 +114,7 @@ export function Intro() {
             className="mt-2 text-[0.7rem] font-semibold uppercase tracking-[0.34em] text-[var(--cine-amber)]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, ease: EASE, delay: 1.85 }}
+            transition={{ duration: 0.4, ease: EASE, delay: 0.8 }}
           >
             The Business Operating System
           </motion.span>
@@ -125,7 +125,7 @@ export function Intro() {
             className="absolute bottom-8 text-[0.75rem] font-medium tracking-wide text-cine-faint transition-colors hover:text-cine"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 2.2 }}
+            transition={{ duration: 0.4, delay: 1 }}
           >
             Skip intro
           </motion.button>

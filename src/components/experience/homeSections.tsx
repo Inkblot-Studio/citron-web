@@ -70,7 +70,7 @@ function Title({ children, className }: { children: ReactNode; className?: strin
   return (
     <h2
       className={cn(
-        'mt-4 text-[2.1rem] font-semibold leading-[1.06] tracking-[-0.03em] text-cine sm:text-[2.8rem]',
+        'mt-4 text-[clamp(2rem,4.6vw,3.4rem)] font-semibold leading-[1.03] tracking-[-0.035em] text-cine',
         className
       )}
     >
@@ -493,7 +493,7 @@ export function FinalCta() {
         transition={{ duration: 0.7, ease: EASE }}
         className="mx-auto max-w-3xl text-center"
       >
-        <Title className="mx-auto max-w-2xl text-[2.4rem] sm:text-[3.2rem]">
+        <Title className="mx-auto max-w-3xl">
           Run your whole company on <span className="gradient-amber">one system.</span>
         </Title>
         <p className="mx-auto mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-cine-dim">

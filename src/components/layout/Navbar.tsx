@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { cn } from '@/lib/cn';
 
 const NAV_LINKS = [
@@ -53,7 +52,6 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           <Link
             href="/demo"
             className="group inline-flex items-center gap-2 rounded-full bg-[var(--cine-amber-bright)] px-4 py-2 text-[0.8125rem] font-semibold text-[#1d1c19] shadow-[0_2px_16px_-6px_rgba(var(--cine-particle),0.7)] transition-all duration-200 hover:brightness-105 sm:px-5"

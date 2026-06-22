@@ -138,63 +138,6 @@
   color-scheme: light;
 }
 
-[data-theme='dark'] {
-  --bg-primary: #12110e;
-  --bg-secondary: #1d1c18;
-  --bg-tertiary: #2a2924;
-  --bg-inverse: #fafaf7;
-
-  --text-primary: #f5f4f0;
-  --text-secondary: #c7c5bd;
-  --text-tertiary: #93928a;
-  --text-muted: #6b6a63;
-  --text-inverse: #1d1c19;
-
-  --border-subtle: #2a2924;
-  --border-default: #38372f;
-  --border-strong: #4d4c44;
-
-  --surface-card: #1a1915;
-  --surface-glass: rgba(26, 25, 21, 0.72);
-  --surface-elevated: #221f1a;
-
-  --accent: #d9bc58;
-  --accent-hover: #e8d38a;
-  --accent-bright: #e8d38a;
-  --accent-wash: rgba(217, 188, 88, 0.08);
-
-  --grid-line: rgba(245, 244, 240, 0.05);
-  --hero-from: #0c0b09;
-  --hero-to: #161410;
-
-  /* Cinematic journey tokens — dark */
-  --cine-bg-0: #0a0907;
-  --cine-bg-1: #100e0a;
-  --cine-bg-2: #16130d;
-  --cine-void-from: #16130d;
-  --cine-void-mid: #0e0c08;
-  --cine-void-to: #0a0907;
-  --cine-ink: #f6f3ea;
-  --cine-ink-dim: #b8b2a2;
-  --cine-ink-faint: #837e72;
-  --cine-amber: #e8d38a;
-  --cine-amber-bright: #d9bc58;
-  --cine-amber-soft: #f0dd9a;
-  --cine-amber-deep: #b8962c;
-  --cine-line: rgba(217, 188, 88, 0.18);
-  --cine-card: rgba(20, 18, 13, 0.7);
-  --cine-card-border: rgba(217, 188, 88, 0.16);
-  --cine-scrim-strong: rgba(8, 7, 5, 0.92);
-  --cine-scrim-soft: rgba(8, 7, 5, 0.55);
-  --cine-vignette: rgba(8, 7, 5, 0.55);
-  --cine-particle: 217, 188, 88;
-  --cine-mascot-0: #211d15;
-  --cine-mascot-1: #161309;
-  --cine-mascot-2: #0c0a06;
-
-  color-scheme: dark;
-}
-
 /* ============================================================
    Base
    ============================================================ */
@@ -218,7 +161,6 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
-    transition: background-color 0.5s var(--ease-out-soft), color 0.5s var(--ease-out-soft);
   }
 
   ::selection {
@@ -448,15 +390,8 @@
 .cine-card {
   background: var(--cine-card);
   border: 1px solid var(--cine-card-border);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-}
-
-/* Smooth, animated light/dark crossfade via the View Transitions API */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.5s;
-  animation-timing-function: var(--ease-out-soft);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
 }
 
 @keyframes data-rise {

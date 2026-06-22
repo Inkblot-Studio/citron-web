@@ -5,8 +5,10 @@ import {
   motion,
   useAnimationControls,
   useMotionValue,
+  useScroll,
   useSpring,
   useTransform,
+  useVelocity,
   useReducedMotion,
 } from 'framer-motion';
 import { AliveMascot } from './Mascot';
@@ -51,6 +53,12 @@ export function MascotGuide() {
   const lookX = useSpring(mx, { stiffness: 90, damping: 16, mass: 0.5 });
   const lookY = useSpring(my, { stiffness: 90, damping: 16, mass: 0.5 });
 
+  // Scroll → the mascot leans the way you're going, like a curious passenger.
+  const { scrollY } = useScroll();
+  const scrollVel = useVelocity(scrollY);
+  const leanRaw = useTransform(scrollVel, [-2500, 0, 2500], [11, 0, -11], { clamp: true });
+  const lean = useSpring(leanRaw, { stiffness: 90, damping: 18, mass: 0.6 });
+
   const trick = useAnimationControls();
   const firstRun = useRef(true);
 
@@ -92,11 +100,11 @@ export function MascotGuide() {
       <motion.div className="absolute left-0 top-0" style={{ x, y }}>
         <motion.div
           className="-translate-x-1/2 -translate-y-1/2"
-          style={{ scale, rotateX, rotateY, transformPerspective: 1000 }}
+          style={{ scale, rotateX, rotateY, rotate: reduce ? undefined : lean, transformPerspective: 1000 }}
         >
           <motion.div animate={trick} style={{ transformPerspective: 900 }}>
             <AliveMascot
-              className="h-[clamp(18rem,26vw,30rem)] w-[clamp(18rem,26vw,30rem)]"
+              className="h-[clamp(11rem,24vmin,18rem)] w-[clamp(11rem,24vmin,18rem)]"
               lookX={reduce ? undefined : lookX}
               lookY={reduce ? undefined : lookY}
             />

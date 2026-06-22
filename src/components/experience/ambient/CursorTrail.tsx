@@ -2,27 +2,18 @@
 
 import { useEffect, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
-import { useExperience } from '../ExperienceContext';
-import { scenes } from '@/lib/experience';
 
 /**
  * A refined cursor trail. As the pointer moves it leaves a sparse wake of soft
  * amber dots that drift upward and fade out within ~0.8s — the kind of detail
- * you notice subconsciously, never a flashy particle burst. The colour and
- * blend adapt to the active chapter (a warm glow over dark panels, a deeper
- * amber over light ones). The native cursor is kept for usability.
+ * you notice subconsciously, never a flashy particle burst. The native cursor
+ * is kept for usability. The render loop sleeps when nothing is moving, so it
+ * costs nothing at rest.
  *
  * Desktop, fine-pointer only; disabled entirely for reduced motion.
  */
 export function CursorTrail() {
   const reduce = useReducedMotion();
-  const { active } = useExperience();
-  const darkRef = useRef(false);
-
-  useEffect(() => {
-    darkRef.current = !!scenes[Math.min(active, scenes.length - 1)].dark;
-  }, [active]);
-
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -58,20 +49,13 @@ export function CursorTrail() {
     let lastX = mx;
     let lastY = my;
     let moved = false;
-
-    const onMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
-      moved = true;
-    };
-    window.addEventListener('mousemove', onMove, { passive: true });
-
     let spawnAcc = 0;
-    let last = performance.now();
+    let last = 0;
     let raf = 0;
+    let running = false;
 
-    const loop = (t: number) => {
-      const dt = Math.min(t - last, 40);
+    const step = (t: number) => {
+      const dt = last ? Math.min(t - last, 40) : 16;
       last = t;
 
       const dx = mx - lastX;
@@ -80,10 +64,9 @@ export function CursorTrail() {
       lastX = mx;
       lastY = my;
 
-      // Spawn proportional to movement → faster moves leave a longer wake.
       if (moved && dist > 0.4) {
         spawnAcc += dist;
-        while (spawnAcc > 16 && dots.length < 70) {
+        while (spawnAcc > 16 && dots.length < 60) {
           spawnAcc -= 16;
           dots.push({
             x: mx + (Math.random() - 0.5) * 5,
@@ -95,14 +78,9 @@ export function CursorTrail() {
           });
         }
       }
+      moved = false;
 
       ctx.clearRect(0, 0, w, h);
-
-      const dark = darkRef.current;
-      ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
-      const col = dark ? '233, 211, 138' : '168, 132, 28';
-      const peak = dark ? 0.5 : 0.34;
-
       for (let i = dots.length - 1; i >= 0; i--) {
         const d = dots[i];
         d.life -= dt / 820;
@@ -112,23 +90,41 @@ export function CursorTrail() {
         }
         d.x += d.vx * dt;
         d.y += d.vy * dt;
-
-        const alpha = d.life * d.life * peak;
+        const alpha = d.life * d.life * 0.34;
         const radius = d.r * (0.55 + d.life * 0.7);
         const outer = radius * 3.4;
         const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, outer);
-        g.addColorStop(0, `rgba(${col}, ${alpha})`);
-        g.addColorStop(1, `rgba(${col}, 0)`);
+        g.addColorStop(0, `rgba(168, 132, 28, ${alpha})`);
+        g.addColorStop(1, 'rgba(168, 132, 28, 0)');
         ctx.fillStyle = g;
         ctx.beginPath();
         ctx.arc(d.x, d.y, outer, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      moved = false;
-      raf = requestAnimationFrame(loop);
+      // Sleep when there's nothing left to draw.
+      if (dots.length === 0) {
+        running = false;
+        ctx.clearRect(0, 0, w, h);
+        return;
+      }
+      raf = requestAnimationFrame(step);
     };
-    raf = requestAnimationFrame(loop);
+
+    const wake = () => {
+      if (running) return;
+      running = true;
+      last = 0;
+      raf = requestAnimationFrame(step);
+    };
+
+    const onMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      moved = true;
+      wake();
+    };
+    window.addEventListener('mousemove', onMove, { passive: true });
 
     return () => {
       cancelAnimationFrame(raf);

@@ -57,8 +57,8 @@ export default function DemoPage() {
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
             <span
-              className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-[var(--radius-xl)] border border-[var(--cine-line)] bg-[rgba(20,18,13,0.7)] text-[var(--cine-amber)]"
-              style={{ boxShadow: '0 0 40px -8px rgba(217,188,88,0.5)' }}
+              className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-[var(--radius-xl)] border border-[var(--cine-line)] bg-[rgba(var(--cine-particle),0.12)] text-[var(--cine-amber-bright)]"
+              style={{ boxShadow: '0 0 40px -10px rgba(var(--cine-particle),0.55)' }}
             >
               <Mascot className="h-7 w-7" animate={false} />
             </span>

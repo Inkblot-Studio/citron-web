@@ -19,12 +19,12 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 function MobileMascot() {
   return (
     <div className="flex justify-center pt-28 lg:hidden">
-      <AliveMascot className="h-40 w-40" />
+      <AliveMascot className="h-36 w-36 sm:h-44 sm:w-44" />
     </div>
   );
 }
 
-/** Shared <section> wrapper: mood background, dark panel flag, snap target. */
+/** Shared <section> wrapper: mood background + snap target. */
 function Chapter({
   index,
   children,
@@ -39,7 +39,6 @@ function Chapter({
       ref={ref}
       id={scene.id}
       aria-label={scene.id}
-      data-theme={scene.dark ? 'dark' : undefined}
       className="snap-section relative w-full overflow-hidden"
     >
       <SectionBackground mood={scene.mood} />
@@ -65,7 +64,7 @@ export function Stage({ index, children }: { index: number; children: ReactNode 
         className={cn(
           'flex min-h-[80vh] flex-col py-16 lg:min-h-screen',
           above
-            ? 'items-center justify-center text-center lg:justify-end lg:pb-[12vh] lg:pt-[42vh]'
+            ? 'items-center justify-start text-center lg:justify-start lg:pb-[10vh] lg:pt-[46vh]'
             : 'justify-center'
         )}
       >
@@ -287,10 +286,10 @@ export function Card({
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={reset}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.6, ease: EASE, delay }}
+      transition={{ duration: 0.7, ease: EASE, delay }}
       whileHover={reduce ? undefined : { scale: 1.015 }}
       style={reduce ? undefined : { rotateX, rotateY, transformPerspective: 900 }}
       className={cn(
@@ -331,10 +330,10 @@ export function SectionHead({
       className={className}
     >
       <span className="eyebrow-cine text-[0.7rem] font-semibold">{eyebrow}</span>
-      <h2 className="mt-4 text-[2.25rem] font-semibold leading-[1.05] tracking-[-0.03em] text-cine sm:text-[2.9rem]">
+      <h2 className="mt-4 text-[clamp(2.1rem,4.6vw,3.4rem)] font-semibold leading-[1.03] tracking-[-0.035em] text-cine">
         {title}
       </h2>
-      {sub && <p className="mt-4 text-[1.0625rem] leading-relaxed text-cine-dim">{sub}</p>}
+      {sub && <p className="mt-5 max-w-[42ch] text-[1.0625rem] leading-relaxed text-cine-dim">{sub}</p>}
     </motion.div>
   );
 }
