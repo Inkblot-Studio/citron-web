@@ -28,23 +28,17 @@ export type Scene = {
 };
 
 export const scenes: Scene[] = [
-  // 1 · What is Citron?            — centerpiece intro
+  // 1 · Hero — opens the story, embeds the 7→1 collapse
   { id: 'hero', layout: 'above', pos: { x: 0.5, y: 0.24 }, scale: 1.15, trick: 'none', mood: 'dawn' },
-  // 2 · Why are tools broken?      — mascot right, content left
-  { id: 'problem', layout: 'right', pos: { x: 0.8, y: 0.36 }, scale: 1.0, trick: 'pop', mood: 'wash' },
-  // 3 · What is Citron CRM?        — mascot left (low), content right
-  { id: 'crm', layout: 'left', pos: { x: 0.2, y: 0.56 }, scale: 1.05, trick: 'spin', mood: 'plain' },
-  // 4 · What is Citron Platform?   — CENTERPIECE, modules flank the mascot
+  // 2 · CRM — mascot left, interactive pipeline right
+  { id: 'crm', layout: 'left', pos: { x: 0.2, y: 0.5 }, scale: 1.05, trick: 'spin', mood: 'plain' },
+  // 3 · Platform — CENTERPIECE, modules flank the mascot
   { id: 'platform', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.92, trick: 'flip', mood: 'wash' },
-  // 5 · How does AI help?          — mascot right, console left
+  // 4 · AI — mascot right, interactive console left
   { id: 'ai', layout: 'right', pos: { x: 0.8, y: 0.4 }, scale: 1.0, trick: 'pop', mood: 'plain' },
-  // 6 · How does automation help?  — mascot left, flow right
-  { id: 'automations', layout: 'left', pos: { x: 0.2, y: 0.5 }, scale: 1.05, trick: 'spin', mood: 'surface' },
-  // 7 · How does it impact?        — CENTERPIECE, metrics vs. voice
+  // 5 · Impact — CENTERPIECE close of Act 1
   { id: 'impact', layout: 'split', pos: { x: 0.5, y: 0.46 }, scale: 0.92, trick: 'flip', mood: 'wash' },
-  // 8 · Why is it different?       — mascot right (high), table left
-  { id: 'why', layout: 'right', pos: { x: 0.78, y: 0.34 }, scale: 1.0, trick: 'pop', mood: 'plain' },
-  // 9 · Who built it / start       — closing centerpiece
+  // 6 · Inkblot — closing centerpiece (after Act 2)
   { id: 'inkblot', layout: 'above', pos: { x: 0.5, y: 0.26 }, scale: 0.85, trick: 'spin', mood: 'surface' },
 ];
 
@@ -68,6 +62,29 @@ export const crmFeatures: { title: string; desc: string }[] = [
   { title: 'Opportunities', desc: 'Always know which deals truly deserve your time.' },
   { title: 'Customers', desc: 'Every conversation, contract, and detail in one view.' },
   { title: 'Forecasting', desc: 'Predict revenue with numbers you can actually trust.' },
+];
+
+/** The visible stages of a deal moving through Citron CRM. */
+export const crmStages: { name: string; deals: { name: string; value: string }[] }[] = [
+  {
+    name: 'Lead',
+    deals: [
+      { name: 'Acme Corp', value: '$24k' },
+      { name: 'Northwind', value: '$8k' },
+    ],
+  },
+  {
+    name: 'Qualified',
+    deals: [{ name: 'Atlas Co', value: '$36k' }],
+  },
+  {
+    name: 'Proposal',
+    deals: [{ name: 'Meridian', value: '$92k' }],
+  },
+  {
+    name: 'Won',
+    deals: [{ name: 'Helix Labs', value: '$48k' }],
+  },
 ];
 
 export const platformModules: { name: string; icon: string }[] = [

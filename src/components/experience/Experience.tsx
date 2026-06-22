@@ -9,29 +9,27 @@ import { DemoNudge } from './ambient/DemoNudge';
 import { Intro } from './Intro';
 import {
   HeroSection,
-  ProblemSection,
   CrmSection,
   PlatformSection,
   AiSection,
-  AutomationsSection,
   ImpactSection,
-  WhySection,
   InkblotSection,
 } from './sections';
 import {
   TrustBar,
   ProductShowcase,
   StackComparison,
+  RoiCalculator,
   Testimonials,
   FinalCta,
 } from './homeSections';
 
 /**
- * Citron — a guided product story. Act one is the mascot's nine-chapter
+ * Citron — a compact guided product story. Act one is the mascot's five-chapter
  * journey (the guide travels chapter to chapter, never overlapping content).
- * Act two is the product website proper — trust, product, comparison, voices,
- * and a close — each section a distinct experience. The guide steps aside for
- * act two and returns for the finale.
+ * Act two is the product website proper — trust, product, comparison, ROI,
+ * voices, and a close — each section a distinct experience. The guide steps
+ * aside for act two and returns for the finale.
  */
 export function Experience() {
   useEffect(() => {
@@ -46,20 +44,18 @@ export function Experience() {
         <CursorTrail />
         <MascotGuide />
 
-        {/* Act one — the mascot's journey */}
+        {/* Act one — the mascot's journey (compact, 5 beats) */}
         <HeroSection />
-        <ProblemSection />
         <CrmSection />
         <PlatformSection />
         <AiSection />
-        <AutomationsSection />
         <ImpactSection />
-        <WhySection />
 
         {/* Act two — the product, in depth */}
         <TrustBar />
         <ProductShowcase />
         <StackComparison />
+        <RoiCalculator />
         <Testimonials />
         <FinalCta />
 

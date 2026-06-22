@@ -16,6 +16,9 @@ import {
   ArrowRight,
   Star,
   Layers,
+  TrendingUp,
+  Clock,
+  DollarSign,
   type LucideIcon,
 } from 'lucide-react';
 import { modules, testimonials, caseStudies, stats } from '@/lib/site';
@@ -476,6 +479,142 @@ export function Testimonials() {
         <MarqueeRow cards={ROW_B} duration={54} reverse />
       </div>
     </Section>
+  );
+}
+
+/* ============================================================
+   ROI calculator — interactive slider, live savings readout
+   ============================================================ */
+
+const PER_SEAT_TOOL_COST = 92; // average / seat / month, traditional stack
+const PER_SEAT_CITRON = 57; // Growth plan, annual
+const HOURS_SAVED_PER_PERSON_WEEK = 6.4;
+const HOURLY_VALUE = 55;
+
+export function RoiCalculator() {
+  const [team, setTeam] = useState(18);
+  const monthlySavings = team * (PER_SEAT_TOOL_COST - PER_SEAT_CITRON);
+  const yearlySavings = monthlySavings * 12;
+  const hoursPerYear = Math.round(team * HOURS_SAVED_PER_PERSON_WEEK * 48);
+  const valueOfTime = hoursPerYear * HOURLY_VALUE;
+  const totalImpact = yearlySavings + valueOfTime;
+
+  return (
+    <Section id="roi">
+      <div className="mx-auto max-w-2xl text-center">
+        <Eyebrow>The math</Eyebrow>
+        <Title>See what Citron saves your team.</Title>
+        <p className="mt-4 text-[1.0625rem] leading-relaxed text-cine-dim">
+          Move the slider. Watch what one system replaces — in software bills
+          and in the time your team gets back.
+        </p>
+      </div>
+
+      <div className="mx-auto mt-12 max-w-3xl rounded-[var(--radius-3xl)] cine-card p-8 sm:p-10">
+        <label className="block">
+          <div className="flex items-baseline justify-between gap-4">
+            <span className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-cine-faint">
+              Your team size
+            </span>
+            <span className="font-mono text-[2rem] font-semibold tabular-nums text-cine">
+              {team}
+            </span>
+          </div>
+          <input
+            type="range"
+            min={5}
+            max={120}
+            value={team}
+            onChange={(e) => setTeam(parseInt(e.target.value, 10))}
+            className="roi-slider mt-4 w-full"
+            style={{ ['--val' as string]: team }}
+            aria-label="Team size"
+          />
+          <div className="mt-1.5 flex justify-between text-[0.7rem] text-cine-faint">
+            <span>5</span>
+            <span>120+</span>
+          </div>
+        </label>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <RoiTile
+            icon={DollarSign}
+            label="Saved on software"
+            value={`$${yearlySavings.toLocaleString()}`}
+            sub="/ year"
+          />
+          <RoiTile
+            icon={Clock}
+            label="Hours back to your team"
+            value={hoursPerYear.toLocaleString()}
+            sub="hrs / year"
+          />
+          <RoiTile
+            icon={TrendingUp}
+            label="Total annual impact"
+            value={`$${totalImpact.toLocaleString()}`}
+            sub="incl. time value"
+            highlight
+          />
+        </div>
+
+        <p className="mt-6 text-center text-[0.75rem] text-cine-faint">
+          Based on industry averages. Most teams see results within the first
+          month.
+        </p>
+
+        <div className="mt-7 flex justify-center">
+          <Magnetic strength={0.4}>
+            <Link
+              href="/demo"
+              className="group inline-flex h-[3rem] items-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-6 text-[0.95rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-12px_rgba(var(--cine-particle),0.7)] transition hover:brightness-105"
+            >
+              See your real numbers
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </Magnetic>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+function RoiTile({
+  icon: Icon,
+  label,
+  value,
+  sub,
+  highlight,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  sub: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div
+      className={
+        'relative rounded-[var(--radius-2xl)] border p-5 transition-colors ' +
+        (highlight
+          ? 'border-[var(--cine-amber-bright)] bg-[rgba(var(--cine-particle),0.1)]'
+          : 'border-[var(--cine-line)] bg-[var(--cine-bg-2)]')
+      }
+    >
+      <div className="flex items-center gap-2 text-cine-faint">
+        <Icon className="h-3.5 w-3.5" strokeWidth={1.8} />
+        <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em]">{label}</span>
+      </div>
+      <div
+        className={
+          'mt-3 font-mono text-[1.55rem] font-semibold leading-none tracking-[-0.02em] tabular-nums ' +
+          (highlight ? 'text-[var(--cine-amber)]' : 'text-cine')
+        }
+      >
+        {value}
+      </div>
+      <div className="mt-1 text-[0.72rem] text-cine-faint">{sub}</div>
+    </div>
   );
 }
 
