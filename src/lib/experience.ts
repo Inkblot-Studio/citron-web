@@ -40,12 +40,12 @@ export const scenes: Scene[] = [
   { id: 'command', layout: 'left', pos: { x: 0.21, y: 0.5 }, scale: 1.0, trick: 'pop', mood: 'plain', theme: 'light' },
   // 2 · Platform + AI — CENTERPIECE, narrative & console flank the mascot
   { id: 'platform', layout: 'split', pos: { x: 0.5, y: 0.5 }, scale: 0.84, trick: 'flip', mood: 'wash', theme: 'light' },
-  // 3 · Finale — mascot floats high & centered; content reads below it
+  // 3 · Finale — mascot on the right; copy stays clear on the left
   {
     id: 'finale',
-    layout: 'above',
-    pos: { x: 0.5, y: 0.19 },
-    scale: 0.74,
+    layout: 'right',
+    pos: { x: 0.84, y: 0.46 },
+    scale: 0.72,
     trick: 'spin',
     mood: 'surface',
     theme: 'light',

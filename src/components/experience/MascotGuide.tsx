@@ -17,6 +17,20 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
+const MOBILE_BREAKPOINT = 1024;
+
+/**
+ * On phones the guide can't share a row with the copy, so it becomes a small
+ * companion that hops to a new edge for every chapter — clearly travelling, never
+ * sitting still, and never covering the text (the wrapper is pointer-events-none).
+ */
+const mobileAnchors: { x: number; y: number; scale: number }[] = [
+  { x: 0.8, y: 0.8, scale: 0.5 }, // hero
+  { x: 0.2, y: 0.82, scale: 0.46 }, // command
+  { x: 0.8, y: 0.82, scale: 0.46 }, // platform
+  { x: 0.78, y: 0.8, scale: 0.5 }, // finale
+];
+
 /**
  * The hero choreography, expressed as a function of the 0→1 reveal timeline.
  * The mascot glides down from its intro hand-off, sweeps left→right across the
@@ -86,6 +100,15 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
     if (roamRef.current) {
       cancelAnimationFrame(roamRef.current);
       roamRef.current = null;
+    }
+
+    // Mobile — hop to a per-chapter edge anchor; no sweep/roam (it would cover copy).
+    if (vp.w < MOBILE_BREAKPOINT) {
+      const m = mobileAnchors[idx] ?? mobileAnchors[mobileAnchors.length - 1];
+      targetX.set(m.x * vp.w);
+      targetY.set(m.y * vp.h);
+      targetScale.set(m.scale);
+      return;
     }
 
     const isHero = idx === 0;
@@ -188,7 +211,7 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-20 hidden lg:block"
+      className="pointer-events-none fixed inset-0 z-20"
       animate={{ opacity: mascotVisible ? 1 : 0 }}
       transition={{ duration: 0.55, ease: EASE }}
     >

@@ -405,119 +405,64 @@ export function AiConsole() {
 }
 
 /* ============================================================
-   4 · FINALE — the close; the guide returns and floats above
+   4 · FINALE — the close; mascot right, copy left
    ============================================================ */
 export function FinaleSection() {
   const year = new Date().getFullYear();
   return (
     <Stage index={3}>
-      {/* CTA close */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.8, ease: EASE }}
-      >
-        <span className="eyebrow-cine text-[0.72rem] font-semibold">Start today</span>
-        <h2 className="mx-auto mt-4 max-w-[18ch] text-[clamp(2.1rem,5.2vw,3.4rem)] font-semibold leading-[1.03] tracking-[-0.04em] text-cine">
-          Run your whole company on{' '}
-          <span className="gradient-amber">one system.</span>
-        </h2>
-        <p className="mx-auto mt-5 max-w-[44ch] text-[1.0625rem] leading-relaxed text-cine-dim">
-          See Citron mapped to how your team actually works — a focused
-          30-minute walkthrough, no slides for the sake of slides.
-        </p>
-        <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Magnetic strength={0.45}>
-            <Link
-              href="/demo"
-              className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)]"
-            >
-              Book a Demo
-              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-            </Link>
-          </Magnetic>
-          <Link
-            href="/pricing"
-            className="inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[1rem] font-semibold text-cine transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
-          >
-            Compare plans
-          </Link>
-        </div>
-      </motion.div>
-
-      {/* Inkblot Studio — refined maker's card */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.8, ease: EASE }}
-        className="relative mx-auto mt-16 max-w-3xl overflow-hidden rounded-[var(--radius-3xl)] cine-card p-8 text-left sm:p-10"
       >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(var(--cine-particle),0.18), transparent 70%)' }}
-        />
-        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <span className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-cine-faint">
-              The makers
-            </span>
-            <h3 className="mt-2 text-[clamp(1.4rem,3vw,2rem)] font-semibold tracking-[-0.03em] text-cine">
-              Built by <span className="gradient-amber">Inkblot Studio</span>
-            </h3>
-            <p className="mt-2 max-w-[40ch] text-[0.95rem] leading-relaxed text-cine-dim">
-              A studio crafting calm, AI-native software that companies actually
-              want to live inside.
-            </p>
-          </div>
-          <Magnetic strength={0.35}>
+        <span className="eyebrow-cine text-[0.72rem] font-semibold">The makers</span>
+        <h2 className="mt-4 max-w-[14ch] text-[clamp(2.2rem,5.4vw,3.6rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-cine">
+          Crafted by <span className="gradient-amber">Inkblot Studio</span>
+        </h2>
+        <p className="mt-5 max-w-[38ch] text-[1.0625rem] leading-relaxed text-cine-dim">
+          A studio building calm, AI-native software companies want to live inside.
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2">
+          {inkblotPillars.map((p, i) => {
+            const Icon = ICONS[p.icon] ?? Sparkles;
+            return (
+              <Fragment key={p.title}>
+                {i > 0 && <span aria-hidden className="text-cine-faint">·</span>}
+                <span className="inline-flex items-center gap-2 text-[0.9rem] font-medium text-cine-dim">
+                  <Icon className="h-4 w-4 text-[var(--cine-amber)]" strokeWidth={1.8} />
+                  {p.title}
+                </span>
+              </Fragment>
+            );
+          })}
+        </div>
+
+        <div className="mt-10">
+          <Magnetic strength={0.4}>
             <Link
               href={siteConfig.studio.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex h-[3rem] shrink-0 items-center gap-2 rounded-full bg-[var(--cine-amber-bright)] px-6 text-[0.9375rem] font-semibold text-[#1d1c19] shadow-[0_10px_30px_-12px_rgba(var(--cine-particle),0.8)] transition hover:brightness-105"
+              className="group inline-flex h-[3.5rem] items-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)]"
             >
               Explore the studio
               <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </Magnetic>
         </div>
-
-        <div className="relative mt-8 grid gap-3 border-t border-[var(--cine-line)] pt-6 sm:grid-cols-3">
-          {inkblotPillars.map((p, i) => {
-            const Icon = ICONS[p.icon] ?? Sparkles;
-            return (
-              <motion.div
-                key={p.title}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.6 }}
-                transition={{ duration: 0.5, ease: EASE, delay: i * 0.08 }}
-                className="flex items-start gap-3"
-              >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[rgba(var(--cine-particle),0.12)] text-[var(--cine-amber)]">
-                  <Icon className="h-4 w-4" strokeWidth={1.8} />
-                </span>
-                <div>
-                  <p className="text-[0.85rem] font-semibold text-cine">{p.title}</p>
-                  <p className="mt-0.5 text-[0.76rem] leading-relaxed text-cine-dim">{p.desc}</p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
       </motion.div>
 
       {/* legal footer */}
-      <div className="mx-auto mt-10 flex max-w-3xl flex-col items-center gap-3 text-[0.8125rem] text-cine-faint sm:flex-row sm:justify-between">
+      <div className="mt-16 flex flex-col gap-3 border-t border-[var(--cine-line)] pt-6 text-[0.8125rem] text-cine-faint sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-6">
           <Link href="/legal/privacy" className="transition-colors hover:text-cine">Privacy</Link>
           <Link href="/legal/terms" className="transition-colors hover:text-cine">Terms</Link>
           <Link href="/legal/cookies" className="transition-colors hover:text-cine">Cookies</Link>
         </div>
-        <p>© {year} Citron · Crafted by Inkblot Studio</p>
+        <p>© {year} Citron · Inkblot Studio</p>
       </div>
     </Stage>
   );

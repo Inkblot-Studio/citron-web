@@ -10,10 +10,8 @@ import { cn } from '@/lib/cn';
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'Platform', href: '/#platform-overview' },
   { label: 'Solutions', href: '/solutions' },
   { label: 'Pricing', href: '/pricing' },
-  { label: 'Customers', href: '/#customers' },
 ];
 
 export function Navbar() {

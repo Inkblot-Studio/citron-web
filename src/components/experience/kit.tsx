@@ -11,19 +11,9 @@ import {
 } from 'framer-motion';
 import { scenes, type Mood } from '@/lib/experience';
 import { useScene } from './ExperienceContext';
-import { AliveMascot } from './Mascot';
 import { cn } from '@/lib/cn';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-
-/** The mobile, in-flow mascot — the fixed desktop guide is hidden < lg. */
-function MobileMascot() {
-  return (
-    <div className="flex justify-center pt-28 lg:hidden">
-      <AliveMascot className="h-36 w-36 sm:h-44 sm:w-44" />
-    </div>
-  );
-}
 
 /** Shared <section> wrapper: mood background + snap target. */
 function Chapter({
@@ -66,7 +56,6 @@ export function Stage({ index, children }: { index: number; children: ReactNode 
 
   return (
     <Chapter index={index}>
-      <MobileMascot />
       <div
         className={cn(
           'flex min-h-[80vh] flex-col py-16 lg:min-h-screen',
@@ -103,7 +92,6 @@ export function SplitStage({
 }) {
   return (
     <Chapter index={index}>
-      <MobileMascot />
       <div className="flex min-h-[80vh] flex-col justify-center gap-12 py-16 lg:grid lg:min-h-screen lg:grid-cols-[1fr_clamp(17rem,23vw,25rem)_1fr] lg:items-center lg:gap-6">
         <div className="lg:pr-4 lg:text-right">{left}</div>
         <div aria-hidden className="hidden lg:block" />
