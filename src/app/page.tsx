@@ -1,5 +1,10 @@
 import { Experience } from '@/components/experience/Experience';
+import { PasswordGate } from '@/components/experience/PasswordGate';
 
 export default function HomePage() {
-  return <Experience />;
+  return (
+    <PasswordGate>
+      <Experience />
+    </PasswordGate>
+  );
 }

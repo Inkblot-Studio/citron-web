@@ -28,17 +28,15 @@ const STORAGE_KEY = 'citron-intro-seen-v5';
  */
 
 type Phase =
-  | 'void' //       1 · empty space + a single glowing point
-  | 'signals' //    2 · fragments appear from the edges
-  | 'assembly' //   3 · the pieces fly in and snap together
-  | 'breath' //     4 · first breath — it comes alive, blinks
-  | 'discovery' //  5 · it looks around, notices the cursor
-  | 'reveal' //     6 · the Citron wordmark assembles
-  | 'tagline'; //   7 · the tagline resolves
+  | 'void' //       (internal initial state — never in ORDER)
+  | 'signals' //    (internal — never in ORDER)
+  | 'assembly' //   1 · pieces fly in and snap together
+  | 'breath' //     2 · first breath — it comes alive, blinks
+  | 'discovery' //  3 · it looks around, notices the cursor
+  | 'reveal' //     4 · the Citron wordmark assembles
+  | 'tagline'; //   5 · the tagline resolves
 
 const ORDER: Phase[] = [
-  'void',
-  'signals',
   'assembly',
   'breath',
   'discovery',
@@ -48,13 +46,13 @@ const ORDER: Phase[] = [
 
 // Phase → how long it holds before the next begins (ms).
 const TIMING: Record<Phase, number> = {
-  void: 650,
-  signals: 700,
-  assembly: 1250,
-  breath: 800,
-  discovery: 900,
-  reveal: 1000,
-  tagline: 1450,
+  void: 0,
+  signals: 0,
+  assembly: 1150,
+  breath: 650,
+  discovery: 650,
+  reveal: 650,
+  tagline: 1100,
 };
 
 /* ── The three brand pieces, each called in from a different direction ──────
@@ -352,7 +350,7 @@ export function Intro() {
           className="fixed inset-0 z-[110] overflow-hidden"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, filter: 'blur(6px)' }}
-          transition={{ duration: 0.9, ease: EASE }}
+          transition={{ duration: 0.6, ease: EASE }}
         >
           {/* ── Bright, premium stage ─────────────────────────────────── */}
           <div
