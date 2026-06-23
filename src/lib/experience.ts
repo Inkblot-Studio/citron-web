@@ -1,8 +1,9 @@
 /**
- * The Citron story — nine chapters, each answering one question. The mascot is
- * the guide: it is intentionally placed in every chapter (never on a predictable
- * left-right loop), and several chapters make it the centerpiece with content
- * balanced around it. This file holds the choreography and the chapter content.
+ * The Citron story — a guided product narrative. The mascot is the protagonist:
+ * it opens the hero by sweeping across the headline and lighting it up word by
+ * word, then travels chapter to chapter (never overlapping the content) before
+ * stepping aside for the dense product chapters and returning for the finale.
+ * This file holds the choreography and the chapter content.
  */
 
 export type Trick = 'none' | 'spin' | 'flip' | 'pop';
@@ -31,37 +32,36 @@ export type Scene = {
 };
 
 export const scenes: Scene[] = [
-  // 1 · Hero — light opening; the mascot roams this chapter freely
+  // 0 · Hero — light opening; the mascot sweeps the headline, then roams
   { id: 'hero', layout: 'above', pos: { x: 0.5, y: 0.2 }, scale: 1.12, trick: 'none', mood: 'dawn', theme: 'light' },
-  // 2 · CRM — mascot left, interactive pipeline right
-  { id: 'crm', layout: 'left', pos: { x: 0.21, y: 0.5 }, scale: 1.0, trick: 'pop', mood: 'plain', theme: 'light' },
-  // 3 · Platform + AI — CENTERPIECE, narrative & console flank the mascot
+  // 1 · Command — mascot left, the living product surface on the right
+  { id: 'command', layout: 'left', pos: { x: 0.21, y: 0.5 }, scale: 1.0, trick: 'pop', mood: 'plain', theme: 'light' },
+  // 2 · Platform + AI — CENTERPIECE, narrative & console flank the mascot
   { id: 'platform', layout: 'split', pos: { x: 0.5, y: 0.5 }, scale: 0.84, trick: 'flip', mood: 'wash', theme: 'light' },
-  // 4 · Inkblot — closing centerpiece (after Act 2)
-  { id: 'inkblot', layout: 'above', pos: { x: 0.5, y: 0.24 }, scale: 0.8, trick: 'spin', mood: 'surface', theme: 'light' },
+  // 3 · Finale — closing centerpiece (the guide returns after the product act)
+  { id: 'finale', layout: 'above', pos: { x: 0.5, y: 0.23 }, scale: 0.82, trick: 'spin', mood: 'surface', theme: 'light' },
 ];
 
 export const TOTAL_SCENES = scenes.length;
 
-/* ---------- chapter content ---------- */
+/* ============================================================
+   HERO — the headline the mascot reveals, word by word
+   ============================================================ */
 
-/** The scattered stack — the everyday reality Citron replaces. */
-export const problemTools = [
-  'CRM',
-  'Spreadsheets',
-  'Email threads',
-  'Invoicing app',
-  'Team chat',
-  'Shared calendar',
+/** Each token is revealed in the mascot's trail. `accent` words glow gold. */
+export const heroHeadline: { text: string; accent?: boolean }[] = [
+  { text: 'Run' },
+  { text: 'your' },
+  { text: 'whole' },
+  { text: 'company' },
+  { text: 'on' },
+  { text: 'one', accent: true },
+  { text: 'system.', accent: true },
 ];
 
-export const crmFeatures: { title: string; desc: string }[] = [
-  { title: 'Leads', desc: 'Capture every inbound and route it in seconds — nothing slips.' },
-  { title: 'Pipelines', desc: 'Visual stages that move themselves as deals progress.' },
-  { title: 'Opportunities', desc: 'Always know which deals truly deserve your time.' },
-  { title: 'Customers', desc: 'Every conversation, contract, and detail in one view.' },
-  { title: 'Forecasting', desc: 'Predict revenue with numbers you can actually trust.' },
-];
+/* ============================================================
+   COMMAND (CRM) — the living pipeline
+   ============================================================ */
 
 /** The visible stages of a deal moving through Citron CRM. */
 export const crmStages: { name: string; deals: { name: string; value: string }[] }[] = [
@@ -72,19 +72,14 @@ export const crmStages: { name: string; deals: { name: string; value: string }[]
       { name: 'Northwind', value: '$8k' },
     ],
   },
-  {
-    name: 'Qualified',
-    deals: [{ name: 'Atlas Co', value: '$36k' }],
-  },
-  {
-    name: 'Proposal',
-    deals: [{ name: 'Meridian', value: '$92k' }],
-  },
-  {
-    name: 'Won',
-    deals: [{ name: 'Helix Labs', value: '$48k' }],
-  },
+  { name: 'Qualified', deals: [{ name: 'Atlas Co', value: '$36k' }] },
+  { name: 'Proposal', deals: [{ name: 'Meridian', value: '$92k' }] },
+  { name: 'Won', deals: [{ name: 'Helix Labs', value: '$48k' }] },
 ];
+
+/* ============================================================
+   PLATFORM + AI
+   ============================================================ */
 
 export const platformModules: { name: string; icon: string }[] = [
   { name: 'CRM', icon: 'Users' },
@@ -110,31 +105,137 @@ export const aiActions: { prompt: string; outcome: string }[] = [
   { prompt: 'Turn this meeting into next steps', outcome: 'Notes, decisions and owners captured automatically' },
 ];
 
-export const automationFlow: { label: string; kind: 'trigger' | 'action' }[] = [
-  { label: 'A deal is marked won', kind: 'trigger' },
-  { label: 'Generate and send the invoice', kind: 'action' },
-  { label: 'Alert the delivery team', kind: 'action' },
-  { label: 'Kick off customer onboarding', kind: 'action' },
-];
+/* ============================================================
+   BENTO — every function, one system
+   ============================================================ */
 
-export const impactMetrics: { value: string; label: string }[] = [
-  { value: '7→1', label: 'tools consolidated into one' },
-  { value: '+32%', label: 'higher sales win rate' },
-  { value: '−68%', label: 'less time on admin' },
-];
-
-export const impactQuote = {
-  quote:
-    'We replaced seven tools with Citron in a month. The team stopped switching tabs and started shipping.',
-  name: 'Maya Okafor',
-  role: 'COO, Meridian Labs',
+export type BentoTile = {
+  id: string;
+  span: 'lg' | 'tall' | 'wide' | 'sm';
+  eyebrow: string;
+  title: string;
+  desc: string;
+  icon: string;
+  /** Which mini-visual to render inside the tile. */
+  visual: 'console' | 'pipeline' | 'chart' | 'flow' | 'finance' | 'globe';
 };
 
-export const comparison: { label: string; before: string; after: string }[] = [
-  { label: 'Your tools', before: '7+ apps that don’t talk', after: 'One connected system' },
-  { label: 'Your data', before: 'Scattered across silos', after: 'A single source of truth' },
-  { label: 'Busywork', before: 'Manual, every single day', after: 'Handled by AI' },
-  { label: 'Time to value', before: 'Weeks of wiring tools together', after: 'Live in a day' },
+export const bentoTiles: BentoTile[] = [
+  {
+    id: 'ai',
+    span: 'lg',
+    eyebrow: 'AI agents',
+    title: 'Work that does itself',
+    desc: 'Describe the outcome in plain language. Citron’s agents act across every module — drafting, sending, updating, closing the loop.',
+    icon: 'Sparkles',
+    visual: 'console',
+  },
+  {
+    id: 'crm',
+    span: 'tall',
+    eyebrow: 'CRM',
+    title: 'Pipelines that move themselves',
+    desc: 'Deals advance on real signals, not manual updates.',
+    icon: 'Users',
+    visual: 'pipeline',
+  },
+  {
+    id: 'analytics',
+    span: 'sm',
+    eyebrow: 'Analytics',
+    title: 'Answers, not dashboards',
+    desc: 'Ask in plain language. Get the chart and the why.',
+    icon: 'BarChart3',
+    visual: 'chart',
+  },
+  {
+    id: 'automations',
+    span: 'sm',
+    eyebrow: 'Automations',
+    title: 'One trigger, everything follows',
+    desc: 'Won deals invoice, alert, and onboard — automatically.',
+    icon: 'Workflow',
+    visual: 'flow',
+  },
+  {
+    id: 'finance',
+    span: 'sm',
+    eyebrow: 'Finance',
+    title: 'Books that keep themselves',
+    desc: 'Invoicing and reconciliation, from the same place you sell.',
+    icon: 'ReceiptText',
+    visual: 'finance',
+  },
+  {
+    id: 'global',
+    span: 'wide',
+    eyebrow: 'One platform',
+    title: 'Every surface, one source of truth',
+    desc: 'CRM, marketing, finance, ops and AI — connected, in real time, everywhere your team works.',
+    icon: 'Globe',
+    visual: 'globe',
+  },
+];
+
+/* ============================================================
+   SHOWCASE — the horizontal product reel
+   ============================================================ */
+
+export type Surface = {
+  id: string;
+  label: string;
+  title: string;
+  desc: string;
+  kind: 'dashboard' | 'board' | 'agent' | 'analytics' | 'automation';
+};
+
+export const surfaces: Surface[] = [
+  {
+    id: 'dashboard',
+    label: 'Command center',
+    title: 'The whole business, at a glance',
+    desc: 'Revenue, pipeline, cash and tasks — one live home screen for the people who run the company.',
+    kind: 'dashboard',
+  },
+  {
+    id: 'crm',
+    label: 'CRM',
+    title: 'A pipeline that updates itself',
+    desc: 'Drag-free stages that advance on real signals, with the next best move surfaced for every deal.',
+    kind: 'board',
+  },
+  {
+    id: 'ai',
+    label: 'AI agents',
+    title: 'Ask. It’s done.',
+    desc: 'Natural-language commands that act across your data — grounded, guarded, and always reviewable.',
+    kind: 'agent',
+  },
+  {
+    id: 'analytics',
+    label: 'Analytics',
+    title: 'Every metric, explained',
+    desc: 'Live KPIs, anomaly alerts and reports that write themselves — no spreadsheet gymnastics.',
+    kind: 'analytics',
+  },
+  {
+    id: 'automations',
+    label: 'Automations',
+    title: 'Workflows you describe in a sentence',
+    desc: 'Triggers, conditions and actions across every module — composed by intelligence, run on autopilot.',
+    kind: 'automation',
+  },
+];
+
+/* ============================================================
+   PROOF — the numbers that rise on scroll
+   ============================================================ */
+
+export const proofMetrics: { value: string; label: string; sub: string }[] = [
+  { value: '7→1', label: 'tools consolidated', sub: 'one system replaces the stack' },
+  { value: '+32%', label: 'higher win rate', sub: 'AI flags deals before they slip' },
+  { value: '−68%', label: 'less admin time', sub: 'busywork handled automatically' },
+  { value: '<1 day', label: 'time to value', sub: 'live, not months of wiring' },
 ];
 
 export const inkblotPillars: { title: string; desc: string; icon: string }[] = [

@@ -312,6 +312,92 @@ export function Card({
   );
 }
 
+/* ============================================================
+   MeshBackdrop — a premium, slow-drifting warm gradient mesh.
+   Pure CSS gradients on the GPU; the hero's quiet "wow" layer.
+   ============================================================ */
+export function MeshBackdrop({ className }: { className?: string }) {
+  return (
+    <div aria-hidden className={cn('pointer-events-none absolute inset-0 overflow-hidden', className)}>
+      <div
+        className="absolute -left-[12%] -top-[18%] h-[60vmax] w-[60vmax] rounded-full animate-aura"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(var(--cine-particle),0.30) 0%, rgba(var(--cine-particle),0.08) 40%, transparent 70%)',
+          filter: 'blur(60px)',
+        }}
+      />
+      <div
+        className="absolute -right-[14%] top-[8%] h-[48vmax] w-[48vmax] rounded-full animate-aura"
+        style={{
+          animationDelay: '-7s',
+          background:
+            'radial-gradient(circle, rgba(217,188,88,0.22) 0%, transparent 68%)',
+          filter: 'blur(56px)',
+        }}
+      />
+      <div
+        className="absolute bottom-[-22%] left-1/3 h-[44vmax] w-[44vmax] -translate-x-1/2 rounded-full animate-aura"
+        style={{
+          animationDelay: '-13s',
+          background:
+            'radial-gradient(circle, rgba(var(--cine-particle),0.18) 0%, transparent 66%)',
+          filter: 'blur(64px)',
+        }}
+      />
+      {/* faint dot grid, masked to the centre for depth */}
+      <div
+        className="absolute inset-0 bg-dots opacity-50"
+        style={{
+          WebkitMaskImage: 'radial-gradient(70% 60% at 50% 38%, black, transparent 78%)',
+          maskImage: 'radial-gradient(70% 60% at 50% 38%, black, transparent 78%)',
+        }}
+      />
+    </div>
+  );
+}
+
+/* ============================================================
+   BrowserFrame — a calm window chrome around a mock product
+   surface. Used by the horizontal showcase reel.
+   ============================================================ */
+export function BrowserFrame({
+  url = 'app.citron.com',
+  accent,
+  children,
+  className,
+}: {
+  url?: string;
+  accent?: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        'flex h-full w-full flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--cine-card-border)] bg-[var(--cine-bg-2)] shadow-[var(--shadow-xl)]',
+        className
+      )}
+    >
+      <div className="flex items-center gap-3 border-b border-[var(--cine-line)] px-4 py-3">
+        <div className="flex gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full" style={{ background: 'var(--cine-line)' }} />
+          <span className="h-2.5 w-2.5 rounded-full" style={{ background: 'var(--cine-line)' }} />
+          <span className="h-2.5 w-2.5 rounded-full" style={{ background: accent ?? 'var(--cine-amber-soft)' }} />
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--cine-line)] bg-[var(--cine-bg-1)] px-3 py-1 text-[0.68rem] font-medium text-cine-faint">
+            <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--cine-amber)' }} />
+            {url}
+          </span>
+        </div>
+        <div className="w-8" />
+      </div>
+      <div className="relative flex-1 overflow-hidden p-5">{children}</div>
+    </div>
+  );
+}
+
 /** Chapter header: eyebrow, title, optional supporting line. */
 export function SectionHead({
   eyebrow,
