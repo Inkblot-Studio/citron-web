@@ -29,7 +29,6 @@ import {
 } from 'lucide-react';
 import {
   crmStages,
-  platformModules,
   platformPoints,
   aiActions,
   inkblotPillars,
@@ -318,20 +317,6 @@ export function PlatformSection() {
               );
             })}
           </div>
-          <div className="mt-4 flex flex-wrap justify-end gap-1.5">
-            {platformModules.map((m) => {
-              const Icon = ICONS[m.icon] ?? Boxes;
-              return (
-                <span
-                  key={m.name}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-2.5 py-1 text-[0.72rem] font-medium text-cine-dim"
-                >
-                  <Icon className="h-3 w-3 text-[var(--cine-amber)]" strokeWidth={1.8} />
-                  {m.name}
-                </span>
-              );
-            })}
-          </div>
         </>
       }
       right={
@@ -431,19 +416,20 @@ export function FinaleSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.8, ease: EASE }}
+        className="max-w-xl lg:max-w-none"
       >
         <span className="eyebrow-cine text-[0.72rem] font-semibold">Start today</span>
-        <h2 className="mx-auto mt-4 max-w-[18ch] text-[clamp(2.2rem,5.4vw,3.6rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-cine">
+        <h2 className="mt-4 max-w-[16ch] text-[clamp(2rem,5vw,3.2rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-cine">
           Run your whole company on{' '}
           <span className="gradient-amber">one system.</span>
         </h2>
-        <p className="mx-auto mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-cine-dim">
+        <p className="mt-5 max-w-[42ch] text-[1.0625rem] leading-relaxed text-cine-dim">
           See Citron mapped to how your team actually works — a focused
           30-minute walkthrough, no slides for the sake of slides.
         </p>
       </motion.div>
 
-      <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
         <Magnetic strength={0.45}>
           <Link
             href="/demo"
@@ -465,26 +451,27 @@ export function FinaleSection() {
         <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-cine-faint">
           Built by Inkblot Studio
         </p>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
           {inkblotPillars.map((p, i) => {
             const Icon = ICONS[p.icon] ?? Sparkles;
             return (
-              <motion.span
+              <motion.div
                 key={p.title}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.6 }}
                 transition={{ duration: 0.5, ease: EASE, delay: i * 0.08 }}
-                className="inline-flex items-center gap-2 rounded-full cine-card px-3.5 py-1.5 text-[0.8rem] font-medium text-cine"
+                className="rounded-[var(--radius-xl)] cine-card p-4"
               >
-                <Icon className="h-3.5 w-3.5 text-[var(--cine-amber)]" strokeWidth={1.8} />
-                {p.title}
-              </motion.span>
+                <Icon className="h-4 w-4 text-[var(--cine-amber)]" strokeWidth={1.8} />
+                <p className="mt-2 text-[0.88rem] font-semibold text-cine">{p.title}</p>
+                <p className="mt-1 text-[0.78rem] leading-relaxed text-cine-dim">{p.desc}</p>
+              </motion.div>
             );
           })}
         </div>
 
-        <div className="mt-7 flex justify-center">
+        <div className="mt-7">
           <Magnetic strength={0.35}>
             <Link
               href={siteConfig.studio.url}
@@ -498,13 +485,11 @@ export function FinaleSection() {
           </Magnetic>
         </div>
 
-        <div className="mt-8 flex flex-col items-center gap-2 text-[0.8125rem] text-cine-faint">
-          <div className="flex items-center gap-6">
-            <Link href="/legal/privacy" className="transition-colors hover:text-cine">Privacy</Link>
-            <Link href="/legal/terms" className="transition-colors hover:text-cine">Terms</Link>
-            <Link href="/legal/cookies" className="transition-colors hover:text-cine">Cookies</Link>
-          </div>
-          <p>© {year} Citron · Crafted by Inkblot Studio</p>
+        <div className="mt-8 flex flex-col gap-3 text-[0.8125rem] text-cine-faint sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
+          <Link href="/legal/privacy" className="transition-colors hover:text-cine">Privacy</Link>
+          <Link href="/legal/terms" className="transition-colors hover:text-cine">Terms</Link>
+          <Link href="/legal/cookies" className="transition-colors hover:text-cine">Cookies</Link>
+          <p className="sm:ml-auto">© {year} Citron · Crafted by Inkblot Studio</p>
         </div>
       </div>
     </Stage>

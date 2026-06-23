@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { testimonials, caseStudies } from '@/lib/site';
 import { bentoTiles, surfaces, proofMetrics, type Surface as SurfaceType } from '@/lib/experience';
-import { Card, BrowserFrame, MeshBackdrop } from './kit';
+import { Card, BrowserFrame, MeshBackdrop, SectionPhotoBg } from './kit';
 import { Magnetic } from './ambient/Magnetic';
 import { cn } from '@/lib/cn';
 
@@ -47,12 +47,16 @@ function Section({
   id,
   tone = 'base',
   snap = true,
+  bgImage,
+  bgOverlay = 'light',
   className,
   children,
 }: {
   id?: string;
   tone?: 'base' | 'surface' | 'dark';
   snap?: boolean;
+  bgImage?: string;
+  bgOverlay?: 'light' | 'dark';
   className?: string;
   children: ReactNode;
 }) {
@@ -67,11 +71,12 @@ function Section({
         className
       )}
       style={
-        tone === 'dark'
+        bgImage || tone === 'dark'
           ? undefined
           : { background: tone === 'surface' ? 'var(--cine-bg-1)' : 'var(--cine-bg-0)' }
       }
     >
+      {bgImage && <SectionPhotoBg src={bgImage} overlay={bgOverlay} />}
       <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6 lg:px-10">{children}</div>
     </section>
   );
@@ -253,14 +258,30 @@ const BENTO_SPAN: Record<string, string> = {
 
 export function BentoSection() {
   return (
-    <Section id="platform-overview" tone="surface">
-      <div className="max-w-2xl">
-        <Eyebrow>One system, every function</Eyebrow>
-        <Title>Everything your business runs on.</Title>
-        <p className="mt-5 max-w-[46ch] text-[1.0625rem] leading-relaxed text-cine-dim">
-          Not a bundle of apps — one platform where every module shares the same
-          data, the same automations, and the same intelligence.
-        </p>
+    <Section id="platform-overview" tone="surface" bgImage="/bg/bg-platform.png" bgOverlay="light">
+      <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-end">
+        <div>
+          <Eyebrow>One system, every function</Eyebrow>
+          <Title>Everything your business runs on.</Title>
+          <p className="mt-5 max-w-[46ch] text-[1.0625rem] leading-relaxed text-cine-dim">
+            Not a bundle of apps — one platform where every module shares the same
+            data, the same automations, and the same intelligence.
+          </p>
+        </div>
+        <div className="grid grid-cols-3 gap-3 rounded-[var(--radius-2xl)] cine-card p-5 sm:grid-cols-3">
+          {[
+            { v: '12+', l: 'modules' },
+            { v: '1', l: 'login' },
+            { v: '∞', l: 'workflows' },
+          ].map((s) => (
+            <div key={s.l} className="text-center">
+              <div className="font-mono text-[1.75rem] font-semibold tracking-[-0.03em] text-[var(--cine-amber)] sm:text-[2rem]">
+                {s.v}
+              </div>
+              <div className="mt-1 text-[0.72rem] uppercase tracking-[0.14em] text-cine-faint">{s.l}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="mt-12 grid auto-rows-[minmax(180px,1fr)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -536,11 +557,79 @@ export function HorizontalShowcase() {
    Proof — numbers that rise on scroll + the ROI calculator
    ============================================================ */
 
+/* ============================================================
+   Proof — numbers that count up on scroll + the ROI calculator
+   ============================================================ */
+
+function parseProofValue(value: string) {
+  if (value.includes('→')) return { kind: 'static' as const, text: value };
+  const lt = /^<([\d.]+)\s*(.*)$/.exec(value);
+  if (lt) {
+    return {
+      kind: 'count' as const,
+      prefix: '<',
+      num: parseFloat(lt[1]),
+      suffix: lt[2] ? ` ${lt[2]}` : '',
+      decimals: 0,
+    };
+  }
+  const m = /^([+\u2212-]?)([\d.]+)(.*)$/.exec(value);
+  if (!m) return { kind: 'static' as const, text: value };
+  const numStr = m[2];
+  return {
+    kind: 'count' as const,
+    prefix: m[1],
+    num: parseFloat(numStr),
+    suffix: m[3],
+    decimals: numStr.includes('.') ? numStr.split('.')[1].length : 0,
+  };
+}
+
+function ProofCounter({ value, run }: { value: string; run: boolean }) {
+  const parsed = parseProofValue(value);
+  const [display, setDisplay] = useState(0);
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    const p = parseProofValue(value);
+    if (p.kind === 'static') return;
+    if (!run) {
+      setDisplay(0);
+      return;
+    }
+    if (reduce) {
+      setDisplay(p.num);
+      return;
+    }
+    let raf = 0;
+    const start = performance.now();
+    const dur = 1400;
+    const tick = (t: number) => {
+      const prog = Math.min((t - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - prog, 3);
+      setDisplay(p.num * eased);
+      if (prog < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [run, value, reduce]);
+
+  if (parsed.kind === 'static') return <>{parsed.text}</>;
+
+  return (
+    <span className="font-mono tabular-nums">
+      {parsed.prefix}
+      {display.toFixed(parsed.decimals)}
+      {parsed.suffix}
+    </span>
+  );
+}
+
 function ProofMetric({ metric, index }: { metric: (typeof proofMetrics)[number]; index: number }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.45 });
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  // Each card drifts up at a slightly different rate → gentle parallax.
   const range = 60 + index * 22;
   const y = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [range, -range]);
 
@@ -555,7 +644,7 @@ function ProofMetric({ metric, index }: { metric: (typeof proofMetrics)[number];
       className="rounded-[var(--radius-2xl)] cine-card p-6"
     >
       <div className="font-mono text-[2.6rem] font-semibold leading-none tracking-[-0.03em] text-[var(--cine-amber)] sm:text-[3rem]">
-        {metric.value}
+        <ProofCounter value={metric.value} run={inView} />
       </div>
       <div className="mt-3 text-[0.95rem] font-semibold text-cine">{metric.label}</div>
       <div className="mt-1 text-[0.82rem] text-cine-dim">{metric.sub}</div>
@@ -676,7 +765,7 @@ function RoiTile({
 
 export function ProofSection() {
   return (
-    <Section id="roi" tone="dark">
+    <Section id="roi" tone="dark" bgImage="/bg/bg-proof.png" bgOverlay="dark">
       <div className="mx-auto max-w-2xl text-center">
         <Eyebrow>The numbers</Eyebrow>
         <Title className="mx-auto">Results teams feel in the first week.</Title>

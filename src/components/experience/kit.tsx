@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, type ReactNode } from 'react';
+import Image from 'next/image';
 import {
   motion,
   useMotionValue,
@@ -44,7 +45,10 @@ function Chapter({
         scene.theme === 'dark' && 'cine-section-dark'
       )}
     >
-      <SectionBackground mood={scene.mood} />
+      {scene.bgImage && (
+        <SectionPhotoBg src={scene.bgImage} overlay={scene.bgOverlay ?? 'light'} />
+      )}
+      <SectionBackground mood={scene.mood} soft={!!scene.bgImage} />
       <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-10">
         {children}
       </div>
@@ -173,11 +177,16 @@ function Orb({
   );
 }
 
-export function SectionBackground({ mood }: { mood: Mood }) {
+export function SectionBackground({ mood, soft = false }: { mood: Mood; soft?: boolean }) {
+  const orbOpacity = soft ? 0.14 : undefined;
   if (mood === 'plain') {
     return (
-      <div aria-hidden className="absolute inset-0 overflow-hidden" style={{ background: 'var(--cine-bg-0)' }}>
-        <Orb size={560} opacity={0.28} className="-left-40 top-1/4" />
+      <div
+        aria-hidden
+        className="absolute inset-0 overflow-hidden"
+        style={{ background: soft ? 'transparent' : 'var(--cine-bg-0)' }}
+      >
+        <Orb size={560} opacity={orbOpacity ?? 0.28} className="-left-40 top-1/4" />
       </div>
     );
   }
@@ -230,7 +239,11 @@ export function SectionBackground({ mood }: { mood: Mood }) {
   }
   // dawn (hero)
   return (
-    <div aria-hidden className="absolute inset-0 overflow-hidden" style={{ background: 'var(--cine-bg-0)' }}>
+    <div
+      aria-hidden
+      className="absolute inset-0 overflow-hidden"
+      style={{ background: soft ? 'transparent' : 'var(--cine-bg-0)' }}
+    >
       <div
         className="absolute inset-x-0 top-0 h-2/3"
         style={{
@@ -238,8 +251,38 @@ export function SectionBackground({ mood }: { mood: Mood }) {
             'radial-gradient(70% 58% at 50% 0%, rgba(var(--cine-particle),0.14), transparent 64%)',
         }}
       />
-      <Orb size={640} opacity={0.36} className="left-1/2 -top-36 -translate-x-1/2" />
-      <Particles />
+      <Orb size={640} opacity={soft ? 0.2 : 0.36} className="left-1/2 -top-36 -translate-x-1/2" />
+      {!soft && <Particles />}
+    </div>
+  );
+}
+
+/** Full-bleed photographic background with a legibility scrim. */
+export function SectionPhotoBg({
+  src,
+  overlay = 'light',
+}: {
+  src: string;
+  overlay?: 'light' | 'dark';
+}) {
+  return (
+    <div aria-hidden className="absolute inset-0">
+      <Image
+        src={src}
+        alt=""
+        fill
+        className="object-cover"
+        sizes="100vw"
+        quality={85}
+      />
+      <div
+        className={cn(
+          'absolute inset-0',
+          overlay === 'dark'
+            ? 'bg-gradient-to-b from-[rgba(11,10,8,0.88)] via-[rgba(11,10,8,0.78)] to-[rgba(11,10,8,0.92)]'
+            : 'bg-gradient-to-b from-[var(--cine-bg-0)]/82 via-[var(--cine-bg-0)]/74 to-[var(--cine-bg-0)]/88'
+        )}
+      />
     </div>
   );
 }
