@@ -30,16 +30,17 @@ export function NavLink({ href, label, onNavigate, className }: Props) {
         className
       )}
     >
-      <span className="relative flex h-full flex-col transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:-translate-y-1/2 group-active:scale-[0.97]">
+      {/* Stack is twice the visible height; on hover it slides up to swap copies. */}
+      <span className="flex flex-col transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:-translate-y-1/2 group-active:scale-[0.97]">
         <span
           className={cn(
-            'flex h-9 items-center text-[0.8125rem] font-medium transition-colors',
-            active ? 'text-[var(--cine-amber)]' : 'text-cine-dim group-hover:text-cine'
+            'flex h-9 shrink-0 items-center text-[0.8125rem] font-medium transition-colors',
+            active ? 'text-[var(--cine-amber)]' : 'text-cine-dim'
           )}
         >
           {label}
         </span>
-        <span className="flex h-9 items-center text-[0.8125rem] font-semibold text-[var(--cine-amber)]">
+        <span className="flex h-9 shrink-0 items-center text-[0.8125rem] font-semibold text-[var(--cine-amber)]">
           {label}
         </span>
       </span>

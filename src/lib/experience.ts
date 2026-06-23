@@ -34,28 +34,18 @@ export type Scene = {
 };
 
 export const scenes: Scene[] = [
-  // 0 · Hero — light opening; photo backdrop; mascot sweeps the headline
-  {
-    id: 'hero',
-    layout: 'above',
-    pos: { x: 0.5, y: 0.2 },
-    scale: 1.12,
-    trick: 'none',
-    mood: 'dawn',
-    theme: 'light',
-    bgImage: '/bg/bg-hero.png',
-    bgOverlay: 'light',
-  },
+  // 0 · Hero — light opening; the mascot sweeps the headline, then roams
+  { id: 'hero', layout: 'above', pos: { x: 0.5, y: 0.2 }, scale: 1.12, trick: 'none', mood: 'dawn', theme: 'light' },
   // 1 · Command — mascot left, the living product surface on the right
   { id: 'command', layout: 'left', pos: { x: 0.21, y: 0.5 }, scale: 1.0, trick: 'pop', mood: 'plain', theme: 'light' },
   // 2 · Platform + AI — CENTERPIECE, narrative & console flank the mascot
   { id: 'platform', layout: 'split', pos: { x: 0.5, y: 0.5 }, scale: 0.84, trick: 'flip', mood: 'wash', theme: 'light' },
-  // 3 · Finale — mascot on the right; copy stays clear on the left
+  // 3 · Finale — mascot floats high & centered; content reads below it
   {
     id: 'finale',
-    layout: 'right',
-    pos: { x: 0.84, y: 0.44 },
-    scale: 0.72,
+    layout: 'above',
+    pos: { x: 0.5, y: 0.19 },
+    scale: 0.74,
     trick: 'spin',
     mood: 'surface',
     theme: 'light',
@@ -137,7 +127,11 @@ export type BentoTile = {
   desc: string;
   icon: string;
   /** Which mini-visual to render inside the tile. */
-  visual: 'console' | 'pipeline' | 'chart' | 'flow' | 'finance' | 'globe';
+  visual: 'shot' | 'chart' | 'flow' | 'finance';
+  /** Product screenshot for `shot` tiles. */
+  image?: string;
+  /** object-position for the cropped screenshot (hides foreign sidebar). */
+  imagePos?: string;
 };
 
 export const bentoTiles: BentoTile[] = [
@@ -146,9 +140,11 @@ export const bentoTiles: BentoTile[] = [
     span: 'lg',
     eyebrow: 'AI agents',
     title: 'Work that does itself',
-    desc: 'Describe the outcome in plain language. Citron’s agents act across every module — drafting, sending, updating, closing the loop.',
+    desc: 'Describe the outcome in plain language — Citron’s agents draft, send, update and close the loop across every module.',
     icon: 'Sparkles',
-    visual: 'console',
+    visual: 'shot',
+    image: '/shots/shot-ai.png',
+    imagePos: '78% 0%',
   },
   {
     id: 'crm',
@@ -157,7 +153,9 @@ export const bentoTiles: BentoTile[] = [
     title: 'Pipelines that move themselves',
     desc: 'Deals advance on real signals, not manual updates.',
     icon: 'Users',
-    visual: 'pipeline',
+    visual: 'shot',
+    image: '/shots/shot-crm.png',
+    imagePos: '82% 0%',
   },
   {
     id: 'analytics',
@@ -189,11 +187,13 @@ export const bentoTiles: BentoTile[] = [
   {
     id: 'global',
     span: 'wide',
-    eyebrow: 'One platform',
+    eyebrow: 'Command center',
     title: 'Every surface, one source of truth',
-    desc: 'CRM, marketing, finance, ops and AI — connected, in real time, everywhere your team works.',
+    desc: 'CRM, marketing, finance, ops and AI — connected in real time, on one live home screen.',
     icon: 'Globe',
-    visual: 'globe',
+    visual: 'shot',
+    image: '/shots/shot-dashboard.png',
+    imagePos: '78% 30%',
   },
 ];
 

@@ -411,47 +411,81 @@ export function FinaleSection() {
   const year = new Date().getFullYear();
   return (
     <Stage index={3}>
+      {/* CTA close */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.8, ease: EASE }}
-        className="max-w-xl lg:max-w-none"
       >
         <span className="eyebrow-cine text-[0.72rem] font-semibold">Start today</span>
-        <h2 className="mt-4 max-w-[16ch] text-[clamp(2rem,5vw,3.2rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-cine">
+        <h2 className="mx-auto mt-4 max-w-[18ch] text-[clamp(2.1rem,5.2vw,3.4rem)] font-semibold leading-[1.03] tracking-[-0.04em] text-cine">
           Run your whole company on{' '}
           <span className="gradient-amber">one system.</span>
         </h2>
-        <p className="mt-5 max-w-[42ch] text-[1.0625rem] leading-relaxed text-cine-dim">
+        <p className="mx-auto mt-5 max-w-[44ch] text-[1.0625rem] leading-relaxed text-cine-dim">
           See Citron mapped to how your team actually works — a focused
           30-minute walkthrough, no slides for the sake of slides.
         </p>
+        <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Magnetic strength={0.45}>
+            <Link
+              href="/demo"
+              className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)]"
+            >
+              Book a Demo
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+          </Magnetic>
+          <Link
+            href="/pricing"
+            className="inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[1rem] font-semibold text-cine transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
+          >
+            Compare plans
+          </Link>
+        </div>
       </motion.div>
 
-      <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Magnetic strength={0.45}>
-          <Link
-            href="/demo"
-            className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)]"
-          >
-            Book a Demo
-            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-          </Link>
-        </Magnetic>
-        <Link
-          href="/pricing"
-          className="inline-flex h-[3.5rem] items-center gap-2 rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[1rem] font-semibold text-cine transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
-        >
-          Compare plans
-        </Link>
-      </div>
+      {/* Inkblot Studio — refined maker's card */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.8, ease: EASE }}
+        className="relative mx-auto mt-16 max-w-3xl overflow-hidden rounded-[var(--radius-3xl)] cine-card p-8 text-left sm:p-10"
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(var(--cine-particle),0.18), transparent 70%)' }}
+        />
+        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <span className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-cine-faint">
+              The makers
+            </span>
+            <h3 className="mt-2 text-[clamp(1.4rem,3vw,2rem)] font-semibold tracking-[-0.03em] text-cine">
+              Built by <span className="gradient-amber">Inkblot Studio</span>
+            </h3>
+            <p className="mt-2 max-w-[40ch] text-[0.95rem] leading-relaxed text-cine-dim">
+              A studio crafting calm, AI-native software that companies actually
+              want to live inside.
+            </p>
+          </div>
+          <Magnetic strength={0.35}>
+            <Link
+              href={siteConfig.studio.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex h-[3rem] shrink-0 items-center gap-2 rounded-full bg-[var(--cine-amber-bright)] px-6 text-[0.9375rem] font-semibold text-[#1d1c19] shadow-[0_10px_30px_-12px_rgba(var(--cine-particle),0.8)] transition hover:brightness-105"
+            >
+              Explore the studio
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+          </Magnetic>
+        </div>
 
-      <div className="mt-12 border-t border-[var(--cine-line)] pt-8">
-        <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-cine-faint">
-          Built by Inkblot Studio
-        </p>
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="relative mt-8 grid gap-3 border-t border-[var(--cine-line)] pt-6 sm:grid-cols-3">
           {inkblotPillars.map((p, i) => {
             const Icon = ICONS[p.icon] ?? Sparkles;
             return (
@@ -461,36 +495,29 @@ export function FinaleSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.6 }}
                 transition={{ duration: 0.5, ease: EASE, delay: i * 0.08 }}
-                className="rounded-[var(--radius-xl)] cine-card p-4"
+                className="flex items-start gap-3"
               >
-                <Icon className="h-4 w-4 text-[var(--cine-amber)]" strokeWidth={1.8} />
-                <p className="mt-2 text-[0.88rem] font-semibold text-cine">{p.title}</p>
-                <p className="mt-1 text-[0.78rem] leading-relaxed text-cine-dim">{p.desc}</p>
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[rgba(var(--cine-particle),0.12)] text-[var(--cine-amber)]">
+                  <Icon className="h-4 w-4" strokeWidth={1.8} />
+                </span>
+                <div>
+                  <p className="text-[0.85rem] font-semibold text-cine">{p.title}</p>
+                  <p className="mt-0.5 text-[0.76rem] leading-relaxed text-cine-dim">{p.desc}</p>
+                </div>
               </motion.div>
             );
           })}
         </div>
+      </motion.div>
 
-        <div className="mt-7">
-          <Magnetic strength={0.35}>
-            <Link
-              href={siteConfig.studio.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex h-[3rem] items-center gap-2 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-6 text-[0.9375rem] font-semibold text-cine backdrop-blur-md transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
-            >
-              Explore Inkblot Studio
-              <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
-          </Magnetic>
-        </div>
-
-        <div className="mt-8 flex flex-col gap-3 text-[0.8125rem] text-cine-faint sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
+      {/* legal footer */}
+      <div className="mx-auto mt-10 flex max-w-3xl flex-col items-center gap-3 text-[0.8125rem] text-cine-faint sm:flex-row sm:justify-between">
+        <div className="flex items-center gap-6">
           <Link href="/legal/privacy" className="transition-colors hover:text-cine">Privacy</Link>
           <Link href="/legal/terms" className="transition-colors hover:text-cine">Terms</Link>
           <Link href="/legal/cookies" className="transition-colors hover:text-cine">Cookies</Link>
-          <p className="sm:ml-auto">© {year} Citron · Crafted by Inkblot Studio</p>
         </div>
+        <p>© {year} Citron · Crafted by Inkblot Studio</p>
       </div>
     </Stage>
   );

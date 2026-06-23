@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   motion,
   useScroll,
@@ -124,66 +125,42 @@ function MiniBars({ values, animate = true }: { values: number[]; animate?: bool
   );
 }
 
+/** A cropped product screenshot that fills the rest of a bento tile. */
+function BentoShot({ src, pos }: { src: string; pos?: string }) {
+  return (
+    <div className="relative mt-5 min-h-[150px] flex-1 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--cine-card-border)] bg-[var(--cine-bg-2)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+      <Image
+        src={src}
+        alt=""
+        fill
+        className="object-cover"
+        style={{ objectPosition: pos ?? '50% 0%' }}
+        sizes="(max-width: 1024px) 100vw, 720px"
+        quality={90}
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ boxShadow: 'inset 0 0 0 1px var(--cine-card-border)' }}
+      />
+    </div>
+  );
+}
+
 function BentoVisual({ kind }: { kind: string }) {
-  if (kind === 'console') {
-    return (
-      <div className="mt-5 rounded-[var(--radius-lg)] border border-[var(--cine-line)] bg-[var(--cine-bg-2)] p-4">
-        <p className="font-mono text-[0.82rem] leading-relaxed text-cine">
-          <span className="text-[var(--cine-amber)]">›</span> Re-engage leads that have gone quiet
-          <span
-            className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[0.15em] bg-[var(--cine-amber)]"
-            style={{ animation: 'caret-blink 1s step-end infinite' }}
-          />
-        </p>
-        <div className="mt-3 flex items-start gap-2 rounded-[var(--radius-md)] border border-[rgba(var(--cine-particle),0.2)] bg-[rgba(var(--cine-particle),0.07)] p-2.5">
-          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--cine-amber)]" strokeWidth={3} />
-          <span className="text-[0.8rem] leading-relaxed text-cine-dim">
-            42 personalized emails drafted for your review
-          </span>
-        </div>
-      </div>
-    );
-  }
-  if (kind === 'pipeline') {
-    const rows = [
-      { n: 'Acme Corp', v: '$24k' },
-      { n: 'Meridian', v: '$92k' },
-      { n: 'Helix Labs', v: '$48k' },
-    ];
-    return (
-      <div className="mt-5 space-y-2">
-        {rows.map((r, i) => (
-          <motion.div
-            key={r.n}
-            initial={{ opacity: 0, x: -8 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.4, ease: EASE, delay: i * 0.08 }}
-            className="flex items-center justify-between rounded-[var(--radius-md)] border border-[var(--cine-line)] bg-[var(--cine-bg-2)] px-3 py-2"
-          >
-            <div className="flex items-center gap-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[rgba(var(--cine-particle),0.14)] text-[0.65rem] font-semibold text-[var(--cine-amber)]">
-                {r.n[0]}
-              </span>
-              <span className="text-[0.8rem] font-medium text-cine">{r.n}</span>
-            </div>
-            <span className="font-mono text-[0.72rem] tabular-nums text-cine-dim">{r.v}</span>
-          </motion.div>
-        ))}
-      </div>
-    );
-  }
   if (kind === 'chart') {
     return (
-      <div className="mt-5 h-20">
-        <MiniBars values={[44, 68, 52, 88, 72]} />
+      <div className="mt-5 flex-1">
+        <div className="flex h-full min-h-[88px] items-end">
+          <MiniBars values={[44, 68, 52, 88, 72]} />
+        </div>
       </div>
     );
   }
   if (kind === 'flow') {
     const nodes = ['Deal won', 'Invoice', 'Onboard'];
     return (
-      <div className="mt-5 flex items-center gap-1.5">
+      <div className="mt-5 flex flex-1 flex-wrap content-end items-center gap-1.5">
         {nodes.map((node, i) => (
           <Fragmentish key={node} last={i === nodes.length - 1}>
             <motion.span
@@ -200,9 +177,10 @@ function BentoVisual({ kind }: { kind: string }) {
       </div>
     );
   }
-  if (kind === 'finance') {
-    return (
-      <div className="mt-5 rounded-[var(--radius-lg)] border border-[var(--cine-line)] bg-[var(--cine-bg-2)] p-4">
+  // finance
+  return (
+    <div className="mt-5 flex flex-1 flex-col justify-end">
+      <div className="rounded-[var(--radius-lg)] border border-[var(--cine-line)] bg-[var(--cine-bg-2)] p-4">
         <div className="flex items-baseline gap-2">
           <span className="font-mono text-[1.6rem] font-semibold leading-none tracking-[-0.02em] text-cine">$63,400</span>
           <span className="text-[0.72rem] text-cine-faint">collected</span>
@@ -211,30 +189,6 @@ function BentoVisual({ kind }: { kind: string }) {
           <Check className="h-3 w-3" strokeWidth={3} /> 9 invoices · paid
         </div>
       </div>
-    );
-  }
-  // globe — a stylized orbit of connected modules
-  return (
-    <div className="mt-5 flex h-28 items-center justify-center">
-      <svg viewBox="0 0 240 120" className="h-full w-full" aria-hidden>
-        <defs>
-          <radialGradient id="bento-core" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(var(--cine-particle),0.5)" />
-            <stop offset="100%" stopColor="rgba(var(--cine-particle),0)" />
-          </radialGradient>
-        </defs>
-        <circle cx="120" cy="60" r="46" fill="none" stroke="var(--cine-line)" strokeWidth="1" />
-        <circle cx="120" cy="60" r="46" fill="none" stroke="rgba(var(--cine-particle),0.35)" strokeWidth="1" strokeDasharray="3 7" />
-        <ellipse cx="120" cy="60" rx="92" ry="30" fill="none" stroke="var(--cine-line)" strokeWidth="1" />
-        <circle cx="120" cy="60" r="22" fill="url(#bento-core)" />
-        <circle cx="120" cy="60" r="7" fill="var(--cine-amber-bright)" />
-        {[0, 60, 120, 180, 240, 300].map((deg) => {
-          const r = (deg * Math.PI) / 180;
-          const cx = 120 + Math.cos(r) * 92;
-          const cy = 60 + Math.sin(r) * 30;
-          return <circle key={deg} cx={cx} cy={cy} r="4" fill="var(--cine-amber)" />;
-        })}
-      </svg>
     </div>
   );
 }
@@ -258,7 +212,7 @@ const BENTO_SPAN: Record<string, string> = {
 
 export function BentoSection() {
   return (
-    <Section id="platform-overview" tone="surface" bgImage="/bg/bg-platform.png" bgOverlay="light">
+    <Section id="platform-overview" tone="surface">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-end">
         <div>
           <Eyebrow>One system, every function</Eyebrow>
@@ -268,7 +222,7 @@ export function BentoSection() {
             data, the same automations, and the same intelligence.
           </p>
         </div>
-        <div className="grid grid-cols-3 gap-3 rounded-[var(--radius-2xl)] cine-card p-5 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-3 rounded-[var(--radius-2xl)] cine-card p-5">
           {[
             { v: '12+', l: 'modules' },
             { v: '1', l: 'login' },
@@ -284,14 +238,15 @@ export function BentoSection() {
         </div>
       </div>
 
-      <div className="mt-12 grid auto-rows-[minmax(180px,1fr)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-12 grid auto-rows-[minmax(190px,1fr)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {bentoTiles.map((tile, i) => {
           const Icon = ICONS[tile.icon] ?? Sparkles;
+          const isShot = tile.visual === 'shot';
           return (
             <Card
               key={tile.id}
               delay={0.04 * i}
-              className={cn('flex flex-col', BENTO_SPAN[tile.span])}
+              className={cn('flex flex-col !p-5', BENTO_SPAN[tile.span])}
             >
               <div className="flex items-center gap-2">
                 <span className="flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-[rgba(var(--cine-particle),0.12)] text-[var(--cine-amber)]">
@@ -301,11 +256,15 @@ export function BentoSection() {
                   {tile.eyebrow}
                 </span>
               </div>
-              <h3 className="mt-4 text-[1.25rem] font-semibold leading-tight tracking-[-0.02em] text-cine">
+              <h3 className="mt-4 text-[1.2rem] font-semibold leading-tight tracking-[-0.02em] text-cine">
                 {tile.title}
               </h3>
-              <p className="mt-2 text-[0.9rem] leading-relaxed text-cine-dim">{tile.desc}</p>
-              <BentoVisual kind={tile.visual} />
+              <p className="mt-2 max-w-[44ch] text-[0.9rem] leading-relaxed text-cine-dim">{tile.desc}</p>
+              {isShot && tile.image ? (
+                <BentoShot src={tile.image} pos={tile.imagePos} />
+              ) : (
+                <BentoVisual kind={tile.visual} />
+              )}
             </Card>
           );
         })}
@@ -501,13 +460,6 @@ export function HorizontalShowcase() {
     return () => window.removeEventListener('resize', measure);
   }, [reduce]);
 
-  const intro = (
-    <div className="pointer-events-none absolute inset-x-0 top-0 z-10 mx-auto flex max-w-[1200px] flex-col px-6 pt-24 lg:px-10">
-      <Eyebrow>See it in motion</Eyebrow>
-      <Title className="max-w-2xl">One platform, every surface.</Title>
-    </div>
-  );
-
   // Reduced motion / no-pin fallback: a normal swipeable row.
   if (reduce) {
     return (
@@ -532,15 +484,33 @@ export function HorizontalShowcase() {
       className="relative w-full"
       style={{ height: `calc(100vh + ${maxScroll}px)` }}
     >
-      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden" style={{ background: 'var(--cine-bg-0)' }}>
+      <div
+        className="sticky top-0 flex h-screen flex-col overflow-hidden"
+        style={{ background: 'var(--cine-bg-0)' }}
+      >
         <MeshBackdrop className="opacity-70" />
-        {intro}
-        <motion.div ref={trackRef} className="relative z-10 flex items-stretch gap-6 px-6 pt-28 pb-12 lg:px-10" style={{ x }}>
-          {surfaces.map((s, i) => (
-            <ShowcasePanel key={s.id} surface={s} index={i} />
-          ))}
-        </motion.div>
-        <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6 lg:px-10">
+
+        {/* Fixed header band — sits above the reel, never overlaps it */}
+        <div className="relative z-10 mx-auto w-full max-w-[1200px] shrink-0 px-6 pt-24 pb-2 sm:pt-28 lg:px-10">
+          <Eyebrow>See it in motion</Eyebrow>
+          <Title className="max-w-2xl">One platform, every surface.</Title>
+        </div>
+
+        {/* The reel — fills the space below the header, vertically centered */}
+        <div className="relative z-10 flex min-h-0 flex-1 items-center">
+          <motion.div
+            ref={trackRef}
+            className="flex h-[min(62vh,30rem)] items-stretch gap-6 px-6 lg:px-10"
+            style={{ x }}
+          >
+            {surfaces.map((s, i) => (
+              <ShowcasePanel key={s.id} surface={s} index={i} />
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="relative z-10 mx-auto w-full max-w-[1200px] shrink-0 px-6 pb-8 lg:px-10">
           <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--cine-line)]">
             <motion.div
               className="h-full rounded-full bg-[var(--cine-amber-bright)]"
@@ -765,7 +735,7 @@ function RoiTile({
 
 export function ProofSection() {
   return (
-    <Section id="roi" tone="dark" bgImage="/bg/bg-proof.png" bgOverlay="dark">
+    <Section id="roi" tone="dark">
       <div className="mx-auto max-w-2xl text-center">
         <Eyebrow>The numbers</Eyebrow>
         <Title className="mx-auto">Results teams feel in the first week.</Title>
