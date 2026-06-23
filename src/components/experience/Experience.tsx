@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { TOTAL_SCENES } from '@/lib/experience';
 import { ExperienceProvider } from './ExperienceContext';
 import { MascotGuide } from './MascotGuide';
 import { CursorTrail } from './ambient/CursorTrail';
 import { DemoNudge } from './ambient/DemoNudge';
-import { Intro } from './Intro';
+import { Intro, introWillPlay } from './Intro';
 import {
   HeroSection,
   CrmSection,
@@ -28,6 +28,10 @@ import {
  * guide steps aside for act two and returns for the finale.
  */
 export function Experience() {
+  // While the intro plays, hold the hero mascot guide still at its anchor so the
+  // intro can hand the mascot off to the exact same spot — no jump, no roam.
+  const [introActive, setIntroActive] = useState(introWillPlay);
+
   useEffect(() => {
     document.documentElement.classList.add('citron-snap');
     return () => document.documentElement.classList.remove('citron-snap');
@@ -35,10 +39,10 @@ export function Experience() {
 
   return (
     <ExperienceProvider total={TOTAL_SCENES}>
-      <Intro />
+      <Intro onDone={() => setIntroActive(false)} />
       <div className="experience-root relative">
         <CursorTrail />
-        <MascotGuide />
+        <MascotGuide introHold={introActive} />
 
         {/* Act one — the mascot's journey (compact, 3 beats) */}
         <HeroSection />

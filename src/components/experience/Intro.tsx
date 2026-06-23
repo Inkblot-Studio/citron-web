@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   motion,
   AnimatePresence,
@@ -48,11 +48,11 @@ const ORDER: Phase[] = [
 const TIMING: Record<Phase, number> = {
   void: 0,
   signals: 0,
-  assembly: 1150,
-  breath: 650,
-  discovery: 650,
-  reveal: 650,
-  tagline: 1100,
+  assembly: 1100,
+  breath: 600,
+  discovery: 600,
+  reveal: 520,
+  tagline: 900,
 };
 
 /* ── The three brand pieces, each called in from a different direction ──────
@@ -184,11 +184,11 @@ function Wordmark() {
           initial={false}
           animate={{
             opacity: [0, 1, 1],
-            y: [28, -4, 0],
-            scale: [0.5, 1.12, 1],
-            rotate: [i % 2 ? -12 : 12, 2, 0],
+            y: [24, -3, 0],
+            scale: [0.55, 1.1, 1],
+            rotate: [i % 2 ? -10 : 10, 2, 0],
           }}
-          transition={{ duration: 0.7, ease: EASE, delay: 0.05 + i * 0.06, times: [0, 0.6, 1] }}
+          transition={{ duration: 0.5, ease: EASE, delay: 0.03 + i * 0.04, times: [0, 0.6, 1] }}
         >
           {ch}
         </motion.span>
@@ -213,7 +213,7 @@ function Tagline() {
         className="text-[0.95rem] font-semibold tracking-[0.01em] text-[var(--cine-amber)] sm:text-[1.0625rem]"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: EASE, delay: 0.55 }}
+        transition={{ duration: 0.5, ease: EASE, delay: 0.38 }}
       >
         For Your Entire Business.
       </motion.span>
@@ -221,11 +221,27 @@ function Tagline() {
   );
 }
 
-export function Intro() {
+/** Whether the intro should play on this client (once per session, motion ok). */
+export function introWillPlay(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    if (sessionStorage.getItem(STORAGE_KEY)) return false;
+  } catch {
+    /* storage unavailable */
+  }
+  return true;
+}
+
+export function Intro({ onDone }: { onDone?: () => void }) {
   const reduce = useReducedMotion();
-  const [armed, setArmed] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [phase, setPhase] = useState<Phase>('void');
+  // Decide synchronously on the very first render so the overlay paints before
+  // the page is ever visible — no flash of the hero before the animation.
+  const [armed] = useState(introWillPlay);
+  const [visible, setVisible] = useState(armed);
+  const [phase, setPhase] = useState<Phase>('assembly');
+  // Where the mascot flies to on exit — measured at hand-off, defaults safe.
+  const [exitT, setExitT] = useState({ x: 0, y: -80, scale: 1.12 });
 
   // Cursor → gaze. Fed to the live mascot once it has woken (discovery).
   const mx = useMotionValue(0);
@@ -235,32 +251,37 @@ export function Intro() {
   const glanceRef = useRef<{ stop: () => void }[]>([]);
 
   const timerRef = useRef<number | null>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
 
   const pi = ORDER.indexOf(phase);
   const at = (p: Phase) => pi >= ORDER.indexOf(p);
-  const mascotStage: 'void' | 'signals' | 'assembly' =
-    phase === 'void' ? 'void' : phase === 'signals' ? 'signals' : 'assembly';
 
-  // Arm once per session (skip entirely for reduced motion).
-  useEffect(() => {
-    if (reduce) return;
-    let seen = false;
-    try {
-      seen = !!sessionStorage.getItem(STORAGE_KEY);
-    } catch {
-      /* storage unavailable */
+  // End the intro: measure the mascot, aim it at the hero anchor, then dissolve.
+  const finish = useCallback(() => {
+    if (timerRef.current) window.clearTimeout(timerRef.current);
+    const el = boxRef.current;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      // Matches the hero mascot guide's anchor: scene.pos = { x: 0.5, y: 0.2 }.
+      const tx = window.innerWidth * 0.5;
+      const ty = window.innerHeight * 0.2;
+      setExitT({ x: tx - cx, y: ty - cy, scale: 1.12 });
     }
-    if (seen) return;
+    setVisible(false);
+  }, []);
 
-    setArmed(true);
-    setVisible(true);
+  // Lock scroll while the intro plays.
+  useEffect(() => {
+    if (!armed) return;
     const root = document.documentElement;
     const prevOverflow = root.style.overflow;
     root.style.overflow = 'hidden';
     return () => {
       root.style.overflow = prevOverflow;
     };
-  }, [reduce]);
+  }, [armed]);
 
   // Drive the phase machine.
   useEffect(() => {
@@ -268,7 +289,7 @@ export function Intro() {
     let i = 0;
     const run = () => {
       if (i >= ORDER.length) {
-        setVisible(false);
+        finish();
         return;
       }
       const p = ORDER[i];
@@ -280,16 +301,13 @@ export function Intro() {
     return () => {
       if (timerRef.current) window.clearTimeout(timerRef.current);
     };
-  }, [armed]);
+  }, [armed, finish]);
 
   // Skip on intent — but ignore the first instants (browsers can fire a
   // synthetic scroll on load that would dismiss before anything plays).
   useEffect(() => {
     if (!armed) return;
-    const dismiss = () => {
-      if (timerRef.current) window.clearTimeout(timerRef.current);
-      setVisible(false);
-    };
+    const dismiss = () => finish();
     let armSkip = 0;
     const add = () => {
       window.addEventListener('wheel', dismiss, { passive: true, once: true });
@@ -303,7 +321,7 @@ export function Intro() {
       window.removeEventListener('touchstart', dismiss);
       window.removeEventListener('keydown', dismiss);
     };
-  }, [armed]);
+  }, [armed, finish]);
 
   // Discovery — a scripted curious glance, then the cursor takes over.
   useEffect(() => {
@@ -338,6 +356,8 @@ export function Intro() {
     } catch {
       /* ignore */
     }
+    // Hand control to the live hero mascot guide (it begins roaming from here).
+    onDone?.();
   };
 
   if (!armed) return null;
@@ -349,8 +369,8 @@ export function Intro() {
           key="citron-genesis"
           className="fixed inset-0 z-[110] overflow-hidden"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, filter: 'blur(6px)' }}
-          transition={{ duration: 0.6, ease: EASE }}
+          exit={{ opacity: 0, filter: 'blur(4px)' }}
+          transition={{ duration: 0.75, ease: EASE }}
         >
           {/* ── Bright, premium stage ─────────────────────────────────── */}
           <div
@@ -394,14 +414,15 @@ export function Intro() {
 
           {/* ── Centre stage ──────────────────────────────────────────── */}
           <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6">
-            {/* mascot zone — drifts up toward the hero on exit */}
+            {/* mascot zone — flies to its hero anchor on exit */}
             <motion.div
+              ref={boxRef}
               className="relative"
-              exit={{ y: -80, scale: 1.05, opacity: 0 }}
-              transition={{ duration: 0.85, ease: EASE }}
+              exit={{ x: exitT.x, y: exitT.y, scale: exitT.scale }}
+              transition={{ duration: 0.75, ease: EASE }}
             >
               <div className="relative h-[clamp(10rem,24vw,14rem)] w-[clamp(10rem,24vw,14rem)]">
-                {/* behind-glow — intensifies as the form completes */}
+                {/* behind-glow — blooms in as the mascot assembles */}
                 <motion.div
                   aria-hidden
                   className="absolute inset-[-30%] rounded-full"
@@ -409,69 +430,12 @@ export function Intro() {
                     background:
                       'radial-gradient(circle, rgba(var(--cine-particle),0.22), transparent 65%)',
                   }}
-                  animate={{
-                    opacity: at('assembly') ? 0.9 : 0.25,
-                    scale: at('assembly') ? 1 : 0.8,
-                  }}
+                  initial={{ opacity: 0.2, scale: 0.8 }}
+                  animate={{ opacity: 0.9, scale: 1 }}
                   transition={{ duration: 1, ease: EASE }}
                 />
 
-                {/* STAGE 1 — the glowing nucleus */}
-                <motion.div
-                  aria-hidden
-                  className="absolute inset-0 flex items-center justify-center"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: at('assembly') ? 0 : 1 }}
-                  transition={{ duration: 0.6, ease: EASE }}
-                >
-                  <motion.span
-                    className="block h-3 w-3 rounded-full"
-                    style={{
-                      background: 'var(--cine-amber-bright)',
-                      boxShadow: '0 0 22px 5px rgba(var(--cine-particle),0.5)',
-                    }}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: [0.6, 1.25, 0.85, 1.15, 0.9] }}
-                    transition={{
-                      duration: 2.2,
-                      ease: 'easeInOut',
-                      repeat: Infinity,
-                      repeatType: 'mirror',
-                    }}
-                  />
-                </motion.div>
-
-                {/* STAGE 2 — signal fragments called in from the edges */}
-                {at('signals') && (
-                  <div aria-hidden className="absolute inset-0">
-                    {PIECES.concat(PIECES).map((p, i) => {
-                      const fx = p.from.x * (i < PIECES.length ? 0.82 : -0.62);
-                      const fy = p.from.y * (i < PIECES.length ? 0.82 : 0.5) - (i % 2 ? 60 : 0);
-                      return (
-                        <motion.span
-                          key={i}
-                          className="absolute left-1/2 top-1/2 block h-1.5 w-1.5 rounded-full"
-                          style={{
-                            marginLeft: -3,
-                            marginTop: -3,
-                            background: 'var(--cine-amber-bright)',
-                            boxShadow: '0 0 10px 2px rgba(var(--cine-particle),0.5)',
-                          }}
-                          initial={{ x: fx, y: fy, opacity: 0, scale: 0.5 }}
-                          animate={{ x: 0, y: 0, opacity: [0, 0.9, 0], scale: [0.5, 1, 0.4] }}
-                          transition={{
-                            duration: 0.95,
-                            ease: EASE,
-                            delay: (i % PIECES.length) * 0.06,
-                            times: [0, 0.5, 1],
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
-                )}
-
-                {/* STAGE 4 — first breath: a glow bloom + a ring, masking the
+                {/* first breath — a glow bloom + a ring, masking the
                     hand-off from the constructed pieces to the living mascot */}
                 {at('breath') && (
                   <>
@@ -503,16 +467,16 @@ export function Intro() {
                   </>
                 )}
 
-                {/* STAGES 1–3 — the constructed mascot */}
+                {/* the constructed mascot — flies in and snaps together */}
                 <motion.div
                   className="absolute inset-0"
                   animate={{ opacity: at('breath') ? 0 : 1 }}
                   transition={{ duration: 0.55, ease: EASE }}
                 >
-                  <AssemblingMascot stage={mascotStage} />
+                  <AssemblingMascot stage="assembly" />
                 </motion.div>
 
-                {/* STAGES 4+ — the living mascot (breath, blink, gaze) */}
+                {/* the living mascot (breath, blink, gaze) */}
                 {at('breath') && (
                   <motion.div
                     className="absolute inset-0"
@@ -534,7 +498,7 @@ export function Intro() {
             <motion.div
               className="relative mt-7 flex h-[8rem] w-full flex-col items-center"
               exit={{ y: -24, opacity: 0 }}
-              transition={{ duration: 0.6, ease: EASE }}
+              transition={{ duration: 0.4, ease: EASE }}
             >
               {at('reveal') && <Wordmark />}
               {at('tagline') && <Tagline />}
@@ -543,10 +507,7 @@ export function Intro() {
 
           <motion.button
             type="button"
-            onClick={() => {
-              if (timerRef.current) window.clearTimeout(timerRef.current);
-              setVisible(false);
-            }}
+            onClick={finish}
             className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[0.7rem] font-medium uppercase tracking-[0.24em] text-cine-faint transition-colors hover:text-cine"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

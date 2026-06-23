@@ -22,7 +22,7 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  * and settles there, alive. Motion is GPU-composited and intentionally smooth:
  * no scroll-velocity jitter, no fighting the scroll-snap.
  */
-export function MascotGuide() {
+export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
   const reduce = useReducedMotion();
   const { active, mascotVisible } = useExperience();
   const [vp, setVp] = useState({ w: 1440, h: 900 });
@@ -66,7 +66,12 @@ export function MascotGuide() {
     }
 
     const isHero = idx === 0;
-    if (isHero && !reduce) {
+    if (isHero && introHold) {
+      // Intro is still playing — sit exactly on the hero anchor so the intro
+      // mascot can dissolve into this spot. Roaming begins once it's done.
+      targetX.set(scene.pos.x * vp.w);
+      targetY.set(scene.pos.y * vp.h);
+    } else if (isHero && !reduce) {
       const start = performance.now();
       const baseX = 0.5 * vp.w;
       const baseY = 0.2 * vp.h;
@@ -93,7 +98,7 @@ export function MascotGuide() {
         roamRef.current = null;
       }
     };
-  }, [active, vp, reduce, targetX, targetY, targetScale]);
+  }, [active, vp, reduce, introHold, targetX, targetY, targetScale]);
 
   useEffect(() => {
     if (reduce) return;

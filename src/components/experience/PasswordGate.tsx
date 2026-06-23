@@ -15,9 +15,9 @@ const CORRECT = 'admin1234@';
  */
 export function PasswordGate({ children }: { children: React.ReactNode }) {
   const [authed, setAuthed] = useState<boolean | null>(null); // null = checking
+  const [unlocked, setUnlocked] = useState(false); // just entered correctly
   const [value, setValue] = useState('');
   const [error, setError] = useState(false);
-  const [leaving, setLeaving] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Check session on mount.
@@ -33,11 +33,11 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
 
   // Focus the input as soon as the gate is visible.
   useEffect(() => {
-    if (authed === false) {
+    if (authed === false && !unlocked) {
       const t = window.setTimeout(() => inputRef.current?.focus(), 50);
       return () => window.clearTimeout(t);
     }
-  }, [authed]);
+  }, [authed, unlocked]);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -47,8 +47,9 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
       } catch {
         /* ignore */
       }
-      setLeaving(true);
-      window.setTimeout(() => setAuthed(true), 650);
+      // Mount the experience immediately (the intro paints white underneath)
+      // and dissolve the gate over it — no blank gap, no flash of the page.
+      setUnlocked(true);
     } else {
       setError(true);
       setValue('');
@@ -57,15 +58,21 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Still checking sessionStorage — render nothing to avoid flash.
-  if (authed === null) return null;
+  // Still checking sessionStorage — hold a plain white cover (matches SSR, so
+  // no hydration mismatch) so the page chrome never flashes underneath.
+  if (authed === null) {
+    return <div aria-hidden className="fixed inset-0 z-[200]" style={{ background: '#ffffff' }} />;
+  }
 
-  if (authed) return <>{children}</>;
+  const passed = authed === true || unlocked;
 
   return (
     <>
+      {/* The experience mounts as soon as access is granted, beneath the gate. */}
+      {passed && children}
+
       <AnimatePresence>
-        {!leaving && (
+        {!passed && (
           <motion.div
             key="gate"
             className="fixed inset-0 z-[200] flex items-center justify-center"
@@ -159,8 +166,6 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Children are never mounted until authed */}
     </>
   );
 }
