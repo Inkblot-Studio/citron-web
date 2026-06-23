@@ -9,15 +9,31 @@ import {
   useState,
   type RefObject,
 } from 'react';
-import { useInView } from 'framer-motion';
+import {
+  animate,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+  type MotionValue,
+} from 'framer-motion';
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 type Ctx = {
   active: number;
   total: number;
-  /** True while at least one mascot chapter is on screen (hides the guide over Act 2). */
+  /** True while at least one mascot chapter is on screen (hides the guide over the product act). */
   mascotVisible: boolean;
   setActive: (i: number) => void;
   setVisibleIndex: (i: number, visible: boolean) => void;
+  /**
+   * 0 → 1 timeline for the hero reveal. The mascot sweeps the headline as this
+   * advances; each headline word lights up in its trail. Shared so the guide's
+   * motion and the text reveal stay perfectly in sync.
+   */
+  heroReveal: MotionValue<number>;
+  /** Kick off the hero reveal once (after the intro hands off). Idempotent. */
+  playHeroReveal: () => void;
 };
 
 const ExperienceCtx = createContext<Ctx | null>(null);
@@ -29,9 +45,13 @@ export function ExperienceProvider({
   total: number;
   children: React.ReactNode;
 }) {
+  const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
   const visibleRef = useRef<Set<number>>(new Set());
   const [mascotVisible, setMascotVisible] = useState(true);
+
+  const heroReveal = useMotionValue(0);
+  const playedRef = useRef(false);
 
   const setVisibleIndex = useCallback((i: number, visible: boolean) => {
     const s = visibleRef.current;
@@ -40,8 +60,20 @@ export function ExperienceProvider({
     setMascotVisible(s.size > 0);
   }, []);
 
+  const playHeroReveal = useCallback(() => {
+    if (playedRef.current) return;
+    playedRef.current = true;
+    if (reduce) {
+      heroReveal.set(1);
+      return;
+    }
+    animate(heroReveal, 1, { duration: 2.7, ease: EASE });
+  }, [reduce, heroReveal]);
+
   return (
-    <ExperienceCtx.Provider value={{ active, total, mascotVisible, setActive, setVisibleIndex }}>
+    <ExperienceCtx.Provider
+      value={{ active, total, mascotVisible, setActive, setVisibleIndex, heroReveal, playHeroReveal }}
+    >
       {children}
     </ExperienceCtx.Provider>
   );

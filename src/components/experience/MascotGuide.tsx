@@ -15,27 +15,51 @@ import { scenes, type Trick } from '@/lib/experience';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
 /**
- * The mascot guide — desktop only. In the hero it roams freely along a calm,
- * looping path (kept above the headline so it never covers the copy). For every
- * other chapter it glides to a dedicated mark on the half opposite the content
- * and settles there, alive. Motion is GPU-composited and intentionally smooth:
- * no scroll-velocity jitter, no fighting the scroll-snap.
+ * The hero choreography, expressed as a function of the 0→1 reveal timeline.
+ * The mascot glides down from its intro hand-off, sweeps left→right across the
+ * headline band (lighting up the words in its trail), then floats up to its
+ * roaming anchor. Returned positions are viewport fractions.
+ */
+function heroSweep(p: number): { x: number; y: number; scale: number } {
+  // Phase A — drop from the hand-off point to the start of the sweep.
+  if (p < 0.16) {
+    const t = p / 0.16;
+    return { x: lerp(0.5, 0.17, t), y: lerp(0.2, 0.47, t), scale: lerp(1.12, 1.18, t) };
+  }
+  // Phase B — sweep across the headline, arcing gently over the type.
+  if (p < 0.7) {
+    const t = (p - 0.16) / 0.54;
+    return { x: lerp(0.17, 0.83, t), y: 0.47 - Math.sin(Math.PI * t) * 0.045, scale: 1.18 };
+  }
+  // Phase C — rise back up to the roaming anchor.
+  const t = (p - 0.7) / 0.3;
+  return { x: lerp(0.83, 0.5, t), y: lerp(0.47, 0.2, t), scale: lerp(1.18, 1.12, t) };
+}
+
+/**
+ * The mascot guide — desktop only. It opens the hero by sweeping the headline,
+ * then roams calmly above it; for every other chapter it glides to a dedicated
+ * mark on the half opposite the content and settles there, alive. Motion is
+ * GPU-composited and intentionally smooth: no scroll-velocity jitter, no
+ * fighting the scroll-snap.
  */
 export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
   const reduce = useReducedMotion();
-  const { active, mascotVisible } = useExperience();
+  const { active, mascotVisible, heroReveal } = useExperience();
   const [vp, setVp] = useState({ w: 1440, h: 900 });
 
   // Travel target (anchor or live roam point) → smoothed by springs.
   const targetX = useMotionValue(0);
   const targetY = useMotionValue(0);
   const targetScale = useMotionValue(1);
-  const x = useSpring(targetX, { stiffness: 58, damping: 20, mass: 1 });
-  const y = useSpring(targetY, { stiffness: 58, damping: 20, mass: 1 });
+  const x = useSpring(targetX, { stiffness: 64, damping: 20, mass: 1 });
+  const y = useSpring(targetY, { stiffness: 64, damping: 20, mass: 1 });
   const scale = useSpring(targetScale, { stiffness: 64, damping: 18, mass: 1 });
 
-  // Cursor → a restrained tilt + gaze (smaller than before, so it reads calm).
+  // Cursor → a restrained tilt + gaze (small, so it reads calm).
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const rotateY = useSpring(useTransform(mx, [-1, 1], [-10, 10]), { stiffness: 90, damping: 20, mass: 0.6 });
@@ -54,11 +78,10 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // Anchor to the active chapter. The hero (index 0) instead roams on a loop.
+  // Anchor to the active chapter. The hero (index 0) sweeps, then roams.
   useEffect(() => {
     const idx = Math.min(active, scenes.length - 1);
     const scene = scenes[idx];
-    targetScale.set(scene.scale);
 
     if (roamRef.current) {
       cancelAnimationFrame(roamRef.current);
@@ -66,16 +89,18 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
     }
 
     const isHero = idx === 0;
-    if (isHero && introHold) {
-      // Intro is still playing — sit exactly on the hero anchor so the intro
-      // mascot can dissolve into this spot. Roaming begins once it's done.
-      targetX.set(scene.pos.x * vp.w);
-      targetY.set(scene.pos.y * vp.h);
-    } else if (isHero && !reduce) {
+
+    // The gentle roam loop the hero settles into once the sweep finishes.
+    const startRoam = () => {
+      if (reduce) {
+        targetX.set(0.5 * vp.w);
+        targetY.set(0.2 * vp.h);
+        targetScale.set(scene.scale);
+        return;
+      }
       const start = performance.now();
       const baseX = 0.5 * vp.w;
       const baseY = 0.2 * vp.h;
-      // Amplitudes kept small in Y so the mascot stays above the hero copy.
       const ampX = Math.min(0.2 * vp.w, 280);
       const ampY = Math.min(0.05 * vp.h, 52);
       const roam = (t: number) => {
@@ -87,10 +112,49 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
         roamRef.current = requestAnimationFrame(roam);
       };
       roamRef.current = requestAnimationFrame(roam);
-    } else {
-      targetX.set(scene.pos.x * vp.w);
-      targetY.set(scene.pos.y * vp.h);
+    };
+
+    if (isHero && introHold) {
+      // Intro still playing — sit on the hand-off anchor so the intro mascot can
+      // dissolve into this exact spot. The sweep begins once the intro is done.
+      targetScale.set(1.12);
+      targetX.set(0.5 * vp.w);
+      targetY.set(0.2 * vp.h);
+      return;
     }
+
+    if (isHero) {
+      if (reduce) {
+        startRoam();
+        return;
+      }
+      // Drive the sweep from the shared reveal timeline; hand off to the roam
+      // loop the moment it completes.
+      const apply = (p: number) => {
+        if (p >= 0.999) {
+          if (!roamRef.current) startRoam();
+          return;
+        }
+        const s = heroSweep(p);
+        targetX.set(s.x * vp.w);
+        targetY.set(s.y * vp.h);
+        targetScale.set(s.scale);
+      };
+      apply(heroReveal.get());
+      const unsub = heroReveal.on('change', apply);
+      return () => {
+        unsub();
+        if (roamRef.current) {
+          cancelAnimationFrame(roamRef.current);
+          roamRef.current = null;
+        }
+      };
+    }
+
+    // Every other chapter — settle onto its dedicated mark.
+    targetScale.set(scene.scale);
+    targetX.set(scene.pos.x * vp.w);
+    targetY.set(scene.pos.y * vp.h);
 
     return () => {
       if (roamRef.current) {
@@ -98,7 +162,7 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
         roamRef.current = null;
       }
     };
-  }, [active, vp, reduce, introHold, targetX, targetY, targetScale]);
+  }, [active, vp, reduce, introHold, heroReveal, targetX, targetY, targetScale]);
 
   useEffect(() => {
     if (reduce) return;

@@ -2,26 +2,31 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useInView, useReducedMotion } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+  useInView,
+} from 'framer-motion';
 import {
   Users,
-  Bot,
+  Sparkles,
   Workflow,
-  Landmark,
-  ListChecks,
-  Megaphone,
+  ReceiptText,
   BarChart3,
-  Unplug,
+  Globe,
   Check,
   ArrowRight,
   Star,
-  Layers,
-  TrendingUp,
   Clock,
   DollarSign,
+  TrendingUp,
   type LucideIcon,
 } from 'lucide-react';
-import { modules, testimonials, caseStudies, stats } from '@/lib/site';
+import { testimonials, caseStudies } from '@/lib/site';
+import { bentoTiles, surfaces, proofMetrics, type Surface as SurfaceType } from '@/lib/experience';
+import { Card, BrowserFrame, MeshBackdrop } from './kit';
 import { Magnetic } from './ambient/Magnetic';
 import { cn } from '@/lib/cn';
 
@@ -29,24 +34,25 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 const ICONS: Record<string, LucideIcon> = {
   Users,
-  Bot,
+  Sparkles,
   Workflow,
-  Landmark,
-  ListChecks,
-  Megaphone,
+  ReceiptText,
   BarChart3,
+  Globe,
 };
 
-/* ---------- shared shell (clean, generous whitespace) ---------- */
+/* ---------- shared shell ---------- */
 
 function Section({
   id,
   tone = 'base',
+  snap = true,
   className,
   children,
 }: {
   id?: string;
   tone?: 'base' | 'surface' | 'dark';
+  snap?: boolean;
   className?: string;
   children: ReactNode;
 }) {
@@ -54,7 +60,8 @@ function Section({
     <section
       id={id}
       className={cn(
-        'snap-section relative w-full overflow-hidden py-24 sm:py-32',
+        'relative w-full overflow-hidden py-24 sm:py-32',
+        snap && 'snap-section',
         tone === 'surface' && 'border-y border-[var(--cine-line)]',
         tone === 'dark' && 'cine-section-dark',
         className
@@ -88,418 +95,480 @@ function Title({ children, className }: { children: ReactNode; className?: strin
 }
 
 /* ============================================================
-   Trust bar — animated counters
+   Bento mini-visuals — small, live product moments
    ============================================================ */
 
-function parseStat(value: string) {
-  const m = /^([^\d-]*)([\d.]+)(.*)$/.exec(value);
-  if (!m) return { prefix: '', num: 0, suffix: value, decimals: 0 };
-  const numStr = m[2];
-  const decimals = numStr.includes('.') ? numStr.split('.')[1].length : 0;
-  return { prefix: m[1], num: parseFloat(numStr), suffix: m[3], decimals };
-}
-
-function Counter({ value, run }: { value: string; run: boolean }) {
-  const { prefix, num, suffix, decimals } = parseStat(value);
-  const [display, setDisplay] = useState(0);
-  const reduce = useReducedMotion();
-
-  useEffect(() => {
-    if (!run) {
-      setDisplay(0);
-      return;
-    }
-    if (reduce) {
-      setDisplay(num);
-      return;
-    }
-    let raf = 0;
-    const start = performance.now();
-    const dur = 1400;
-    const tick = (t: number) => {
-      const p = Math.min((t - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(num * eased);
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [run, num, reduce]);
-
+function MiniBars({ values, animate = true }: { values: number[]; animate?: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
   return (
-    <span className="font-mono tabular-nums">
-      {prefix}
-      {display.toFixed(decimals)}
-      {suffix}
-    </span>
+    <div ref={ref} className="flex h-full items-end gap-2">
+      {values.map((v, i) => (
+        <motion.div
+          key={i}
+          className="flex-1 rounded-t-[4px]"
+          style={{
+            background: 'linear-gradient(180deg, var(--cine-amber-bright), rgba(var(--cine-particle),0.22))',
+          }}
+          initial={{ height: animate ? 0 : `${v}%` }}
+          animate={{ height: inView || !animate ? `${v}%` : 0 }}
+          transition={{ duration: 0.7, ease: EASE, delay: 0.1 + i * 0.06 }}
+        />
+      ))}
+    </div>
   );
 }
 
-export function TrustBar() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.45 });
-
-  return (
-    <Section id="trust" tone="surface">
-      <div ref={ref} className="text-center">
-        <Eyebrow>Trusted to run the business</Eyebrow>
-        <Title className="mx-auto max-w-2xl">Numbers teams feel in the first week.</Title>
-        <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.6 }}
-              transition={{ duration: 0.6, ease: EASE, delay: i * 0.08 }}
-            >
-              <div className="text-[2.6rem] font-semibold tracking-[-0.03em] text-[var(--cine-amber)] sm:text-[3.2rem]">
-                <Counter value={s.value} run={inView} />
-              </div>
-              <div className="mt-1 text-[0.85rem] text-cine-dim">{s.label}</div>
-            </motion.div>
-          ))}
+function BentoVisual({ kind }: { kind: string }) {
+  if (kind === 'console') {
+    return (
+      <div className="mt-5 rounded-[var(--radius-lg)] border border-[var(--cine-line)] bg-[var(--cine-bg-2)] p-4">
+        <p className="font-mono text-[0.82rem] leading-relaxed text-cine">
+          <span className="text-[var(--cine-amber)]">›</span> Re-engage leads that have gone quiet
+          <span
+            className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[0.15em] bg-[var(--cine-amber)]"
+            style={{ animation: 'caret-blink 1s step-end infinite' }}
+          />
+        </p>
+        <div className="mt-3 flex items-start gap-2 rounded-[var(--radius-md)] border border-[rgba(var(--cine-particle),0.2)] bg-[rgba(var(--cine-particle),0.07)] p-2.5">
+          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--cine-amber)]" strokeWidth={3} />
+          <span className="text-[0.8rem] leading-relaxed text-cine-dim">
+            42 personalized emails drafted for your review
+          </span>
         </div>
+      </div>
+    );
+  }
+  if (kind === 'pipeline') {
+    const rows = [
+      { n: 'Acme Corp', v: '$24k' },
+      { n: 'Meridian', v: '$92k' },
+      { n: 'Helix Labs', v: '$48k' },
+    ];
+    return (
+      <div className="mt-5 space-y-2">
+        {rows.map((r, i) => (
+          <motion.div
+            key={r.n}
+            initial={{ opacity: 0, x: -8 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.4, ease: EASE, delay: i * 0.08 }}
+            className="flex items-center justify-between rounded-[var(--radius-md)] border border-[var(--cine-line)] bg-[var(--cine-bg-2)] px-3 py-2"
+          >
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[rgba(var(--cine-particle),0.14)] text-[0.65rem] font-semibold text-[var(--cine-amber)]">
+                {r.n[0]}
+              </span>
+              <span className="text-[0.8rem] font-medium text-cine">{r.n}</span>
+            </div>
+            <span className="font-mono text-[0.72rem] tabular-nums text-cine-dim">{r.v}</span>
+          </motion.div>
+        ))}
+      </div>
+    );
+  }
+  if (kind === 'chart') {
+    return (
+      <div className="mt-5 h-20">
+        <MiniBars values={[44, 68, 52, 88, 72]} />
+      </div>
+    );
+  }
+  if (kind === 'flow') {
+    const nodes = ['Deal won', 'Invoice', 'Onboard'];
+    return (
+      <div className="mt-5 flex items-center gap-1.5">
+        {nodes.map((node, i) => (
+          <Fragmentish key={node} last={i === nodes.length - 1}>
+            <motion.span
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.4, ease: EASE, delay: i * 0.12 }}
+              className="rounded-full border border-[var(--cine-line)] bg-[var(--cine-bg-2)] px-2.5 py-1 text-[0.7rem] font-medium text-cine"
+            >
+              {node}
+            </motion.span>
+          </Fragmentish>
+        ))}
+      </div>
+    );
+  }
+  if (kind === 'finance') {
+    return (
+      <div className="mt-5 rounded-[var(--radius-lg)] border border-[var(--cine-line)] bg-[var(--cine-bg-2)] p-4">
+        <div className="flex items-baseline gap-2">
+          <span className="font-mono text-[1.6rem] font-semibold leading-none tracking-[-0.02em] text-cine">$63,400</span>
+          <span className="text-[0.72rem] text-cine-faint">collected</span>
+        </div>
+        <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[rgba(var(--cine-particle),0.1)] px-2.5 py-1 text-[0.7rem] font-medium text-[var(--cine-amber)]">
+          <Check className="h-3 w-3" strokeWidth={3} /> 9 invoices · paid
+        </div>
+      </div>
+    );
+  }
+  // globe — a stylized orbit of connected modules
+  return (
+    <div className="mt-5 flex h-28 items-center justify-center">
+      <svg viewBox="0 0 240 120" className="h-full w-full" aria-hidden>
+        <defs>
+          <radialGradient id="bento-core" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(var(--cine-particle),0.5)" />
+            <stop offset="100%" stopColor="rgba(var(--cine-particle),0)" />
+          </radialGradient>
+        </defs>
+        <circle cx="120" cy="60" r="46" fill="none" stroke="var(--cine-line)" strokeWidth="1" />
+        <circle cx="120" cy="60" r="46" fill="none" stroke="rgba(var(--cine-particle),0.35)" strokeWidth="1" strokeDasharray="3 7" />
+        <ellipse cx="120" cy="60" rx="92" ry="30" fill="none" stroke="var(--cine-line)" strokeWidth="1" />
+        <circle cx="120" cy="60" r="22" fill="url(#bento-core)" />
+        <circle cx="120" cy="60" r="7" fill="var(--cine-amber-bright)" />
+        {[0, 60, 120, 180, 240, 300].map((deg) => {
+          const r = (deg * Math.PI) / 180;
+          const cx = 120 + Math.cos(r) * 92;
+          const cy = 60 + Math.sin(r) * 30;
+          return <circle key={deg} cx={cx} cy={cy} r="4" fill="var(--cine-amber)" />;
+        })}
+      </svg>
+    </div>
+  );
+}
+
+// tiny helper to render a connector between flow nodes
+function Fragmentish({ children, last }: { children: ReactNode; last: boolean }) {
+  return (
+    <>
+      {children}
+      {!last && <ArrowRight className="h-3 w-3 shrink-0 text-cine-faint" />}
+    </>
+  );
+}
+
+const BENTO_SPAN: Record<string, string> = {
+  lg: 'sm:col-span-2 lg:col-span-2 lg:row-span-2',
+  tall: 'lg:row-span-2',
+  wide: 'sm:col-span-2 lg:col-span-3',
+  sm: '',
+};
+
+export function BentoSection() {
+  return (
+    <Section id="platform-overview" tone="surface">
+      <div className="max-w-2xl">
+        <Eyebrow>One system, every function</Eyebrow>
+        <Title>Everything your business runs on.</Title>
+        <p className="mt-5 max-w-[46ch] text-[1.0625rem] leading-relaxed text-cine-dim">
+          Not a bundle of apps — one platform where every module shares the same
+          data, the same automations, and the same intelligence.
+        </p>
+      </div>
+
+      <div className="mt-12 grid auto-rows-[minmax(180px,1fr)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {bentoTiles.map((tile, i) => {
+          const Icon = ICONS[tile.icon] ?? Sparkles;
+          return (
+            <Card
+              key={tile.id}
+              delay={0.04 * i}
+              className={cn('flex flex-col', BENTO_SPAN[tile.span])}
+            >
+              <div className="flex items-center gap-2">
+                <span className="flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-[rgba(var(--cine-particle),0.12)] text-[var(--cine-amber)]">
+                  <Icon className="h-5 w-5" strokeWidth={1.8} />
+                </span>
+                <span className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-cine-faint">
+                  {tile.eyebrow}
+                </span>
+              </div>
+              <h3 className="mt-4 text-[1.25rem] font-semibold leading-tight tracking-[-0.02em] text-cine">
+                {tile.title}
+              </h3>
+              <p className="mt-2 text-[0.9rem] leading-relaxed text-cine-dim">{tile.desc}</p>
+              <BentoVisual kind={tile.visual} />
+            </Card>
+          );
+        })}
       </div>
     </Section>
   );
 }
 
 /* ============================================================
-   Product showcase — interactive slider
+   Horizontal showcase — product surfaces that scroll sideways
    ============================================================ */
 
-const SHOWCASE: { slug: string; label: string; kpi: [string, string]; bars: number[] }[] = [
-  { slug: 'crm', label: 'CRM', kpi: ['1,248', 'active accounts'], bars: [62, 80, 48, 92] },
-  { slug: 'ai-agents', label: 'AI Agents', kpi: ['18', 'tasks done today'], bars: [40, 70, 95, 60] },
-  { slug: 'automations', label: 'Automations', kpi: ['34', 'flows running'], bars: [55, 88, 72, 40] },
-  { slug: 'accounting', label: 'Finance', kpi: ['$1.2M', 'cash in'], bars: [70, 52, 84, 66] },
-  { slug: 'tasks', label: 'Tasks', kpi: ['92%', 'on time'], bars: [48, 60, 90, 75] },
-  { slug: 'marketing', label: 'Marketing', kpi: ['4.2x', 'ROAS'], bars: [38, 64, 80, 96] },
-  { slug: 'analytics', label: 'Analytics', kpi: ['312', 'MQLs'], bars: [80, 50, 68, 88] },
-];
-
-export function ProductShowcase() {
-  const reduce = useReducedMotion();
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (reduce || paused) return;
-    const t = window.setTimeout(() => setActive((p) => (p + 1) % SHOWCASE.length), 4800);
-    return () => window.clearTimeout(t);
-  }, [active, paused, reduce]);
-
-  const item = SHOWCASE[active];
-  const mod = modules.find((m) => m.slug === item.slug)!;
-  const Icon = ICONS[mod.icon] ?? Layers;
-
-  return (
-    <Section id="product">
-      <div className="max-w-2xl">
-        <Eyebrow>One system, every surface</Eyebrow>
-        <Title>Explore what runs on Citron.</Title>
-        <p className="mt-4 text-[1.0625rem] leading-relaxed text-cine-dim">
-          Every module shares the same data, the same automations, and the same
-          intelligence. Pick one to see it in motion.
-        </p>
+function SurfaceMock({ kind }: { kind: SurfaceType['kind'] }) {
+  if (kind === 'dashboard') {
+    return (
+      <div className="grid h-full grid-cols-3 gap-3">
+        <div className="col-span-3 grid grid-cols-3 gap-3">
+          {[
+            { k: 'Revenue', v: '$1.24M' },
+            { k: 'Pipeline', v: '$3.8M' },
+            { k: 'Cash', v: '$612k' },
+          ].map((m) => (
+            <div key={m.k} className="rounded-[var(--radius-md)] border border-[var(--cine-line)] bg-[var(--cine-bg-1)] p-3">
+              <div className="text-[0.65rem] uppercase tracking-[0.14em] text-cine-faint">{m.k}</div>
+              <div className="mt-1 font-mono text-[1.1rem] font-semibold tracking-[-0.02em] text-cine">{m.v}</div>
+            </div>
+          ))}
+        </div>
+        <div className="col-span-2 rounded-[var(--radius-md)] border border-[var(--cine-line)] bg-[var(--cine-bg-1)] p-3">
+          <div className="text-[0.7rem] font-medium text-cine-dim">Revenue · last 6 months</div>
+          <div className="mt-2 h-[calc(100%-1.5rem)]">
+            <MiniBars values={[40, 58, 50, 72, 66, 90]} />
+          </div>
+        </div>
+        <div className="rounded-[var(--radius-md)] border border-[var(--cine-line)] bg-[var(--cine-bg-1)] p-3">
+          <div className="text-[0.7rem] font-medium text-cine-dim">Today</div>
+          <div className="mt-2 space-y-1.5">
+            {['3 invoices sent', 'Acme moved to Won', '2 tasks due'].map((t) => (
+              <div key={t} className="flex items-center gap-1.5 text-[0.72rem] text-cine-dim">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--cine-amber)]" />
+                {t}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-
-      {/* tabs */}
-      <div
-        className="mt-10 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        role="tablist"
-        aria-label="Citron modules"
-      >
-        {SHOWCASE.map((s, i) => (
-          <button
-            key={s.slug}
-            role="tab"
-            aria-selected={i === active}
-            onClick={() => {
-              setActive(i);
-              setPaused(true);
-            }}
+    );
+  }
+  if (kind === 'board') {
+    const cols = [
+      { name: 'Qualified', deals: ['Atlas Co', 'Vega'] },
+      { name: 'Proposal', deals: ['Meridian'] },
+      { name: 'Won', deals: ['Helix', 'Acme'] },
+    ];
+    return (
+      <div className="grid h-full grid-cols-3 gap-3">
+        {cols.map((c) => (
+          <div key={c.name} className="flex flex-col rounded-[var(--radius-md)] border border-[var(--cine-line)] bg-[var(--cine-bg-1)] p-2.5">
+            <div className="mb-2 flex items-center justify-between text-[0.7rem] font-semibold text-cine">
+              {c.name}
+              <span className="text-cine-faint">{c.deals.length}</span>
+            </div>
+            <div className="space-y-2">
+              {c.deals.map((d) => (
+                <div key={d} className="rounded-[var(--radius-sm)] border border-[var(--cine-line)] bg-[var(--cine-bg-2)] px-2.5 py-2">
+                  <div className="text-[0.75rem] font-medium text-cine">{d}</div>
+                  <div className="mt-1 h-1 w-2/3 rounded-full bg-[rgba(var(--cine-particle),0.25)]" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  if (kind === 'agent') {
+    return (
+      <div className="flex h-full flex-col justify-center gap-3">
+        <div className="rounded-[var(--radius-md)] border border-[var(--cine-line)] bg-[var(--cine-bg-1)] p-4 font-mono text-[0.85rem] text-cine">
+          <span className="text-[var(--cine-amber)]">›</span> Build this month’s revenue report
+        </div>
+        {['Pulled revenue, churn & runway', 'Generated 4-page summary', 'Shared with #leadership'].map((s, i) => (
+          <div key={s} className="flex items-center gap-2 rounded-[var(--radius-md)] border border-[rgba(var(--cine-particle),0.2)] bg-[rgba(var(--cine-particle),0.07)] px-3 py-2 text-[0.8rem] text-cine-dim">
+            <span className="font-mono text-[0.7rem] text-[var(--cine-amber)]">{i + 1}</span>
+            <Check className="h-3.5 w-3.5 text-[var(--cine-amber)]" strokeWidth={3} />
+            {s}
+          </div>
+        ))}
+      </div>
+    );
+  }
+  if (kind === 'analytics') {
+    return (
+      <div className="flex h-full flex-col">
+        <div className="flex items-baseline gap-3">
+          <div className="font-mono text-[2rem] font-semibold leading-none tracking-[-0.03em] text-cine">4.2x</div>
+          <div className="text-[0.75rem] text-cine-faint">ROAS · up 19% MoM</div>
+        </div>
+        <div className="mt-4 flex-1">
+          <MiniBars values={[36, 52, 44, 70, 60, 82, 96]} />
+        </div>
+        <div className="mt-3 flex gap-3 text-[0.7rem] text-cine-dim">
+          {['Organic', 'Paid', 'Email'].map((l) => (
+            <span key={l} className="inline-flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-sm bg-[var(--cine-amber)]" /> {l}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  // automation
+  const steps = [
+    { t: 'When a deal is won', kind: 'trigger' },
+    { t: 'Generate & send invoice', kind: 'action' },
+    { t: 'Alert the delivery team', kind: 'action' },
+    { t: 'Start customer onboarding', kind: 'action' },
+  ];
+  return (
+    <div className="flex h-full flex-col justify-center gap-2">
+      {steps.map((s, i) => (
+        <div key={s.t} className="flex items-center gap-3">
+          <span
             className={cn(
-              'shrink-0 rounded-full border px-4 py-2 text-[0.85rem] font-medium transition-colors duration-200',
-              i === active
-                ? 'border-transparent bg-[var(--cine-amber-bright)] text-[#1d1c19]'
-                : 'border-[var(--cine-line)] text-cine-dim hover:text-cine'
+              'flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[0.65rem] font-semibold',
+              s.kind === 'trigger'
+                ? 'bg-[var(--cine-amber-bright)] text-[#1d1c19]'
+                : 'border border-[var(--cine-line)] text-[var(--cine-amber)]'
             )}
           >
-            {s.label}
-          </button>
-        ))}
-      </div>
-
-      <div
-        className="mt-6 grid items-stretch gap-6 lg:grid-cols-2"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
-        {/* copy */}
-        <div className="flex flex-col justify-center rounded-[var(--radius-2xl)] cine-card p-8">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={item.slug}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4, ease: EASE }}
-            >
-              <span className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-lg)] bg-[rgba(var(--cine-particle),0.14)] text-[var(--cine-amber)]">
-                <Icon className="h-6 w-6" strokeWidth={1.8} />
-              </span>
-              <h3 className="mt-5 text-[1.5rem] font-semibold tracking-[-0.02em] text-cine">
-                {item.label}
-              </h3>
-              <p className="mt-1 text-[0.95rem] font-medium text-[var(--cine-amber)]">{mod.tagline}</p>
-              <p className="mt-3 text-[0.95rem] leading-relaxed text-cine-dim">{mod.description}</p>
-              <ul className="mt-5 grid grid-cols-2 gap-2">
-                {mod.features.map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-[0.8125rem] text-cine-dim">
-                    <Check className="h-3.5 w-3.5 shrink-0 text-[var(--cine-amber)]" strokeWidth={3} />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </AnimatePresence>
+            {i + 1}
+          </span>
+          <div
+            className={cn(
+              'flex-1 rounded-[var(--radius-md)] border px-3 py-2 text-[0.8rem]',
+              s.kind === 'trigger'
+                ? 'border-[rgba(var(--cine-particle),0.3)] bg-[rgba(var(--cine-particle),0.08)] font-medium text-cine'
+                : 'border-[var(--cine-line)] bg-[var(--cine-bg-1)] text-cine-dim'
+            )}
+          >
+            {s.t}
+          </div>
         </div>
-
-        {/* faux product surface */}
-        <div className="relative min-h-[20rem] overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--cine-card-border)] bg-[var(--cine-bg-2)] p-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={item.slug}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.4, ease: EASE }}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-cine">
-                  <Icon className="h-4 w-4 text-[var(--cine-amber)]" strokeWidth={1.8} />
-                  <span className="text-[0.85rem] font-semibold">{item.label}</span>
-                </div>
-                <div className="flex gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-[var(--cine-line)]" />
-                  <span className="h-2 w-2 rounded-full bg-[var(--cine-line)]" />
-                  <span className="h-2 w-2 rounded-full bg-[var(--cine-amber-soft)]" />
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-end gap-3">
-                <div className="text-[2.4rem] font-semibold leading-none tracking-[-0.03em] text-cine">
-                  {item.kpi[0]}
-                </div>
-                <div className="pb-1 text-[0.8rem] text-cine-faint">{item.kpi[1]}</div>
-              </div>
-
-              {/* animated bar chart */}
-              <div className="mt-6 flex h-28 items-end gap-3">
-                {item.bars.map((b, i) => (
-                  <motion.div
-                    key={i}
-                    className="flex-1 rounded-t-md"
-                    style={{
-                      background:
-                        'linear-gradient(180deg, var(--cine-amber-bright), rgba(var(--cine-particle),0.25))',
-                    }}
-                    initial={{ height: 0 }}
-                    animate={{ height: `${b}%` }}
-                    transition={{ duration: 0.6, ease: EASE, delay: 0.1 + i * 0.06 }}
-                  />
-                ))}
-              </div>
-
-              <div className="mt-5 space-y-2">
-                {mod.features.slice(0, 2).map((f) => (
-                  <div
-                    key={f}
-                    className="flex items-center gap-2 rounded-[var(--radius-md)] border border-[var(--cine-card-border)] bg-[var(--cine-card)] px-3 py-2 text-[0.8rem] text-cine-dim"
-                  >
-                    <Check className="h-3.5 w-3.5 text-[var(--cine-amber)]" strokeWidth={3} />
-                    {f}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
-    </Section>
+      ))}
+    </div>
   );
 }
 
-/* ============================================================
-   Stack comparison — the messy stack collapses into one
-   ============================================================ */
-
-const OLD_STACK = ['CRM', 'Marketing tool', 'Automation tool', 'Spreadsheets', 'Project mgmt', 'Reporting', 'Accounting'];
-const CITRON_TRUTHS = ['One platform', 'One login', 'One intelligence', 'One workflow'];
-
-export function StackComparison() {
+function ShowcasePanel({ surface, index }: { surface: SurfaceType; index: number }) {
   return (
-    <Section tone="surface" id="compare">
-      <div className="mx-auto max-w-2xl text-center">
-        <Eyebrow>The difference</Eyebrow>
-        <Title>Seven tools, or one system.</Title>
-        <p className="mt-4 text-[1.0625rem] leading-relaxed text-cine-dim">
-          The traditional stack is a tax you pay every day — in logins, in
-          exports, in things that fall through the cracks.
-        </p>
+    <div className="flex h-full w-[min(88vw,1040px)] shrink-0 flex-col px-3 sm:px-5">
+      <div className="flex items-center gap-3">
+        <span className="font-mono text-[0.75rem] text-cine-faint">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-3 py-1 text-[0.72rem] font-medium text-[var(--cine-amber)]">
+          {surface.label}
+        </span>
       </div>
-
-      <div className="mt-14 grid items-center gap-6 lg:grid-cols-[1fr_auto_1fr]">
-        {/* the old stack */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.6, ease: EASE }}
-        >
-          <p className="mb-4 text-center text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-cine-faint lg:text-left">
-            The traditional stack
-          </p>
-          <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
-            {OLD_STACK.map((t) => (
-              <span
-                key={t}
-                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-3 py-1.5 text-[0.8rem] text-cine-dim"
-              >
-                <Unplug className="h-3.5 w-3.5 text-cine-faint" strokeWidth={1.8} />
-                {t}
-              </span>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* connector */}
-        <motion.div
-          className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--cine-amber-bright)] text-[#1d1c19] lg:h-14 lg:w-14"
-          initial={{ opacity: 0, scale: 0.6 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.5, ease: EASE, delay: 0.15 }}
-        >
-          <ArrowRight className="h-5 w-5 lg:h-6 lg:w-6" strokeWidth={2.4} />
-        </motion.div>
-
-        {/* citron */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
-          className="rounded-[var(--radius-2xl)] cine-card p-6"
-          style={{ boxShadow: '0 0 50px -16px rgba(var(--cine-particle),0.6)' }}
-        >
-          <div className="flex items-center gap-2 text-cine">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[rgba(var(--cine-particle),0.16)] text-[var(--cine-amber)]">
-              <Layers className="h-4 w-4" strokeWidth={1.9} />
-            </span>
-            <span className="text-[1.05rem] font-semibold">Citron</span>
-          </div>
-          <div className="mt-4 grid grid-cols-2 gap-2.5">
-            {CITRON_TRUTHS.map((t) => (
-              <div key={t} className="flex items-center gap-2 text-[0.9rem] font-medium text-cine">
-                <Check className="h-4 w-4 shrink-0 text-[var(--cine-amber)]" strokeWidth={3} />
-                {t}
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </Section>
-  );
-}
-
-/* ============================================================
-   Testimonials — continuous, self-moving marquee
-   ============================================================ */
-
-type Card = { quote: string; name: string; sub: string; metric?: string };
-
-const ROW_A: Card[] = testimonials.map((t) => ({
-  quote: t.quote,
-  name: t.name,
-  sub: `${t.role}, ${t.company}`,
-}));
-
-const ROW_B: Card[] = caseStudies.map((c) => ({
-  quote: c.summary,
-  name: c.company,
-  sub: c.industry,
-  metric: `${c.metric} ${c.metricLabel}`,
-}));
-
-function TestimonialCard({ c }: { c: Card }) {
-  return (
-    <figure className="flex w-[20rem] shrink-0 flex-col rounded-[var(--radius-2xl)] cine-card p-6 sm:w-[24rem]">
-      {c.metric ? (
-        <div className="text-[1.4rem] font-semibold tracking-[-0.02em] text-[var(--cine-amber)]">
-          {c.metric}
-        </div>
-      ) : (
-        <div className="flex gap-0.5 text-[var(--cine-amber)]">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i} className="h-3.5 w-3.5 fill-current" />
-          ))}
-        </div>
-      )}
-      <blockquote className="mt-3 flex-1 text-[0.95rem] leading-relaxed text-cine">{c.quote}</blockquote>
-      <figcaption className="mt-4 text-[0.8125rem] text-cine-faint">
-        <span className="font-semibold text-cine">{c.name}</span> · {c.sub}
-      </figcaption>
-    </figure>
-  );
-}
-
-function MarqueeRow({ cards, duration, reverse }: { cards: Card[]; duration: number; reverse?: boolean }) {
-  const doubled = [...cards, ...cards];
-  return (
-    <div className="group flex overflow-hidden mask-fade-edges">
-      <div
-        className="flex shrink-0 gap-4 pr-4 group-hover:[animation-play-state:paused]"
-        style={{
-          animation: `marquee ${duration}s linear infinite`,
-          animationDirection: reverse ? 'reverse' : 'normal',
-        }}
-      >
-        {doubled.map((c, i) => (
-          <TestimonialCard key={i} c={c} />
-        ))}
+      <h3 className="mt-3 max-w-[20ch] text-[clamp(1.5rem,2.6vw,2.1rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-cine">
+        {surface.title}
+      </h3>
+      <p className="mt-2 max-w-[42ch] text-[0.95rem] leading-relaxed text-cine-dim">{surface.desc}</p>
+      <div className="mt-5 min-h-0 flex-1">
+        <BrowserFrame url={`app.citron.com/${surface.id}`}>
+          <SurfaceMock kind={surface.kind} />
+        </BrowserFrame>
       </div>
     </div>
   );
 }
 
-export function Testimonials() {
+export function HorizontalShowcase() {
+  const reduce = useReducedMotion();
+  const outerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [maxScroll, setMaxScroll] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: outerRef,
+    offset: ['start start', 'end end'],
+  });
+  const x = useTransform(scrollYProgress, [0, 1], [0, -maxScroll]);
+
+  useEffect(() => {
+    const measure = () => {
+      const el = trackRef.current;
+      if (!el) return;
+      setMaxScroll(Math.max(0, el.scrollWidth - window.innerWidth + 48));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [reduce]);
+
+  const intro = (
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-10 mx-auto flex max-w-[1200px] flex-col px-6 pt-24 lg:px-10">
+      <Eyebrow>See it in motion</Eyebrow>
+      <Title className="max-w-2xl">One platform, every surface.</Title>
+    </div>
+  );
+
+  // Reduced motion / no-pin fallback: a normal swipeable row.
+  if (reduce) {
+    return (
+      <Section id="showcase" snap={false} className="!py-24">
+        <Eyebrow>See it in motion</Eyebrow>
+        <Title className="max-w-2xl">One platform, every surface.</Title>
+        <div className="mt-10 flex gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {surfaces.map((s, i) => (
+            <div key={s.id} className="h-[34rem]">
+              <ShowcasePanel surface={s} index={i} />
+            </div>
+          ))}
+        </div>
+      </Section>
+    );
+  }
+
   return (
-    <Section id="customers">
-      <div className="mx-auto max-w-2xl text-center">
-        <Eyebrow>Why teams switch</Eyebrow>
-        <Title>Loved by the people who run the business.</Title>
+    <section
+      ref={outerRef}
+      id="showcase"
+      className="relative w-full"
+      style={{ height: `calc(100vh + ${maxScroll}px)` }}
+    >
+      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden" style={{ background: 'var(--cine-bg-0)' }}>
+        <MeshBackdrop className="opacity-70" />
+        {intro}
+        <motion.div ref={trackRef} className="relative z-10 flex items-stretch gap-6 px-6 pt-28 pb-12 lg:px-10" style={{ x }}>
+          {surfaces.map((s, i) => (
+            <ShowcasePanel key={s.id} surface={s} index={i} />
+          ))}
+        </motion.div>
+        <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6 lg:px-10">
+          <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--cine-line)]">
+            <motion.div
+              className="h-full rounded-full bg-[var(--cine-amber-bright)]"
+              style={{ scaleX: scrollYProgress, transformOrigin: '0% 50%' }}
+            />
+          </div>
+        </div>
       </div>
-      <div className="mt-12 space-y-4">
-        <MarqueeRow cards={ROW_A} duration={46} />
-        <MarqueeRow cards={ROW_B} duration={54} reverse />
-      </div>
-    </Section>
+    </section>
   );
 }
 
 /* ============================================================
-   ROI calculator — interactive slider, live savings readout
+   Proof — numbers that rise on scroll + the ROI calculator
    ============================================================ */
 
-const PER_SEAT_TOOL_COST = 92; // average / seat / month, traditional stack
-const PER_SEAT_CITRON = 57; // Growth plan, annual
+function ProofMetric({ metric, index }: { metric: (typeof proofMetrics)[number]; index: number }) {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  // Each card drifts up at a slightly different rate → gentle parallax.
+  const range = 60 + index * 22;
+  const y = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [range, -range]);
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{ y }}
+      initial={{ opacity: 0, scale: 0.94 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{ duration: 0.6, ease: EASE, delay: index * 0.06 }}
+      className="rounded-[var(--radius-2xl)] cine-card p-6"
+    >
+      <div className="font-mono text-[2.6rem] font-semibold leading-none tracking-[-0.03em] text-[var(--cine-amber)] sm:text-[3rem]">
+        {metric.value}
+      </div>
+      <div className="mt-3 text-[0.95rem] font-semibold text-cine">{metric.label}</div>
+      <div className="mt-1 text-[0.82rem] text-cine-dim">{metric.sub}</div>
+    </motion.div>
+  );
+}
+
+const PER_SEAT_TOOL_COST = 92;
+const PER_SEAT_CITRON = 57;
 const HOURS_SAVED_PER_PERSON_WEEK = 6.4;
 const HOURLY_VALUE = 55;
 
-export function RoiCalculator() {
+function RoiCalculator() {
   const [team, setTeam] = useState(18);
   const monthlySavings = team * (PER_SEAT_TOOL_COST - PER_SEAT_CITRON);
   const yearlySavings = monthlySavings * 12;
@@ -508,82 +577,61 @@ export function RoiCalculator() {
   const totalImpact = yearlySavings + valueOfTime;
 
   return (
-    <Section id="roi" tone="dark">
-      <div className="mx-auto max-w-2xl text-center">
-        <Eyebrow>The math</Eyebrow>
-        <Title>See what Citron saves your team.</Title>
-        <p className="mt-4 text-[1.0625rem] leading-relaxed text-cine-dim">
-          Move the slider. Watch what one system replaces — in software bills
-          and in the time your team gets back.
-        </p>
+    <div className="mx-auto mt-16 max-w-3xl rounded-[var(--radius-3xl)] cine-card p-8 sm:p-10">
+      <div className="text-center">
+        <Eyebrow>Run the math</Eyebrow>
+        <h3 className="mt-3 text-[clamp(1.4rem,3vw,2rem)] font-semibold tracking-[-0.03em] text-cine">
+          See what Citron saves your team.
+        </h3>
       </div>
 
-      <div className="mx-auto mt-12 max-w-3xl rounded-[var(--radius-3xl)] cine-card p-8 sm:p-10">
-        <label className="block">
-          <div className="flex items-baseline justify-between gap-4">
-            <span className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-cine-faint">
-              Your team size
-            </span>
-            <span className="font-mono text-[2rem] font-semibold tabular-nums text-cine">
-              {team}
-            </span>
-          </div>
-          <input
-            type="range"
-            min={5}
-            max={120}
-            value={team}
-            onChange={(e) => setTeam(parseInt(e.target.value, 10))}
-            className="roi-slider mt-4 w-full"
-            style={{ ['--val' as string]: team }}
-            aria-label="Team size"
-          />
-          <div className="mt-1.5 flex justify-between text-[0.7rem] text-cine-faint">
-            <span>5</span>
-            <span>120+</span>
-          </div>
-        </label>
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <RoiTile
-            icon={DollarSign}
-            label="Saved on software"
-            value={`$${yearlySavings.toLocaleString()}`}
-            sub="/ year"
-          />
-          <RoiTile
-            icon={Clock}
-            label="Hours back to your team"
-            value={hoursPerYear.toLocaleString()}
-            sub="hrs / year"
-          />
-          <RoiTile
-            icon={TrendingUp}
-            label="Total annual impact"
-            value={`$${totalImpact.toLocaleString()}`}
-            sub="incl. time value"
-            highlight
-          />
+      <label className="mt-8 block">
+        <div className="flex items-baseline justify-between gap-4">
+          <span className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-cine-faint">
+            Your team size
+          </span>
+          <span className="font-mono text-[2rem] font-semibold tabular-nums text-cine">{team}</span>
         </div>
-
-        <p className="mt-6 text-center text-[0.75rem] text-cine-faint">
-          Based on industry averages. Most teams see results within the first
-          month.
-        </p>
-
-        <div className="mt-7 flex justify-center">
-          <Magnetic strength={0.4}>
-            <Link
-              href="/demo"
-              className="group inline-flex h-[3rem] items-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-6 text-[0.95rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-12px_rgba(var(--cine-particle),0.7)] transition hover:brightness-105"
-            >
-              See your real numbers
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </Magnetic>
+        <input
+          type="range"
+          min={5}
+          max={120}
+          value={team}
+          onChange={(e) => setTeam(parseInt(e.target.value, 10))}
+          className="roi-slider mt-4 w-full"
+          style={{ ['--val' as string]: team }}
+          aria-label="Team size"
+        />
+        <div className="mt-1.5 flex justify-between text-[0.7rem] text-cine-faint">
+          <span>5</span>
+          <span>120+</span>
         </div>
+      </label>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+        <RoiTile icon={DollarSign} label="Saved on software" value={`$${yearlySavings.toLocaleString()}`} sub="/ year" />
+        <RoiTile icon={Clock} label="Hours back to your team" value={hoursPerYear.toLocaleString()} sub="hrs / year" />
+        <RoiTile
+          icon={TrendingUp}
+          label="Total annual impact"
+          value={`$${totalImpact.toLocaleString()}`}
+          sub="incl. time value"
+          highlight
+        />
       </div>
-    </Section>
+
+      <div className="mt-7 flex justify-center">
+        <Magnetic strength={0.4}>
+          <Link
+            href="/demo"
+            className="group inline-flex h-[3rem] items-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-6 text-[0.95rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-12px_rgba(var(--cine-particle),0.7)] transition hover:brightness-105"
+          >
+            See your real numbers
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </Magnetic>
+      </div>
+    </div>
   );
 }
 
@@ -626,45 +674,98 @@ function RoiTile({
   );
 }
 
+export function ProofSection() {
+  return (
+    <Section id="roi" tone="dark">
+      <div className="mx-auto max-w-2xl text-center">
+        <Eyebrow>The numbers</Eyebrow>
+        <Title className="mx-auto">Results teams feel in the first week.</Title>
+        <p className="mx-auto mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-cine-dim">
+          One system instead of seven means less spend, less busywork, and a team
+          that moves on its data instead of maintaining it.
+        </p>
+      </div>
+
+      <div className="mt-16 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {proofMetrics.map((m, i) => (
+          <ProofMetric key={m.label} metric={m} index={i} />
+        ))}
+      </div>
+
+      <RoiCalculator />
+    </Section>
+  );
+}
+
 /* ============================================================
-   Final CTA band
+   Testimonials — continuous, self-moving marquee
    ============================================================ */
 
-export function FinalCta() {
+type Quote = { quote: string; name: string; sub: string; metric?: string };
+
+const ROW_A: Quote[] = testimonials.map((t) => ({
+  quote: t.quote,
+  name: t.name,
+  sub: `${t.role}, ${t.company}`,
+}));
+
+const ROW_B: Quote[] = caseStudies.map((c) => ({
+  quote: c.summary,
+  name: c.company,
+  sub: c.industry,
+  metric: `${c.metric} ${c.metricLabel}`,
+}));
+
+function QuoteCard({ c }: { c: Quote }) {
   return (
-    <Section id="cta">
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.7, ease: EASE }}
-        className="mx-auto max-w-3xl text-center"
-      >
-        <Title className="mx-auto max-w-3xl">
-          Run your whole company on <span className="gradient-amber">one system.</span>
-        </Title>
-        <p className="mx-auto mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-cine-dim">
-          See Citron mapped to how your team actually works — a focused
-          30-minute walkthrough, no slides for the sake of slides.
-        </p>
-        <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Magnetic strength={0.45}>
-            <Link
-              href="/demo"
-              className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)]"
-            >
-              Book a Demo
-              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-            </Link>
-          </Magnetic>
-          <Link
-            href="/pricing"
-            className="inline-flex h-[3.5rem] items-center gap-2 rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[1rem] font-semibold text-cine transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
-          >
-            Compare plans
-          </Link>
+    <figure className="flex w-[20rem] shrink-0 flex-col rounded-[var(--radius-2xl)] cine-card p-6 sm:w-[24rem]">
+      {c.metric ? (
+        <div className="text-[1.4rem] font-semibold tracking-[-0.02em] text-[var(--cine-amber)]">{c.metric}</div>
+      ) : (
+        <div className="flex gap-0.5 text-[var(--cine-amber)]">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star key={i} className="h-3.5 w-3.5 fill-current" />
+          ))}
         </div>
-      </motion.div>
+      )}
+      <blockquote className="mt-3 flex-1 text-[0.95rem] leading-relaxed text-cine">{c.quote}</blockquote>
+      <figcaption className="mt-4 text-[0.8125rem] text-cine-faint">
+        <span className="font-semibold text-cine">{c.name}</span> · {c.sub}
+      </figcaption>
+    </figure>
+  );
+}
+
+function MarqueeRow({ cards, duration, reverse }: { cards: Quote[]; duration: number; reverse?: boolean }) {
+  const doubled = [...cards, ...cards];
+  return (
+    <div className="group flex overflow-hidden mask-fade-edges">
+      <div
+        className="flex shrink-0 gap-4 pr-4 group-hover:[animation-play-state:paused]"
+        style={{
+          animation: `marquee ${duration}s linear infinite`,
+          animationDirection: reverse ? 'reverse' : 'normal',
+        }}
+      >
+        {doubled.map((c, i) => (
+          <QuoteCard key={i} c={c} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function Testimonials() {
+  return (
+    <Section id="customers">
+      <div className="mx-auto max-w-2xl text-center">
+        <Eyebrow>Why teams switch</Eyebrow>
+        <Title>Loved by the people who run the business.</Title>
+      </div>
+      <div className="mt-12 space-y-4">
+        <MarqueeRow cards={ROW_A} duration={46} />
+        <MarqueeRow cards={ROW_B} duration={54} reverse />
+      </div>
     </Section>
   );
 }
