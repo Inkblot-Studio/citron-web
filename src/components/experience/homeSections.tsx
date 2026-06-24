@@ -238,7 +238,7 @@ export function BentoSection() {
         </div>
       </div>
 
-      <div className="mt-12 grid auto-rows-[minmax(190px,1fr)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid auto-rows-[minmax(168px,auto)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {bentoTiles.map((tile, i) => {
           const Icon = ICONS[tile.icon] ?? Sparkles;
           const isShot = tile.visual === 'shot';

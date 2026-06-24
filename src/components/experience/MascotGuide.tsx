@@ -16,19 +16,28 @@ import { scenes, type Trick } from '@/lib/experience';
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+const clamp01 = (v: number) => clamp(v, 0, 1);
+// Smooth in/out so the guide eases into each mark rather than tracking the
+// scroll linearly — it reads as an intentional guide, not a parallax sticker.
+const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 
 const MOBILE_BREAKPOINT = 1024;
 
+/** Horizontal arc bias per chapter — the path bows around the copy mid-travel. */
+const CHAPTER_ARC = [0, -0.06, 0.05, 0];
+
 /**
- * On phones the guide can't share a row with the copy, so it becomes a small
- * companion that hops to a new edge for every chapter — clearly travelling, never
- * sitting still, and never covering the text (the wrapper is pointer-events-none).
+ * On phones the guide can't share a row with the copy, so it gets one carefully
+ * chosen spot per chapter and "portals" between them — a dissolve where it is,
+ * then it re-forms at the new mark. Clearly travelling, never covering text
+ * (the wrapper is pointer-events-none, and these anchors sit clear of the copy).
  */
 const mobileAnchors: { x: number; y: number; scale: number }[] = [
-  { x: 0.8, y: 0.8, scale: 0.5 }, // hero
-  { x: 0.2, y: 0.82, scale: 0.46 }, // command
-  { x: 0.8, y: 0.82, scale: 0.46 }, // platform
-  { x: 0.78, y: 0.8, scale: 0.5 }, // finale
+  { x: 0.78, y: 0.8, scale: 0.52 }, // hero
+  { x: 0.22, y: 0.82, scale: 0.48 }, // command
+  { x: 0.8, y: 0.82, scale: 0.48 }, // platform
+  { x: 0.78, y: 0.8, scale: 0.52 }, // finale
 ];
 
 /**
@@ -48,30 +57,43 @@ function heroSweep(p: number): { x: number; y: number; scale: number } {
     const t = (p - 0.16) / 0.54;
     return { x: lerp(0.17, 0.83, t), y: 0.47 - Math.sin(Math.PI * t) * 0.045, scale: 1.18 };
   }
-  // Phase C — rise back up to the roaming anchor.
+  // Phase C — rise back up to the hero mark.
   const t = (p - 0.7) / 0.3;
   return { x: lerp(0.83, 0.5, t), y: lerp(0.47, 0.2, t), scale: lerp(1.18, 1.12, t) };
 }
 
 /**
- * The mascot guide — desktop only. It opens the hero by sweeping the headline,
- * then roams calmly above it; for every other chapter it glides to a dedicated
- * mark on the half opposite the content and settles there, alive. Motion is
- * GPU-composited and intentionally smooth: no scroll-velocity jitter, no
- * fighting the scroll-snap.
+ * The mascot guide. On desktop it is a continuous traveller: it opens the hero
+ * with the headline sweep, then every scroll step glides it along a bowed path
+ * between the chapter marks — resting in each chapter's safe zone and only
+ * crossing the gaps in between, never cutting through the copy. It steps aside
+ * (fades) for the dense product act and returns for the finale. On phones it
+ * keeps one mark per chapter and portals between them. GPU-composited; calm.
  */
 export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
   const reduce = useReducedMotion();
   const { active, mascotVisible, heroReveal } = useExperience();
   const [vp, setVp] = useState({ w: 1440, h: 900 });
 
-  // Travel target (anchor or live roam point) → smoothed by springs.
+  // Travel target → smoothed by springs.
   const targetX = useMotionValue(0);
   const targetY = useMotionValue(0);
   const targetScale = useMotionValue(1);
-  const x = useSpring(targetX, { stiffness: 64, damping: 20, mass: 1 });
-  const y = useSpring(targetY, { stiffness: 64, damping: 20, mass: 1 });
-  const scale = useSpring(targetScale, { stiffness: 64, damping: 18, mass: 1 });
+  const x = useSpring(targetX, { stiffness: 82, damping: 22, mass: 0.9 });
+  const y = useSpring(targetY, { stiffness: 82, damping: 22, mass: 0.9 });
+  const scale = useSpring(targetScale, { stiffness: 78, damping: 20, mass: 0.9 });
+
+  // Opacity is the product of two tracks: `vis` fades the guide out when it
+  // steps aside for the product act, and `portal` drives the mobile dissolve.
+  const portal = useMotionValue(1);
+  const portalSpring = useSpring(portal, { stiffness: 140, damping: 24, mass: 0.5 });
+  const vis = useMotionValue(1);
+  const visSpring = useSpring(vis, { stiffness: 120, damping: 26, mass: 0.5 });
+  const opacity = useTransform([visSpring, portalSpring], ([a, b]: number[]) => a * b);
+
+  useEffect(() => {
+    vis.set(mascotVisible ? 1 : 0);
+  }, [mascotVisible, vis]);
 
   // Cursor → a restrained tilt + gaze (small, so it reads calm).
   const mx = useMotionValue(0);
@@ -83,7 +105,6 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
 
   const trick = useAnimationControls();
   const firstRun = useRef(true);
-  const roamRef = useRef<number | null>(null);
 
   useEffect(() => {
     const onResize = () => setVp({ w: window.innerWidth, h: window.innerHeight });
@@ -92,100 +113,143 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // Anchor to the active chapter. The hero (index 0) sweeps, then roams.
+  // ----- MOBILE: one mark per chapter, with a dissolve → reform portal -----
   useEffect(() => {
-    const idx = Math.min(active, scenes.length - 1);
-    const scene = scenes[idx];
+    if (vp.w >= MOBILE_BREAKPOINT) return;
+    const idx = Math.min(active, mobileAnchors.length - 1);
+    const m = mobileAnchors[idx] ?? mobileAnchors[mobileAnchors.length - 1];
 
-    if (roamRef.current) {
-      cancelAnimationFrame(roamRef.current);
-      roamRef.current = null;
-    }
-
-    // Mobile — hop to a per-chapter edge anchor; no sweep/roam (it would cover copy).
-    if (vp.w < MOBILE_BREAKPOINT) {
-      const m = mobileAnchors[idx] ?? mobileAnchors[mobileAnchors.length - 1];
+    if (reduce) {
+      x.jump(m.x * vp.w);
+      y.jump(m.y * vp.h);
+      scale.jump(m.scale);
       targetX.set(m.x * vp.w);
       targetY.set(m.y * vp.h);
       targetScale.set(m.scale);
+      portal.set(1);
       return;
     }
 
-    const isHero = idx === 0;
+    // Dissolve where it is, jump to the new mark while invisible, then re-form.
+    portal.set(0);
+    const t = window.setTimeout(() => {
+      x.jump(m.x * vp.w);
+      y.jump(m.y * vp.h);
+      scale.jump(m.scale * 0.7);
+      targetX.set(m.x * vp.w);
+      targetY.set(m.y * vp.h);
+      targetScale.set(m.scale);
+      portal.set(1);
+    }, 240);
+    return () => window.clearTimeout(t);
+  }, [active, vp, reduce, x, y, scale, targetX, targetY, targetScale, portal]);
 
-    // The gentle roam loop the hero settles into once the sweep finishes.
-    const startRoam = () => {
-      if (reduce) {
-        targetX.set(0.5 * vp.w);
-        targetY.set(0.2 * vp.h);
-        targetScale.set(scene.scale);
-        return;
-      }
-      const start = performance.now();
-      const baseX = 0.5 * vp.w;
-      const baseY = 0.2 * vp.h;
-      const ampX = Math.min(0.2 * vp.w, 280);
-      const ampY = Math.min(0.05 * vp.h, 52);
-      const roam = (t: number) => {
-        const e = (t - start) / 1000;
-        const nx = baseX + Math.sin(e * 0.34) * ampX + Math.cos(e * 0.21) * ampX * 0.22;
-        const ny = baseY + Math.sin(e * 0.47 + 1.2) * ampY;
-        targetX.set(nx);
-        targetY.set(ny);
-        roamRef.current = requestAnimationFrame(roam);
-      };
-      roamRef.current = requestAnimationFrame(roam);
+  // ----- DESKTOP: continuous, scroll-driven travel between chapter marks -----
+  useEffect(() => {
+    if (vp.w < MOBILE_BREAKPOINT) return;
+    portal.set(1);
+
+    const w = vp.w;
+    const h = vp.h;
+    const heroHandoff = { x: 0.5, y: 0.2, scale: 1.12 };
+
+    // Resolve the live bounds + mark of every chapter that's mounted.
+    type Node = { x: number; y: number; scale: number; arc: number; top: number; bottom: number };
+    const collect = (): Node[] => {
+      const out: Node[] = [];
+      scenes.forEach((s, idx) => {
+        const el = document.getElementById(s.id);
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        out.push({
+          x: s.pos.x,
+          y: s.pos.y,
+          scale: s.scale,
+          arc: CHAPTER_ARC[idx] ?? 0,
+          top: r.top,
+          bottom: r.bottom,
+        });
+      });
+      return out;
     };
 
-    if (isHero && introHold) {
-      // Intro still playing — sit on the hand-off anchor so the intro mascot can
-      // dissolve into this exact spot. The sweep begins once the intro is done.
-      targetScale.set(1.12);
-      targetX.set(0.5 * vp.w);
-      targetY.set(0.2 * vp.h);
-      return;
-    }
+    // Rest in each chapter's mark; travel only across the boundary band.
+    const travel = (nodes: Node[]): { x: number; y: number; scale: number } => {
+      if (nodes.length === 0) return heroHandoff;
+      const focus = h / 2;
+      const lastN = nodes.length - 1;
+      const boundary = (k: number) => (nodes[k].bottom + nodes[k + 1].top) / 2;
 
-    if (isHero) {
-      if (reduce) {
-        startRoam();
+      let i = 0;
+      while (i < lastN && focus >= boundary(i)) i++;
+
+      let fx = nodes[i].x;
+      let fy = nodes[i].y;
+      let fs = nodes[i].scale;
+
+      const BAND = Math.min(h * 0.4, 360);
+      const cross = (k: number) => {
+        const raw = clamp01((focus - (boundary(k) - BAND)) / (2 * BAND));
+        const te = easeInOut(raw);
+        const a = nodes[k];
+        const b = nodes[k + 1];
+        const bow = Math.sin(Math.PI * raw);
+        fx = lerp(a.x, b.x, te) + bow * lerp(a.arc, b.arc, te);
+        fy = lerp(a.y, b.y, te) - bow * 0.03;
+        fs = lerp(a.scale, b.scale, te);
+      };
+
+      if (i < lastN && focus > boundary(i) - BAND) cross(i);
+      else if (i > 0 && focus < boundary(i - 1) + BAND) cross(i - 1);
+      else {
+        // Resting — a whisper of scroll-linked drift so it never feels frozen.
+        const span = Math.max(1, nodes[i].bottom - nodes[i].top);
+        const p = clamp01((focus - nodes[i].top) / span);
+        fy += (p - 0.5) * 0.04;
+      }
+
+      return { x: clamp(fx, 0.05, 0.95), y: clamp(fy, 0.1, 0.9), scale: fs };
+    };
+
+    const apply = () => {
+      if (introHold) {
+        targetX.set(heroHandoff.x * w);
+        targetY.set(heroHandoff.y * h);
+        targetScale.set(heroHandoff.scale);
         return;
       }
-      // Drive the sweep from the shared reveal timeline; hand off to the roam
-      // loop the moment it completes.
-      const apply = (p: number) => {
-        if (p >= 0.999) {
-          if (!roamRef.current) startRoam();
-          return;
-        }
-        const s = heroSweep(p);
-        targetX.set(s.x * vp.w);
-        targetY.set(s.y * vp.h);
+      const reveal = heroReveal.get();
+      if (reveal < 0.999) {
+        const s = heroSweep(reveal);
+        targetX.set(s.x * w);
+        targetY.set(s.y * h);
         targetScale.set(s.scale);
-      };
-      apply(heroReveal.get());
-      const unsub = heroReveal.on('change', apply);
-      return () => {
-        unsub();
-        if (roamRef.current) {
-          cancelAnimationFrame(roamRef.current);
-          roamRef.current = null;
-        }
-      };
-    }
-
-    // Every other chapter — settle onto its dedicated mark.
-    targetScale.set(scene.scale);
-    targetX.set(scene.pos.x * vp.w);
-    targetY.set(scene.pos.y * vp.h);
-
-    return () => {
-      if (roamRef.current) {
-        cancelAnimationFrame(roamRef.current);
-        roamRef.current = null;
+        return;
       }
+      const t = travel(collect());
+      targetX.set(t.x * w);
+      targetY.set(t.y * h);
+      targetScale.set(t.scale);
     };
-  }, [active, vp, reduce, introHold, heroReveal, targetX, targetY, targetScale]);
+
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        apply();
+      });
+    };
+
+    apply();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    const unsub = heroReveal.on('change', apply);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      unsub();
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [vp, introHold, heroReveal, targetX, targetY, targetScale, portal]);
 
   useEffect(() => {
     if (reduce) return;
@@ -212,8 +276,7 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
     <motion.div
       aria-hidden
       className="pointer-events-none fixed inset-0 z-20"
-      animate={{ opacity: mascotVisible ? 1 : 0 }}
-      transition={{ duration: 0.55, ease: EASE }}
+      style={{ opacity }}
     >
       <motion.div className="absolute left-0 top-0" style={{ x, y, willChange: 'transform' }}>
         <motion.div
@@ -222,7 +285,7 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
         >
           <motion.div animate={trick} style={{ transformPerspective: 900 }}>
             <AliveMascot
-              className="h-[clamp(11rem,24vmin,18rem)] w-[clamp(11rem,24vmin,18rem)]"
+              className="h-[clamp(12rem,25vmin,19rem)] w-[clamp(12rem,25vmin,19rem)]"
               lookX={reduce ? undefined : lookX}
               lookY={reduce ? undefined : lookY}
             />

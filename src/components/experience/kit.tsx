@@ -261,7 +261,7 @@ export function SectionPhotoBg({
         fill
         className="object-cover"
         sizes="100vw"
-        quality={85}
+        quality={90}
       />
       <div
         className={cn(
