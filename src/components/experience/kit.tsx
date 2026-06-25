@@ -39,7 +39,9 @@ function Chapter({
         <SectionPhotoBg src={scene.bgImage} overlay={scene.bgOverlay ?? 'light'} />
       )}
       <SectionBackground mood={scene.mood} soft={!!scene.bgImage} />
-      <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-10">
+      {/* `data-frame` lets the mascot guide measure the real content column so it
+          can sit in the true gutter and never overlap the copy. */}
+      <div data-frame className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-10">
         {children}
       </div>
     </section>

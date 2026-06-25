@@ -12,6 +12,20 @@ import { cn } from '@/lib/cn';
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /**
+ * Blink choreography — one shared timeline keeps both eyes perfectly in sync.
+ * The cadence reads as life: a quick single blink, then a little while later a
+ * natural double blink, then calm. Eyes close almost fully (scaleY → 0.05).
+ */
+const BLINK_KEYFRAMES = [1, 0.05, 1, 1, 0.05, 1, 0.05, 1, 1];
+const BLINK_TIMES = [0, 0.018, 0.04, 0.5, 0.516, 0.534, 0.55, 0.568, 1];
+const BLINK_TRANSITION = {
+  duration: 6.4,
+  ease: 'easeInOut',
+  times: BLINK_TIMES,
+  repeat: Infinity,
+} as const;
+
+/**
  * The Citron mascot, alive. Exact brand geometry (two bars + a wide smile),
  * never modified — only given life through layered, handcrafted motion:
  *
@@ -116,14 +130,8 @@ export function AliveMascot({
                   height="338"
                   rx="10"
                   initial={false}
-                  animate={reduce ? undefined : { scaleY: [1, 0.08, 1, 0.08, 1] }}
-                  transition={{
-                    duration: 0.62,
-                    ease: 'easeInOut',
-                    times: [0, 0.12, 0.32, 0.44, 0.6],
-                    repeat: Infinity,
-                    repeatDelay: 3.6,
-                  }}
+                  animate={reduce ? undefined : { scaleY: BLINK_KEYFRAMES }}
+                  transition={BLINK_TRANSITION}
                   style={{ transformOrigin: '438px 265px' }}
                 />
                 <motion.rect
@@ -133,14 +141,8 @@ export function AliveMascot({
                   height="338"
                   rx="10"
                   initial={false}
-                  animate={reduce ? undefined : { scaleY: [1, 0.08, 1, 0.08, 1] }}
-                  transition={{
-                    duration: 0.62,
-                    ease: 'easeInOut',
-                    times: [0, 0.12, 0.32, 0.44, 0.6],
-                    repeat: Infinity,
-                    repeatDelay: 3.6,
-                  }}
+                  animate={reduce ? undefined : { scaleY: BLINK_KEYFRAMES }}
+                  transition={BLINK_TRANSITION}
                   style={{ transformOrigin: '662px 265px' }}
                 />
               </motion.g>
