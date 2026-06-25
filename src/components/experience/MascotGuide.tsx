@@ -239,20 +239,50 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
     const h = vp.h;
     const heroHandoff = { x: 0.5, y: 0.2, scale: 1.12 };
 
+    // The mascot's rendered half-size (h-[clamp(12rem,25vmin,19rem)] × hero
+    // scale) plus a little clearance — used to keep it clear of the copy.
+    const mascotPx = clamp(192, 0.25 * Math.min(w, h), 304) * 1.12;
+    const halfWFrac = (mascotPx / 2 + 26) / w;
+    const halfHFrac = (mascotPx / 2 + 20) / h;
+
     // Static per-chapter data, measured once per layout/resize: the safe gutter
     // center (horizontal) and the vertical corridor. Only the chapter's top/
     // bottom is read per frame on scroll.
-    type Mark = { id: string; xFrac: number; yTop: number; yBot: number; scale: number; arc: number };
+    type Mark = {
+      id: string;
+      layout: Layout;
+      xFrac: number;
+      yTop: number;
+      yBot: number;
+      contentLeftFrac: number;
+      scale: number;
+      arc: number;
+    };
     const marks: Mark[] = scenes.map((s, idx) => {
       const el = document.getElementById(s.id);
+      const frameEl = el?.querySelector('[data-frame]') as HTMLElement | null;
+      const frame = (frameEl ?? el)?.getBoundingClientRect();
       let xFrac = s.pos.x;
-      if (el) {
-        const frameEl = el.querySelector('[data-frame]') as HTMLElement | null;
-        const frame = (frameEl ?? el).getBoundingClientRect();
-        xFrac = safeXFraction(frame, s.layout, w);
+      let [yTop, yBot] = bandFor(s.layout);
+      let contentLeftFrac = 0.24;
+      if (frame) {
+        if (s.layout === 'above') {
+          // Hero: the copy is a centered column, so the guide lives in the LEFT
+          // margin beside it and arcs in around the title (see travel()).
+          const center = (frame.left + frame.right) / 2;
+          const colHalf = Math.min(380, (frame.width - 2 * FRAME_PAD) / 2);
+          const contentLeft = center - colHalf;
+          contentLeftFrac = contentLeft / w;
+          const gutterCenter = (frame.left + FRAME_PAD + contentLeft) / 2;
+          const xLeftPx = Math.min(gutterCenter, contentLeft - mascotPx / 2 - 26);
+          xFrac = clamp(xLeftPx / w, -0.06, 0.5);
+          yTop = 0.2;
+          yBot = 0.62;
+        } else {
+          xFrac = safeXFraction(frame, s.layout, w);
+        }
       }
-      const [yTop, yBot] = bandFor(s.layout);
-      return { id: s.id, xFrac, yTop, yBot, scale: s.scale, arc: CHAPTER_ARC[idx] ?? 0 };
+      return { id: s.id, layout: s.layout, xFrac, yTop, yBot, contentLeftFrac, scale: s.scale, arc: CHAPTER_ARC[idx] ?? 0 };
     });
 
     type Node = Mark & { top: number; bottom: number; height: number };
@@ -278,11 +308,34 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
       while (i < lastN && focus >= boundary(i)) i++;
 
       const here = nodes[i];
-      // Resting: descend the gutter as the chapter scrolls through the viewport.
-      const p = clamp01((focus - here.top) / here.height);
-      let fx = here.xFrac;
-      let fy = lerp(here.yTop, here.yBot, easeInOut(p));
+      let fx: number;
+      let fy: number;
       let fs = here.scale;
+
+      if (here.layout === 'above') {
+        // Hero: travel AROUND the centered title, never over it. As the page
+        // scrolls, arc from center toward the clear left margin; while still
+        // horizontally above the column, ride just above the text so it is
+        // neither covered nor covering — then drop into the margin and descend.
+        const s = clamp01(-here.top / (h * 0.9));
+        const hx = lerp(0.5, here.xFrac, easeInOut(clamp01(s / 0.26)));
+        const descend = lerp(here.yTop, here.yBot, easeInOut(s));
+        let hy = descend;
+        if (hx + halfWFrac > here.contentLeftFrac) {
+          const tEl =
+            document.querySelector('#hero .eyebrow-cine') ?? document.querySelector('#hero h1');
+          const textTop = tEl ? tEl.getBoundingClientRect().top : here.top + h * 0.46;
+          const aboveCenter = (textTop - 22) / h - halfHFrac;
+          hy = Math.min(descend, aboveCenter);
+        }
+        fx = hx;
+        fy = hy;
+      } else {
+        // Resting: descend the gutter as the chapter scrolls through the viewport.
+        const p = clamp01((focus - here.top) / here.height);
+        fx = here.xFrac;
+        fy = lerp(here.yTop, here.yBot, easeInOut(p));
+      }
 
       const BAND = Math.min(h * 0.42, 380);
       const cross = (k: number) => {
@@ -299,7 +352,9 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
       if (i < lastN && focus > boundary(i) - BAND) cross(i);
       else if (i > 0 && focus < boundary(i - 1) + BAND) cross(i - 1);
 
-      return { x: clamp(fx, 0.04, 0.96), y: clamp(fy, 0.08, 0.92), scale: fs };
+      // Wide bounds: the hero arc deliberately lifts above the top edge and can
+      // sit just off the left edge on narrow screens to clear the centered copy.
+      return { x: clamp(fx, -0.08, 1.02), y: clamp(fy, -0.4, 0.95), scale: fs };
     };
 
     const apply = () => {
