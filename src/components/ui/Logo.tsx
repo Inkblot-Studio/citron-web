@@ -80,7 +80,7 @@ export function Logo({
   return (
     <Link
       href={href}
-      aria-label="Citron — home"
+      aria-label="Citron home"
       className={cn('group inline-flex items-center gap-2.5', className)}
     >
       <span className="text-[var(--cine-amber-bright)] transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:rotate-[-6deg]">

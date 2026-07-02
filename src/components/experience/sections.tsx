@@ -145,7 +145,7 @@ export function HeroSection() {
         <RevealBlock progress={heroReveal} from={0.76} to={0.9}>
           <p className="mx-auto mt-7 max-w-xl text-[1.1875rem] leading-relaxed text-cine-dim">
             Citron replaces seven disconnected tools with one intelligent
-            platform — calm, connected, and built to scale.
+            platform: calm, connected, and built to scale.
           </p>
         </RevealBlock>
 
@@ -154,7 +154,7 @@ export function HeroSection() {
             <Magnetic strength={0.45}>
               <Link
                 href="/demo"
-                className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)]"
+                className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)] active:scale-[0.97]"
               >
                 Book a Demo
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -162,14 +162,11 @@ export function HeroSection() {
             </Magnetic>
             <Link
               href="/pricing"
-              className="inline-flex h-[3.5rem] items-center gap-2 rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[1rem] font-semibold text-cine-dim transition-colors duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
+              className="inline-flex h-[3.5rem] items-center gap-2 rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[1rem] font-semibold text-cine-dim transition-[border-color,color,transform] duration-200 hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)] active:scale-[0.97]"
             >
-              Try it free
+              See pricing
             </Link>
           </div>
-          <p className="mt-5 text-[0.8125rem] text-cine-faint">
-            No credit card · Live in a day · Cancel anytime
-          </p>
         </RevealBlock>
       </div>
     </Stage>
@@ -183,7 +180,6 @@ export function CommandSection() {
   return (
     <Stage index={1}>
       <SectionHead
-        eyebrow="Citron CRM"
         title={
           <>
             The CRM your team{' '}
@@ -231,7 +227,7 @@ function PipelineDemo() {
                 type="button"
                 onClick={() => setStage(i)}
                 className={
-                  'rounded-full border px-3.5 py-1.5 text-[0.78rem] font-medium transition-all duration-200 ' +
+                  'rounded-full border px-3.5 py-1.5 text-[0.78rem] font-medium transition-[border-color,background-color,color,box-shadow] duration-200 active:scale-[0.97] ' +
                   (active
                     ? 'border-transparent bg-[var(--cine-amber-bright)] text-[#1d1c19] shadow-[0_8px_22px_-10px_rgba(var(--cine-particle),0.8)]'
                     : 'border-[var(--cine-line)] text-cine-dim hover:text-cine')
@@ -247,10 +243,10 @@ function PipelineDemo() {
           <AnimatePresence mode="wait">
             <motion.div
               key={crmStages[stage].name}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.4, ease: EASE }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.3, ease: EASE }}
               className="space-y-2"
             >
               {crmStages[stage].deals.map((d, i) => (
@@ -294,14 +290,13 @@ export function PlatformSection() {
       left={
         <>
           <SectionHead
-            eyebrow="Platform + AI"
             title={
               <>
                 Bigger than a CRM.{' '}
                 <span className="gradient-amber">Driven by AI.</span>
               </>
             }
-            sub="CRM is where it starts. Citron runs everything else your company does — on one foundation, with intelligence woven through every module."
+            sub="CRM is where it starts. Citron runs everything else your company does, on one foundation, with intelligence woven through every module."
           />
           <div className="mt-7 space-y-3">
             {platformPoints.map((p, i) => {
@@ -321,9 +316,6 @@ export function PlatformSection() {
       }
       right={
         <div>
-          <p className="mb-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-cine-faint">
-            Just ask — finished work out
-          </p>
           <AiConsole />
         </div>
       }
@@ -376,7 +368,7 @@ export function AiConsole() {
         <div className="flex items-center gap-2 text-[var(--cine-amber)]">
           <Sparkles className="h-4 w-4" />
           <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-cine-dim">
-            Citron AI · {aiActions[i].outcome.split(' ')[0]}
+            Citron AI
           </span>
         </div>
 
@@ -412,10 +404,10 @@ export function FinaleSection() {
   return (
     <Stage index={3}>
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.8, ease: EASE }}
+        transition={{ duration: 0.6, ease: EASE }}
       >
         <span className="eyebrow-cine text-[0.72rem] font-semibold">The makers</span>
         <h2 className="mt-4 max-w-[14ch] text-[clamp(2.2rem,5.4vw,3.6rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-cine">
@@ -446,7 +438,7 @@ export function FinaleSection() {
               href={siteConfig.studio.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex h-[3.5rem] items-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)]"
+              className="group inline-flex h-[3.5rem] items-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 hover:shadow-[0_18px_50px_-12px_rgba(var(--cine-particle),0.95)] active:scale-[0.97]"
             >
               Explore the studio
               <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -458,9 +450,9 @@ export function FinaleSection() {
       {/* legal footer */}
       <div className="mt-16 flex flex-col gap-3 border-t border-[var(--cine-line)] pt-6 text-[0.8125rem] text-cine-faint sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-6">
-          <Link href="/legal/privacy" className="transition-colors hover:text-cine">Privacy</Link>
-          <Link href="/legal/terms" className="transition-colors hover:text-cine">Terms</Link>
-          <Link href="/legal/cookies" className="transition-colors hover:text-cine">Cookies</Link>
+          <Link href="/legal/privacy" className="transition-colors duration-150 hover:text-cine">Privacy</Link>
+          <Link href="/legal/terms" className="transition-colors duration-150 hover:text-cine">Terms</Link>
+          <Link href="/legal/cookies" className="transition-colors duration-150 hover:text-cine">Cookies</Link>
         </div>
         <p>© {year} Citron · Inkblot Studio</p>
       </div>

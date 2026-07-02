@@ -146,6 +146,14 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
   const leanRaw = useTransform(scrollVelocity, [-2600, 0, 2600], [7, 0, -7]);
   const lean = useSpring(leanRaw, { stiffness: 110, damping: 18, mass: 0.7 });
 
+  // Scroll velocity → squash & stretch. Moving fast, the guide elongates along
+  // its travel and narrows, like a soft body with real weight; the springs give
+  // it settle and follow-through when the scroll stops.
+  const stretchRaw = useTransform(scrollVelocity, (v: number) => 1 + Math.min(Math.abs(v) / 3200, 1) * 0.07);
+  const squashRaw = useTransform(scrollVelocity, (v: number) => 1 - Math.min(Math.abs(v) / 3200, 1) * 0.05);
+  const stretchY = useSpring(stretchRaw, { stiffness: 150, damping: 19, mass: 0.6 });
+  const stretchX = useSpring(squashRaw, { stiffness: 150, damping: 19, mass: 0.6 });
+
   // Cursor → a restrained tilt + gaze (small, so it reads calm).
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -397,15 +405,52 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
     };
   }, [vp, introHold, heroReveal, targetX, targetY, targetScale, portal]);
 
+  // Cursor gaze + idle life. While the pointer moves, the guide watches it;
+  // once it rests (or on touch devices, always) the guide glances around on its
+  // own so it never freezes — small, curious looks, never darting.
   useEffect(() => {
     if (reduce) return;
-    if (!window.matchMedia('(pointer: fine)').matches) return;
-    function onMove(e: MouseEvent) {
+    const fine = window.matchMedia('(pointer: fine)').matches;
+    let lastMove = performance.now();
+    let anims: { stop: () => void }[] = [];
+    const stopGlance = () => {
+      anims.forEach((a) => a.stop());
+      anims = [];
+    };
+
+    const onMove = (e: MouseEvent) => {
+      lastMove = performance.now();
+      stopGlance();
       mx.set((e.clientX / window.innerWidth) * 2 - 1);
       my.set((e.clientY / window.innerHeight) * 2 - 1);
-    }
-    window.addEventListener('mousemove', onMove, { passive: true });
-    return () => window.removeEventListener('mousemove', onMove);
+    };
+    if (fine) window.addEventListener('mousemove', onMove, { passive: true });
+
+    const glance = () => {
+      const dx = (Math.random() - 0.5) * 1.2;
+      const dy = (Math.random() - 0.5) * 0.7;
+      anims = [
+        animateMV(mx, [mx.get(), dx, dx * 0.35, 0], {
+          duration: 3.2,
+          ease: 'easeInOut',
+          times: [0, 0.28, 0.66, 1],
+        }),
+        animateMV(my, [my.get(), dy, dy * 0.5, 0], {
+          duration: 3.2,
+          ease: 'easeInOut',
+          times: [0, 0.28, 0.66, 1],
+        }),
+      ];
+    };
+    const idleTimer = window.setInterval(() => {
+      if (!fine || performance.now() - lastMove > 6500) glance();
+    }, 5400);
+
+    return () => {
+      window.clearInterval(idleTimer);
+      if (fine) window.removeEventListener('mousemove', onMove);
+      stopGlance();
+    };
   }, [mx, my, reduce]);
 
   // A small flourish when settling into a new chapter.
@@ -435,12 +480,16 @@ export function MascotGuide({ introHold = false }: { introHold?: boolean }) {
               willChange: 'transform',
             }}
           >
-            <motion.div animate={trick} style={{ transformPerspective: 900 }}>
-              <AliveMascot
-                className="h-[clamp(12rem,25vmin,19rem)] w-[clamp(12rem,25vmin,19rem)]"
-                lookX={reduce ? undefined : lookX}
-                lookY={reduce ? undefined : lookY}
-              />
+            <motion.div
+              style={reduce ? undefined : { scaleX: stretchX, scaleY: stretchY }}
+            >
+              <motion.div animate={trick} style={{ transformPerspective: 900 }}>
+                <AliveMascot
+                  className="h-[clamp(12rem,25vmin,19rem)] w-[clamp(12rem,25vmin,19rem)]"
+                  lookX={reduce ? undefined : lookX}
+                  lookY={reduce ? undefined : lookY}
+                />
+              </motion.div>
             </motion.div>
           </motion.div>
         </motion.div>

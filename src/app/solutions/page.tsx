@@ -17,7 +17,7 @@ import { Reveal } from '@/components/ui/Reveal';
 export const metadata: Metadata = {
   title: 'Solutions',
   description:
-    'How teams run on Citron — startups, agencies, professional services, consultancies, sales teams, and operations. One operating system, mapped to your outcomes.',
+    'How teams run on Citron: startups, agencies, professional services, consultancies, sales teams, and operations. One operating system, mapped to your outcomes.',
   alternates: { canonical: '/solutions' },
 };
 
@@ -57,7 +57,7 @@ export default function SolutionsPage() {
           <Reveal delay={0.12}>
             <p className="mx-auto mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-cine-dim">
               One operating system, shaped to your outcomes. See how different
-              teams put Citron to work — and what changes when they do.
+              teams put Citron to work, and what changes when they do.
             </p>
           </Reveal>
         </div>
@@ -68,7 +68,7 @@ export default function SolutionsPage() {
             const Icon = ICON_BY_SLUG[s.slug] ?? Rocket;
             return (
               <Reveal key={s.slug} delay={(i % 2) * 0.08}>
-                <article className="group flex h-full flex-col rounded-[var(--radius-2xl)] cine-card p-7 transition-all duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-1 hover:shadow-[var(--shadow-xl)]">
+                <article className="group flex h-full flex-col rounded-[var(--radius-2xl)] cine-card p-7 transition-[transform,box-shadow] duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-1 hover:shadow-[var(--shadow-xl)]">
                   <div className="flex items-center gap-3">
                     <span className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-lg)] bg-[rgba(var(--cine-particle),0.14)] text-[var(--cine-amber)]">
                       <Icon className="h-5 w-5" strokeWidth={1.8} />
@@ -125,7 +125,7 @@ export default function SolutionsPage() {
             </p>
             <Link
               href="/demo"
-              className="group mt-8 inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow] duration-200 hover:brightness-105"
+              className="group mt-8 inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 active:scale-[0.97]"
             >
               Book a Demo
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />

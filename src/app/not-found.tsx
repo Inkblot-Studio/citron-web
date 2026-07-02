@@ -24,19 +24,19 @@ export default function NotFound() {
           This page wandered off.
         </h1>
         <p className="mx-auto mt-4 max-w-md text-[1.0625rem] text-cine-dim">
-          The page you’re looking for doesn’t exist — but everything your
+          The page you’re looking for doesn’t exist. Everything your
           business needs still does.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
             href="/"
-            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-7 text-[0.9375rem] font-semibold text-[#1d1c19] transition-[filter] hover:brightness-105"
+            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-7 text-[0.9375rem] font-semibold text-[#1d1c19] transition-[filter,transform] duration-200 hover:brightness-105 active:scale-[0.97]"
           >
             Back to the journey
           </Link>
           <Link
             href="/demo"
-            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[0.9375rem] font-medium text-cine transition-colors hover:border-[var(--cine-amber-bright)]"
+            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[0.9375rem] font-medium text-cine transition-[border-color,transform] duration-200 hover:border-[var(--cine-amber-bright)] active:scale-[0.97]"
           >
             Book a Demo
           </Link>

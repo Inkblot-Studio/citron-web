@@ -78,7 +78,7 @@ export const crmStages: { name: string; deals: { name: string; value: string }[]
   {
     name: 'Lead',
     deals: [
-      { name: 'Acme Corp', value: '$24k' },
+      { name: 'Copperline', value: '$24k' },
       { name: 'Northwind', value: '$8k' },
     ],
   },
@@ -104,13 +104,13 @@ export const platformModules: { name: string; icon: string }[] = [
 
 /** Two highlight points for the platform centerpiece (left column). */
 export const platformPoints: { title: string; desc: string; icon: string }[] = [
-  { title: 'One source of truth', desc: 'Every team works from the same live data — no more reconciling.', icon: 'Boxes' },
+  { title: 'One source of truth', desc: 'Every team works from the same live data. No more reconciling.', icon: 'Boxes' },
   { title: 'Every function, connected', desc: 'Sales to finance to ops, woven into a single system.', icon: 'Workflow' },
 ];
 
 export const aiActions: { prompt: string; outcome: string }[] = [
   { prompt: 'Invoice every customer with an overdue balance', outcome: '9 invoices · $63,400 sent with payment links' },
-  { prompt: 'Build this month’s revenue report', outcome: 'Revenue, churn and runway — ready to share' },
+  { prompt: 'Build this month’s revenue report', outcome: 'Revenue, churn and runway in a shareable report' },
   { prompt: 'Re-engage leads that have gone quiet', outcome: '42 personalized emails drafted for your review' },
   { prompt: 'Turn this meeting into next steps', outcome: 'Notes, decisions and owners captured automatically' },
 ];
@@ -140,7 +140,7 @@ export const bentoTiles: BentoTile[] = [
     span: 'lg',
     eyebrow: 'AI agents',
     title: 'Work that does itself',
-    desc: 'Describe the outcome in plain language — Citron’s agents draft, send, update and close the loop across every module.',
+    desc: 'Describe the outcome in plain language. Citron’s agents draft, send, update and close the loop across every module.',
     icon: 'Sparkles',
     visual: 'shot',
     image: '/shots/shot-ai.png',
@@ -171,7 +171,7 @@ export const bentoTiles: BentoTile[] = [
     span: 'sm',
     eyebrow: 'Automations',
     title: 'One trigger, everything follows',
-    desc: 'Won deals invoice, alert, and onboard — automatically.',
+    desc: 'Won deals invoice, alert, and onboard automatically.',
     icon: 'Workflow',
     visual: 'flow',
   },
@@ -189,7 +189,7 @@ export const bentoTiles: BentoTile[] = [
     span: 'wide',
     eyebrow: 'Command center',
     title: 'Every surface, one source of truth',
-    desc: 'CRM, marketing, finance, ops and AI — connected in real time, on one live home screen.',
+    desc: 'CRM, marketing, finance, ops and AI, connected in real time on one live home screen.',
     icon: 'Globe',
     visual: 'shot',
     image: '/shots/shot-dashboard.png',
@@ -214,7 +214,7 @@ export const surfaces: Surface[] = [
     id: 'dashboard',
     label: 'Command center',
     title: 'The whole business, at a glance',
-    desc: 'Revenue, pipeline, cash and tasks — one live home screen for the people who run the company.',
+    desc: 'Revenue, pipeline, cash and tasks on one live home screen for the people who run the company.',
     kind: 'dashboard',
   },
   {
@@ -228,21 +228,21 @@ export const surfaces: Surface[] = [
     id: 'ai',
     label: 'AI agents',
     title: 'Ask. It’s done.',
-    desc: 'Natural-language commands that act across your data — grounded, guarded, and always reviewable.',
+    desc: 'Natural-language commands that act across your data: grounded, guarded, and always reviewable.',
     kind: 'agent',
   },
   {
     id: 'analytics',
     label: 'Analytics',
     title: 'Every metric, explained',
-    desc: 'Live KPIs, anomaly alerts and reports that write themselves — no spreadsheet gymnastics.',
+    desc: 'Live KPIs, anomaly alerts and reports that write themselves. No spreadsheet gymnastics.',
     kind: 'analytics',
   },
   {
     id: 'automations',
     label: 'Automations',
     title: 'Workflows you describe in a sentence',
-    desc: 'Triggers, conditions and actions across every module — composed by intelligence, run on autopilot.',
+    desc: 'Triggers, conditions and actions across every module, composed by intelligence and run on autopilot.',
     kind: 'automation',
   },
 ];

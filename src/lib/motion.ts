@@ -9,21 +9,21 @@ export const fadeUp: Variants = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: EASE_EXPO },
+    transition: { duration: 0.6, ease: EASE_EXPO },
   },
 };
 
 export const fadeIn: Variants = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.8, ease: EASE_SOFT } },
+  show: { opacity: 1, transition: { duration: 0.5, ease: EASE_SOFT } },
 };
 
 export const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.96 },
-  show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: EASE_EXPO } },
+  hidden: { opacity: 0, scale: 0.95 },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: EASE_EXPO } },
 };
 
-export const stagger = (staggerChildren = 0.08, delayChildren = 0): Variants => ({
+export const stagger = (staggerChildren = 0.07, delayChildren = 0): Variants => ({
   hidden: {},
   show: {
     transition: { staggerChildren, delayChildren },

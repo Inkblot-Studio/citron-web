@@ -18,7 +18,7 @@ export const legalDocs: LegalDoc[] = [
       {
         heading: 'Overview',
         paragraphs: [
-          'This Privacy Policy explains how Citron, operated by Inkblot Studio, collects, uses, and safeguards information when you use our website and product. We designed Citron to be private by default — your business data belongs to you.',
+          'This Privacy Policy explains how Citron, operated by Inkblot Studio, collects, uses, and safeguards information when you use our website and product. We designed Citron to be private by default: your business data belongs to you.',
           'By using Citron, you agree to the practices described here. If you do not agree, please discontinue use of the service.',
         ],
       },

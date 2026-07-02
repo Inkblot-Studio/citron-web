@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useScroll,
+  useMotionValueEvent,
+} from 'framer-motion';
 import { X, ArrowRight, Sparkles } from 'lucide-react';
 
 /**
@@ -23,20 +29,13 @@ export function DemoNudge() {
     } catch {
       /* ignore */
     }
-    if (done) return;
-    setDismissed(false);
-
-    const onScroll = () => {
-      const scrolled = window.scrollY + window.innerHeight;
-      const ratio = scrolled / document.documentElement.scrollHeight;
-      if (ratio > 0.55) {
-        setOpen(true);
-        window.removeEventListener('scroll', onScroll);
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    if (!done) setDismissed(false);
   }, []);
+
+  const { scrollYProgress } = useScroll();
+  useMotionValueEvent(scrollYProgress, 'change', (p) => {
+    if (!dismissed && !open && p > 0.55) setOpen(true);
+  });
 
   const close = () => {
     setOpen(false);
@@ -94,7 +93,7 @@ export function DemoNudge() {
                 onClick={close}
                 className="inline-flex items-center rounded-full border border-[var(--cine-line)] px-4 py-2 text-[0.8125rem] font-medium text-cine-dim transition-colors hover:text-cine"
               >
-                Compare plans
+                See pricing
               </Link>
             </div>
           </div>

@@ -4,7 +4,7 @@ import { PricingView } from '@/components/sections/PricingView';
 export const metadata: Metadata = {
   title: 'Pricing',
   description:
-    'Simple, transparent pricing for Citron — the Business Operating System. Start with the CRM or run your whole company on one platform. Plans for teams of every size.',
+    'Simple, transparent pricing for Citron, the Business Operating System. Start with the CRM or run your whole company on one platform. Plans for teams of every size.',
   alternates: { canonical: '/pricing' },
 };
 

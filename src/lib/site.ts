@@ -2,7 +2,7 @@ export const siteConfig = {
   name: 'Citron',
   tagline: 'The Business Operating System',
   description:
-    'Your company. One intelligence. Citron replaces dozens of disconnected tools with a single AI-powered operating system — CRM, marketing, automations, finance, and AI agents, unified.',
+    'Your company. One intelligence. Citron replaces dozens of disconnected tools with a single AI-powered operating system: CRM, marketing, automations, finance, and AI agents, unified.',
   url: 'https://citron.inkblotstudio.eu',
   ogImage: '/og.png',
   studio: {
@@ -39,7 +39,7 @@ export const modules: Module[] = [
     icon: 'Users',
     tagline: 'Every relationship, in context.',
     description:
-      'A living record of every customer — enriched, scored, and surfaced exactly when it matters. No more stitching together five tabs to understand one account.',
+      'A living record of every customer: enriched, scored, and surfaced exactly when it matters. No more stitching together five tabs to understand one account.',
     features: ['Unified contact timeline', 'AI lead scoring', 'Relationship intelligence', 'Account health'],
   },
   {
@@ -79,7 +79,7 @@ export const modules: Module[] = [
     icon: 'Workflow',
     tagline: 'Workflows that build themselves.',
     description:
-      'Describe an outcome in plain language. Citron assembles the triggers, conditions, and actions — across every module.',
+      'Describe an outcome in plain language. Citron assembles the triggers, conditions, and actions across every module.',
     features: ['Natural-language builder', 'Cross-module triggers', 'Conditional logic', 'Human-in-the-loop steps'],
   },
   {
@@ -109,7 +109,7 @@ export const modules: Module[] = [
     icon: 'CalendarClock',
     tagline: 'Time, coordinated.',
     description:
-      'Meetings, availability, and reminders that sync to the work and the customer — automatically.',
+      'Meetings, availability, and reminders that sync to the work and the customer, automatically.',
     features: ['Shared availability', 'Round-robin routing', 'Reminders', 'Calendar sync'],
   },
   {
@@ -149,7 +149,7 @@ export const modules: Module[] = [
     icon: 'Bot',
     tagline: 'A teammate for every workflow.',
     description:
-      'Autonomous agents that act across your data — qualifying leads, drafting replies, updating records, and closing loops.',
+      'Autonomous agents that act across your data: qualifying leads, drafting replies, updating records, and closing loops.',
     features: ['Autonomous actions', 'Grounded in your data', 'Guardrails & approvals', 'Always learning'],
   },
 ];
@@ -169,7 +169,7 @@ export const solutions: Solution[] = [
     audience: 'Startups',
     headline: 'Run lean. Move fast. Stay coordinated.',
     description:
-      'One system from day one. Skip the tool sprawl and the integration debt — Citron grows with you from first customer to Series B.',
+      'One system from day one. Skip the tool sprawl and the integration debt. Citron grows with you from first customer to Series B.',
     outcomes: ['Set up in a day', 'No integration overhead', 'AI doing the work of a bigger team'],
     modules: ['CRM', 'Sales Pipelines', 'Automations', 'Invoicing'],
   },
@@ -228,8 +228,8 @@ export type AiCommand = {
 
 export const aiCommands: AiCommand[] = [
   {
-    prompt: 'Create an invoice for Acme Corp for the Q3 retainer.',
-    response: 'Invoice #1042 created — $24,000 to Acme Corp. Sent with a 14-day payment link.',
+    prompt: 'Create an invoice for Copperline for the Q3 retainer.',
+    response: 'Invoice #1042 created: $24,000 to Copperline. Sent with a 14-day payment link.',
     module: 'Invoicing',
   },
   {
@@ -244,7 +244,7 @@ export const aiCommands: AiCommand[] = [
   },
   {
     prompt: 'Identify deals at risk of slipping this quarter.',
-    response: '6 deals flagged — $186K at risk. Common signal: no contact in 12+ days.',
+    response: '6 deals flagged, $186K at risk. Common signal: no contact in 12+ days.',
     module: 'Sales Pipelines',
   },
   {
@@ -302,7 +302,7 @@ export const pricingPlans: PricingPlan[] = [
     price: { monthly: null, annual: null },
     cadence: 'custom',
     description: 'For organizations that need scale, control, and assurance.',
-    cta: { label: 'Talk to sales', href: '/contact' },
+    cta: { label: 'Talk to sales', href: '/demo' },
     features: [
       'Everything in Growth',
       'SSO & SCIM',
@@ -332,7 +332,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     quote:
-      'The AI layer is the difference. It does not just store our data — it acts on it. Deals at risk get flagged before I would have noticed. That is a different category of product.',
+      'The AI layer is the difference. It does not just store our data, it acts on it. Deals at risk get flagged before I would have noticed. That is a different category of product.',
     name: 'Daniel Reyes',
     role: 'VP Sales',
     company: 'Northwind',

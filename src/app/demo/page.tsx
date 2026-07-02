@@ -8,12 +8,12 @@ import { testimonials, stats } from '@/lib/site';
 export const metadata: Metadata = {
   title: 'Book a Demo',
   description:
-    'See Citron in action — a personalized 30-minute walkthrough mapped to how your team actually works. One platform, one intelligence.',
+    'See Citron in action: a personalized 30-minute walkthrough mapped to how your team actually works. One platform, one intelligence.',
   alternates: { canonical: '/demo' },
 };
 
 const willSee = [
-  'A live tour of the unified system — CRM to finance',
+  'A live tour of the unified system, CRM to finance',
   'AI agents acting across your real workflows',
   'How automations build themselves from plain language',
   'A clear migration path from your current stack',
@@ -73,7 +73,7 @@ export default function DemoPage() {
           </Reveal>
           <Reveal delay={0.15}>
             <p className="mx-auto mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-cine-dim">
-              A personalized 30-minute walkthrough with a product specialist —
+              A personalized 30-minute walkthrough with a product specialist,
               mapped to how your team actually works. No slides for the sake of
               slides.
             </p>

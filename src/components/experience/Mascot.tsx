@@ -9,8 +9,6 @@ import {
 } from 'framer-motion';
 import { cn } from '@/lib/cn';
 
-const EASE = [0.22, 1, 0.36, 1] as const;
-
 /**
  * Blink choreography — one shared timeline keeps both eyes perfectly in sync.
  * The cadence reads as life: a quick single blink, then a little while later a
@@ -34,8 +32,10 @@ const BLINK_TRANSITION = {
  *   · breathes (a slow scale pulse)
  *   · sways its head (a soft tilt)
  *   · blinks every ~4 seconds (both eyes, with an occasional double-blink)
- *   · spins playfully on a long timer (a moment of charisma)
  *   · its eyes track a look target and the smile follows with secondary motion
+ *
+ * Charisma moments (spins, flips, pops) are reserved for chapter transitions,
+ * triggered by the guide — idle life stays calm and premium, never cartoonish.
  *
  * Color follows the brand gold via currentColor.
  */
@@ -72,22 +72,11 @@ export function AliveMascot({
         }}
       />
 
-      {/* occasional playful spin while parked */}
-      <motion.div
-        className="relative h-full w-full"
-        animate={reduce ? undefined : { rotate: [0, 0, 0, 360] }}
-        transition={{
-          duration: 17,
-          ease: EASE,
-          times: [0, 0.5, 0.88, 1],
-          repeat: Infinity,
-        }}
-        style={{ transformOrigin: '50% 50%' }}
-      >
+      <div className="relative h-full w-full">
         {/* gentle head sway (tilt) */}
         <motion.div
           className="h-full w-full"
-          animate={reduce ? undefined : { rotate: [0, 4, 0, -4, 0] }}
+          animate={reduce ? undefined : { rotate: [0, 3, 0, -3, 0] }}
           transition={{ duration: 9, ease: 'easeInOut', repeat: Infinity }}
           style={{ transformOrigin: '50% 70%' }}
         >
@@ -158,7 +147,7 @@ export function AliveMascot({
             </motion.svg>
           </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 }

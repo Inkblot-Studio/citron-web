@@ -322,10 +322,10 @@ export function Card({
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={reset}
-      initial={{ opacity: 0, y: 26 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.7, ease: EASE, delay }}
+      transition={{ duration: 0.55, ease: EASE, delay }}
       whileHover={reduce ? undefined : { scale: 1.015 }}
       style={reduce ? undefined : { rotateX, rotateY, transformPerspective: 900 }}
       className={cn(
@@ -431,28 +431,28 @@ export function BrowserFrame({
   );
 }
 
-/** Chapter header: eyebrow, title, optional supporting line. */
+/** Chapter header: optional eyebrow, title, optional supporting line. */
 export function SectionHead({
   eyebrow,
   title,
   sub,
   className,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: ReactNode;
   sub?: string;
   className?: string;
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 22 }}
+      initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.5 }}
-      transition={{ duration: 0.7, ease: EASE }}
+      transition={{ duration: 0.55, ease: EASE }}
       className={className}
     >
-      <span className="eyebrow-cine text-[0.7rem] font-semibold">{eyebrow}</span>
-      <h2 className="mt-4 text-[clamp(2.1rem,4.6vw,3.4rem)] font-semibold leading-[1.03] tracking-[-0.035em] text-cine">
+      {eyebrow && <span className="eyebrow-cine text-[0.7rem] font-semibold">{eyebrow}</span>}
+      <h2 className={cn('text-[clamp(2.1rem,4.6vw,3.4rem)] font-semibold leading-[1.03] tracking-[-0.035em] text-cine', eyebrow && 'mt-4')}>
         {title}
       </h2>
       {sub && <p className="mt-5 max-w-[42ch] text-[1.0625rem] leading-relaxed text-cine-dim">{sub}</p>}

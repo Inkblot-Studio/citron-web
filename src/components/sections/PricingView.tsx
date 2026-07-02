@@ -49,11 +49,11 @@ const MATRIX: { group: string; rows: { label: string; plans: [string | boolean, 
 const FAQS = [
   {
     q: 'Can I start with just the CRM?',
-    a: 'Yes. Citron CRM is a complete, standalone product. Start there, and turn on the rest of the platform whenever you’re ready — your data carries over instantly because it was never separate to begin with.',
+    a: 'Yes. Citron CRM is a complete, standalone product. Start there, and turn on the rest of the platform whenever you’re ready. Your data carries over instantly because it was never separate to begin with.',
   },
   {
     q: 'How long does setup take?',
-    a: 'Most teams are live in a day. There’s no integration project — Citron is one system, so there’s nothing to wire together. Import your contacts and you’re running.',
+    a: 'Most teams are live in a day. There’s no integration project: Citron is one system, so there’s nothing to wire together. Import your contacts and you’re running.',
   },
   {
     q: 'Is my data used to train shared AI models?',
@@ -61,7 +61,7 @@ const FAQS = [
   },
   {
     q: 'Can I change plans later?',
-    a: 'Anytime. Upgrade or downgrade in a click — changes are prorated and take effect immediately.',
+    a: 'Anytime. Upgrade or downgrade in a click. Changes are prorated and take effect immediately.',
   },
   {
     q: 'What does annual billing save?',
@@ -182,7 +182,7 @@ export function PricingView() {
                   <Link
                     href={href}
                     className={cn(
-                      'group flex h-[3rem] w-full items-center justify-center gap-2 rounded-[var(--radius-lg)] text-[0.9375rem] font-semibold transition-all duration-200',
+                      'group flex h-[3rem] w-full items-center justify-center gap-2 rounded-[var(--radius-lg)] text-[0.9375rem] font-semibold transition-[filter,border-color,color,transform] duration-200 active:scale-[0.98]',
                       plan.highlighted
                         ? 'bg-[var(--cine-amber-bright)] text-[#1d1c19] hover:brightness-105'
                         : 'border border-[var(--cine-line)] text-cine hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]'
@@ -300,7 +300,7 @@ export function PricingView() {
           <Magnetic strength={0.4} className="mt-8 inline-block">
             <Link
               href="/demo"
-              className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105"
+              className="group inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 active:scale-[0.97]"
             >
               Book a Demo
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />

@@ -164,10 +164,10 @@ function BentoVisual({ kind }: { kind: string }) {
         {nodes.map((node, i) => (
           <Fragmentish key={node} last={i === nodes.length - 1}>
             <motion.span
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.94 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, amount: 0.6 }}
-              transition={{ duration: 0.4, ease: EASE, delay: i * 0.12 }}
+              transition={{ duration: 0.35, ease: EASE, delay: i * 0.09 }}
               className="rounded-full border border-[var(--cine-line)] bg-[var(--cine-bg-2)] px-2.5 py-1 text-[0.7rem] font-medium text-cine"
             >
               {node}
@@ -218,7 +218,7 @@ export function BentoSection() {
           <Eyebrow>One system, every function</Eyebrow>
           <Title>Everything your business runs on.</Title>
           <p className="mt-5 max-w-[46ch] text-[1.0625rem] leading-relaxed text-cine-dim">
-            Not a bundle of apps — one platform where every module shares the same
+            Not a bundle of apps. One platform where every module shares the same
             data, the same automations, and the same intelligence.
           </p>
         </div>
@@ -302,7 +302,7 @@ function SurfaceMock({ kind }: { kind: SurfaceType['kind'] }) {
         <div className="rounded-[var(--radius-md)] border border-[var(--cine-line)] bg-[var(--cine-bg-1)] p-3">
           <div className="text-[0.7rem] font-medium text-cine-dim">Today</div>
           <div className="mt-2 space-y-1.5">
-            {['3 invoices sent', 'Acme moved to Won', '2 tasks due'].map((t) => (
+            {['3 invoices sent', 'Copperline moved to Won', '2 tasks due'].map((t) => (
               <div key={t} className="flex items-center gap-1.5 text-[0.72rem] text-cine-dim">
                 <span className="h-1.5 w-1.5 rounded-full bg-[var(--cine-amber)]" />
                 {t}
@@ -317,7 +317,7 @@ function SurfaceMock({ kind }: { kind: SurfaceType['kind'] }) {
     const cols = [
       { name: 'Qualified', deals: ['Atlas Co', 'Vega'] },
       { name: 'Proposal', deals: ['Meridian'] },
-      { name: 'Won', deals: ['Helix', 'Acme'] },
+      { name: 'Won', deals: ['Helix', 'Copperline'] },
     ];
     return (
       <div className="grid h-full grid-cols-3 gap-3">
@@ -417,9 +417,6 @@ function ShowcasePanel({ surface, index }: { surface: SurfaceType; index: number
   return (
     <div className="flex h-full w-[min(88vw,1040px)] shrink-0 flex-col px-3 sm:px-5">
       <div className="flex items-center gap-3">
-        <span className="font-mono text-[0.75rem] text-cine-faint">
-          {String(index + 1).padStart(2, '0')}
-        </span>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-3 py-1 text-[0.72rem] font-medium text-[var(--cine-amber)]">
           {surface.label}
         </span>
@@ -464,8 +461,7 @@ export function HorizontalShowcase() {
   if (reduce) {
     return (
       <Section id="showcase" snap={false} className="!py-24">
-        <Eyebrow>See it in motion</Eyebrow>
-        <Title className="max-w-2xl">One platform, every surface.</Title>
+        <Title className="!mt-0 max-w-2xl">One platform, every surface.</Title>
         <div className="mt-10 flex gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {surfaces.map((s, i) => (
             <div key={s.id} className="h-[34rem]">
@@ -492,8 +488,7 @@ export function HorizontalShowcase() {
 
         {/* Fixed header band — sits above the reel, never overlaps it */}
         <div className="relative z-10 mx-auto w-full max-w-[1200px] shrink-0 px-6 pt-24 pb-2 sm:pt-28 lg:px-10">
-          <Eyebrow>See it in motion</Eyebrow>
-          <Title className="max-w-2xl">One platform, every surface.</Title>
+          <Title className="!mt-0 max-w-2xl">One platform, every surface.</Title>
         </div>
 
         {/* The reel — fills the space below the header, vertically centered */}
@@ -638,8 +633,7 @@ function RoiCalculator() {
   return (
     <div className="mx-auto mt-16 max-w-3xl rounded-[var(--radius-3xl)] cine-card p-8 sm:p-10">
       <div className="text-center">
-        <Eyebrow>Run the math</Eyebrow>
-        <h3 className="mt-3 text-[clamp(1.4rem,3vw,2rem)] font-semibold tracking-[-0.03em] text-cine">
+        <h3 className="text-[clamp(1.4rem,3vw,2rem)] font-semibold tracking-[-0.03em] text-cine">
           See what Citron saves your team.
         </h3>
       </div>
@@ -683,10 +677,10 @@ function RoiCalculator() {
         <Magnetic strength={0.4}>
           <Link
             href="/demo"
-            className="group inline-flex h-[3rem] items-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-6 text-[0.95rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-12px_rgba(var(--cine-particle),0.7)] transition hover:brightness-105"
+            className="group inline-flex h-[3rem] items-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-6 text-[0.95rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-12px_rgba(var(--cine-particle),0.7)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 active:scale-[0.97]"
           >
-            See your real numbers
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            Book a Demo
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>
         </Magnetic>
       </div>
@@ -737,8 +731,7 @@ export function ProofSection() {
   return (
     <Section id="roi" tone="dark">
       <div className="mx-auto max-w-2xl text-center">
-        <Eyebrow>The numbers</Eyebrow>
-        <Title className="mx-auto">Results teams feel in the first week.</Title>
+        <Title className="!mt-0 mx-auto">Results teams feel in the first week.</Title>
         <p className="mx-auto mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-cine-dim">
           One system instead of seven means less spend, less busywork, and a team
           that moves on its data instead of maintaining it.
@@ -818,8 +811,7 @@ export function Testimonials() {
   return (
     <Section id="customers">
       <div className="mx-auto max-w-2xl text-center">
-        <Eyebrow>Why teams switch</Eyebrow>
-        <Title>Loved by the people who run the business.</Title>
+        <Title className="!mt-0">Loved by the people who run the business.</Title>
       </div>
       <div className="mt-12 space-y-4">
         <MarqueeRow cards={ROW_A} duration={46} />
