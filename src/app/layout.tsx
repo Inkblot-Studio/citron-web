@@ -1,22 +1,9 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { siteConfig } from '@/lib/site';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollProgress } from '@/components/effects/ScrollProgress';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
-
-const jetbrains = JetBrains_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-jetbrains',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -71,7 +58,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#f7f5ef',
+  themeColor: '#fafaf7',
   width: 'device-width',
   initialScale: 1,
   colorScheme: 'light',
@@ -108,11 +95,7 @@ const softwareJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      data-theme="light"
-      className={`${inter.variable} ${jetbrains.variable}`}
-    >
+    <html lang="en" data-theme="light">
       <head>
         <script
           type="application/ld+json"
@@ -126,7 +109,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-[var(--cine-amber-bright)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#1d1c19]"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-[var(--cine-amber-bright)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--inkblot-color-neutral-gray-900)]"
         >
           Skip to content
         </a>

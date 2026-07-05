@@ -1,136 +1,138 @@
+@import '@citron-systems/citron-ds/fonts';
+@import '@citron-systems/citron-ds/css';
 @import 'tailwindcss';
 
 /* ============================================================
-   CITRON — Design tokens (Inkblot Studio design system)
-   Warm, restrained, premium. Citrus through taste, never literal.
+   CITRON — Design tokens (Inkblot Studio design system v2)
+   Warm ink, luminous citron, engineered typography.
    ============================================================ */
 
 @theme {
-  /* ---- Fonts ---- */
-  --font-sans: var(--font-inter), 'SF Pro Text', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, sans-serif;
-  --font-mono: var(--font-jetbrains), 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+  /* ---- Fonts (citron-ds v2) ---- */
+  --font-sans: var(--inkblot-typography-font-family-sans);
+  --font-mono: var(--inkblot-typography-font-family-mono);
+  --font-display: var(--inkblot-typography-font-family-display);
 
   /* ---- Warm neutrals ---- */
-  --color-ink-white: #ffffff;
-  --color-ink-50: #fafaf7;
-  --color-ink-100: #f5f4f0;
-  --color-ink-200: #eae9e3;
-  --color-ink-300: #d4d3cb;
-  --color-ink-400: #93928a;
-  --color-ink-500: #6b6a63;
-  --color-ink-600: #4d4c47;
-  --color-ink-700: #3a3935;
-  --color-ink-800: #2d2c28;
-  --color-ink-900: #1d1c19;
-  --color-ink-950: #0f0e0c;
+  --color-ink-white: var(--inkblot-color-neutral-white);
+  --color-ink-50: var(--inkblot-color-neutral-gray-50);
+  --color-ink-100: var(--inkblot-color-neutral-gray-100);
+  --color-ink-200: var(--inkblot-color-neutral-gray-200);
+  --color-ink-300: var(--inkblot-color-neutral-gray-300);
+  --color-ink-400: var(--inkblot-color-neutral-gray-400);
+  --color-ink-500: var(--inkblot-color-neutral-gray-500);
+  --color-ink-600: var(--inkblot-color-neutral-gray-600);
+  --color-ink-700: var(--inkblot-color-neutral-gray-700);
+  --color-ink-800: var(--inkblot-color-neutral-gray-800);
+  --color-ink-900: var(--inkblot-color-neutral-gray-900);
+  --color-ink-950: var(--inkblot-color-neutral-gray-950);
 
   /* ---- Citron accent ---- */
-  --color-citron-50: #fdfbf3;
-  --color-citron-100: #faf4df;
-  --color-citron-200: #f3e6b8;
-  --color-citron-300: #e8d38a;
-  --color-citron-400: #d9bc58;
-  --color-citron-500: #c4a030;
-  --color-citron-600: #a38427;
-  --color-citron-700: #7f671f;
-  --color-citron-800: #5c4a18;
-  --color-citron-900: #3d3111;
+  --color-citron-50: var(--inkblot-color-accent-citron-50);
+  --color-citron-100: var(--inkblot-color-accent-citron-100);
+  --color-citron-200: var(--inkblot-color-accent-citron-200);
+  --color-citron-300: var(--inkblot-color-accent-citron-300);
+  --color-citron-400: var(--inkblot-color-accent-citron-400);
+  --color-citron-500: var(--inkblot-color-accent-citron-500);
+  --color-citron-600: var(--inkblot-color-accent-citron-600);
+  --color-citron-700: var(--inkblot-color-accent-citron-700);
+  --color-citron-800: var(--inkblot-color-accent-citron-800);
+  --color-citron-900: var(--inkblot-color-accent-citron-900);
 
   /* ---- Warm dark surfaces ---- */
-  --color-night-950: #0c0b09;
-  --color-night-900: #12110e;
-  --color-night-800: #1d1c18;
-  --color-night-700: #2a2924;
-  --color-night-600: #38372f;
-  --color-night-500: #4d4c44;
+  --color-night-950: var(--inkblot-color-neutral-ink);
+  --color-night-900: var(--inkblot-dark-color-background-primary);
+  --color-night-800: var(--inkblot-dark-color-background-secondary);
+  --color-night-700: var(--inkblot-dark-color-background-tertiary);
+  --color-night-600: var(--inkblot-dark-color-border-strong);
+  --color-night-500: var(--inkblot-dark-color-text-tertiary);
 
   /* ---- Status ---- */
-  --color-success: #358c46;
-  --color-warning: #c48c1a;
-  --color-error: #be3e35;
-  --color-info: #5790ad;
+  --color-success: var(--inkblot-color-semantic-success-main);
+  --color-warning: var(--inkblot-color-semantic-warning-main);
+  --color-error: var(--inkblot-color-semantic-error-main);
+  --color-info: var(--inkblot-color-semantic-info-main);
 
   /* ---- Radii ---- */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
-  --radius-2xl: 24px;
+  --radius-sm: var(--inkblot-radius-sm);
+  --radius-md: var(--inkblot-radius-md);
+  --radius-lg: var(--inkblot-radius-lg);
+  --radius-xl: var(--inkblot-radius-xl);
+  --radius-2xl: var(--inkblot-radius-2xl);
   --radius-3xl: 32px;
 
   /* ---- Shadows (warm-tinted, diffused) ---- */
-  --shadow-xs: 0 1px 2px 0 rgba(29, 28, 25, 0.04);
-  --shadow-sm: 0 2px 8px -1px rgba(29, 28, 25, 0.06), 0 1px 3px -1px rgba(29, 28, 25, 0.04);
-  --shadow-md: 0 4px 16px -2px rgba(29, 28, 25, 0.08), 0 2px 6px -2px rgba(29, 28, 25, 0.04);
-  --shadow-lg: 0 8px 24px -4px rgba(29, 28, 25, 0.1), 0 4px 10px -4px rgba(29, 28, 25, 0.04);
-  --shadow-xl: 0 16px 40px -8px rgba(29, 28, 25, 0.12), 0 8px 16px -8px rgba(29, 28, 25, 0.04);
-  --shadow-glow: 0 0 40px -8px rgba(196, 160, 48, 0.35);
+  --shadow-xs: var(--inkblot-shadow-xs);
+  --shadow-sm: var(--inkblot-shadow-sm);
+  --shadow-md: var(--inkblot-shadow-md);
+  --shadow-lg: var(--inkblot-shadow-lg);
+  --shadow-xl: var(--inkblot-shadow-xl);
+  --shadow-glow: var(--inkblot-shadow-glow);
 
   /* ---- Easing ---- */
-  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-out-soft: cubic-bezier(0.33, 1, 0.68, 1);
-  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out-expo: var(--inkblot-easing-expressive);
+  --ease-out-soft: var(--inkblot-easing-out);
+  --ease-in-out-soft: var(--inkblot-easing-in-out);
 
   /* ---- Container ---- */
-  --container-prose: 768px;
-  --container-page: 1200px;
-  --container-wide: 1440px;
+  --container-prose: var(--inkblot-grid-max-width-content);
+  --container-page: var(--inkblot-grid-max-width-container);
+  --container-wide: var(--inkblot-grid-max-width-wide);
 }
 
 /* ============================================================
    Semantic theme — light (default) & dark
    ============================================================ */
 :root {
-  --bg-primary: #fafaf7;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #f5f4f0;
-  --bg-inverse: #12110e;
+  --bg-primary: var(--inkblot-semantic-color-background-primary);
+  --bg-secondary: var(--inkblot-semantic-color-background-secondary);
+  --bg-tertiary: var(--inkblot-semantic-color-background-tertiary);
+  --bg-inverse: var(--inkblot-semantic-color-background-inverse);
 
-  --text-primary: #1d1c19;
-  --text-secondary: #4d4c47;
-  --text-tertiary: #6b6a63;
-  --text-muted: #93928a;
-  --text-inverse: #fafaf7;
+  --text-primary: var(--inkblot-semantic-color-text-primary);
+  --text-secondary: var(--inkblot-semantic-color-text-secondary);
+  --text-tertiary: var(--inkblot-semantic-color-text-tertiary);
+  --text-muted: var(--inkblot-semantic-color-text-tertiary);
+  --text-inverse: var(--inkblot-semantic-color-text-inverse);
 
-  --border-subtle: #eae9e3;
-  --border-default: #d4d3cb;
-  --border-strong: #93928a;
+  --border-subtle: var(--inkblot-semantic-color-border-default);
+  --border-default: var(--inkblot-semantic-color-border-strong);
+  --border-strong: var(--inkblot-color-neutral-gray-400);
 
-  --surface-card: #ffffff;
+  --surface-card: var(--inkblot-semantic-color-background-secondary);
   --surface-glass: rgba(255, 255, 255, 0.72);
-  --surface-elevated: #ffffff;
+  --surface-elevated: var(--inkblot-semantic-color-background-secondary);
 
-  --accent: #c4a030;
-  --accent-hover: #a38427;
-  --accent-bright: #d9bc58;
-  --accent-wash: #fdfbf3;
+  --accent: var(--inkblot-semantic-color-interactive-primary);
+  --accent-hover: var(--inkblot-semantic-color-interactive-primary-hover);
+  --accent-bright: var(--inkblot-color-accent-citron-400);
+  --accent-wash: var(--inkblot-color-accent-citron-50);
 
   --grid-line: rgba(29, 28, 25, 0.05);
-  --hero-from: #fafaf7;
-  --hero-to: #f3eddc;
+  --hero-from: var(--inkblot-color-neutral-gray-50);
+  --hero-to: var(--inkblot-color-accent-citron-100);
 
-  /* Cinematic journey tokens — light (default) */
-  --cine-bg-0: #f7f5ef;
-  --cine-bg-1: #fbfaf6;
-  --cine-bg-2: #ffffff;
-  --cine-void-from: #ffffff;
-  --cine-void-mid: #f7f5ef;
-  --cine-void-to: #efeadd;
-  --cine-ink: #1d1c19;
-  --cine-ink-dim: #4d4c47;
-  --cine-ink-faint: #6b6a63;
-  --cine-amber: #8a6a16;
-  --cine-amber-bright: #c4a030;
-  --cine-amber-soft: #d9bc58;
-  --cine-amber-deep: #6f5817;
+  /* Cinematic journey tokens — light (default), v2 palette */
+  --cine-bg-0: var(--inkblot-color-neutral-gray-50);
+  --cine-bg-1: var(--inkblot-color-neutral-white);
+  --cine-bg-2: var(--inkblot-color-neutral-white);
+  --cine-void-from: var(--inkblot-color-neutral-white);
+  --cine-void-mid: var(--inkblot-color-neutral-gray-50);
+  --cine-void-to: var(--inkblot-color-accent-citron-100);
+  --cine-ink: var(--inkblot-color-neutral-gray-900);
+  --cine-ink-dim: var(--inkblot-color-neutral-gray-600);
+  --cine-ink-faint: var(--inkblot-color-neutral-gray-500);
+  --cine-amber: var(--inkblot-color-accent-citron-700);
+  --cine-amber-bright: var(--inkblot-color-accent-citron-500);
+  --cine-amber-soft: var(--inkblot-color-accent-citron-400);
+  --cine-amber-deep: var(--inkblot-color-accent-citron-800);
   --cine-line: rgba(160, 125, 28, 0.26);
   --cine-card: rgba(255, 255, 255, 0.74);
   --cine-card-border: rgba(29, 28, 25, 0.1);
-  --cine-scrim-strong: rgba(247, 245, 239, 0.94);
-  --cine-scrim-soft: rgba(247, 245, 239, 0.55);
+  --cine-scrim-strong: rgba(250, 250, 247, 0.94);
+  --cine-scrim-soft: rgba(250, 250, 247, 0.55);
   --cine-vignette: rgba(70, 58, 28, 0.06);
-  --cine-particle: 176, 138, 30;
+  --cine-particle: 201, 162, 39;
   --cine-mascot-0: #ffffff;
   --cine-mascot-1: #fbf6e8;
   --cine-mascot-2: #f1e8cf;
@@ -143,26 +145,26 @@
    Light tokens stay on :root; dark overrides live on the section.
    ============================================================ */
 .cine-section-dark {
-  --cine-bg-0: #0b0a08;
-  --cine-bg-1: #100e0b;
-  --cine-bg-2: #171410;
-  --cine-void-from: #171410;
-  --cine-void-mid: #0e0c09;
-  --cine-void-to: #060504;
-  --cine-ink: #f4efe2;
-  --cine-ink-dim: #c7c0ae;
-  --cine-ink-faint: #8c8677;
-  --cine-amber: #eccd74;
-  --cine-amber-bright: #f1cf6d;
-  --cine-amber-soft: #dcc066;
-  --cine-amber-deep: #c9a945;
+  --cine-bg-0: var(--inkblot-dark-color-background-primary);
+  --cine-bg-1: var(--inkblot-dark-color-background-secondary);
+  --cine-bg-2: var(--inkblot-dark-color-background-tertiary);
+  --cine-void-from: var(--inkblot-dark-color-background-tertiary);
+  --cine-void-mid: var(--inkblot-dark-color-background-primary);
+  --cine-void-to: var(--inkblot-color-neutral-ink);
+  --cine-ink: var(--inkblot-dark-color-text-primary);
+  --cine-ink-dim: var(--inkblot-dark-color-text-secondary);
+  --cine-ink-faint: var(--inkblot-dark-color-text-tertiary);
+  --cine-amber: var(--inkblot-dark-color-interactive-primary);
+  --cine-amber-bright: var(--inkblot-color-accent-citron-400);
+  --cine-amber-soft: var(--inkblot-color-accent-citron-300);
+  --cine-amber-deep: var(--inkblot-color-accent-citron-500);
   --cine-line: rgba(236, 205, 116, 0.16);
   --cine-card: rgba(255, 255, 255, 0.045);
   --cine-card-border: rgba(255, 255, 255, 0.09);
-  --cine-scrim-strong: rgba(11, 10, 8, 0.94);
-  --cine-scrim-soft: rgba(11, 10, 8, 0.5);
+  --cine-scrim-strong: rgba(10, 9, 8, 0.94);
+  --cine-scrim-soft: rgba(10, 9, 8, 0.5);
   --cine-vignette: rgba(0, 0, 0, 0.5);
-  --cine-particle: 236, 205, 116;
+  --cine-particle: 227, 192, 82;
 
   color-scheme: dark;
   background-color: var(--cine-bg-0);
@@ -186,7 +188,7 @@
     background-color: var(--cine-bg-0);
     color: var(--cine-ink);
     font-family: var(--font-sans);
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
+    font-feature-settings: var(--inkblot-typography-font-features-default);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -194,14 +196,15 @@
   }
 
   ::selection {
-    background-color: rgba(196, 160, 48, 0.22);
+    background-color: color-mix(in srgb, var(--inkblot-color-accent-citron-500) 22%, transparent);
     color: var(--cine-ink);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-sans);
+    font-family: var(--font-display);
     color: var(--cine-ink);
     text-wrap: balance;
+    letter-spacing: var(--inkblot-typography-letter-spacing-tight);
   }
 
   p {
@@ -260,7 +263,12 @@
   }
 
   .gradient-citron {
-    background: linear-gradient(135deg, #e8d38a 0%, #c4a030 50%, #a38427 100%);
+    background: linear-gradient(
+      135deg,
+      var(--inkblot-color-accent-citron-300) 0%,
+      var(--inkblot-color-accent-citron-500) 50%,
+      var(--inkblot-color-accent-citron-600) 100%
+    );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -273,7 +281,7 @@
   }
 
   .glow-citron {
-    box-shadow: 0 0 0 1px rgba(196, 160, 48, 0.2), 0 0 40px -8px rgba(196, 160, 48, 0.45);
+    box-shadow: var(--inkblot-shadow-glow);
   }
 
   .mask-fade-b {
@@ -300,8 +308,8 @@
   .aurora {
     background: radial-gradient(
       60% 60% at 50% 40%,
-      rgba(217, 188, 88, 0.18) 0%,
-      rgba(196, 160, 48, 0.08) 40%,
+      color-mix(in srgb, var(--inkblot-color-accent-citron-400) 18%, transparent) 0%,
+      color-mix(in srgb, var(--inkblot-color-accent-citron-500) 8%, transparent) 40%,
       transparent 70%
     );
     filter: blur(20px);
@@ -353,7 +361,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(196, 160, 48, 0.12) 50%,
+    color-mix(in srgb, var(--inkblot-color-accent-citron-500) 12%, transparent) 50%,
     transparent 100%
   );
   background-size: 200% 100%;

@@ -1,9 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 800" role="img" aria-labelledby="citron-mascot-title citron-mascot-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-labelledby="citron-mascot-title citron-mascot-desc">
   <title id="citron-mascot-title">Citron</title>
-  <desc id="citron-mascot-desc">Citron mark: two vertical bars and a wide smile, citron gold.</desc>
-  <g fill="#C9A227" stroke="none">
-    <rect x="378" y="96" width="120" height="338" rx="8" />
-    <rect x="602" y="96" width="120" height="338" rx="8" />
+  <desc id="citron-mascot-desc">Geometric face mark: two pause bars as eyes and a large smile, citron orange, sharp geometry.</desc>
+  <g id="citron-mascot">
+    <g id="mascot-eyes" fill="var(--citron-mascot-fill, #c9a227)" stroke="none">
+      <g id="mascot-eye-left">
+        <rect x="31" y="17" width="13" height="34" />
+      </g>
+      <g id="mascot-eye-right">
+        <rect x="56" y="17" width="13" height="34" />
+      </g>
+    </g>
+    <g id="mascot-smile" fill="none" stroke-linecap="butt" stroke-linejoin="miter">
+      <path
+        d="M 12 40 A 38 38 0 0 0 88 40"
+        stroke="var(--citron-mascot-fill, #c9a227)"
+        stroke-width="10"
+      />
+    </g>
   </g>
-  <path d="M 200 360 A 350 350 0 0 0 900 360" fill="none" stroke="#C9A227" stroke-width="96" stroke-linecap="butt" />
 </svg>

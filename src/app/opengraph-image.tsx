@@ -51,7 +51,7 @@ export default function OgImage() {
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ color: '#6b6a63', fontSize: 24 }}>citron.inkblotstudio.eu</span>
-          <span style={{ color: '#c4a030', fontSize: 24, fontWeight: 500 }}>
+          <span style={{ color: '#c9a227', fontSize: 24, fontWeight: 500 }}>
             by Inkblot Studio
           </span>
         </div>
