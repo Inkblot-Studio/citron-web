@@ -164,7 +164,7 @@ function FallbackScheduler() {
               type="button"
               disabled={!time || !days}
               onClick={() => setConfirmed(true)}
-              className="mt-7 inline-flex h-12 w-full items-center justify-center rounded-[var(--radius-lg)] bg-[var(--accent)] text-[0.9375rem] font-medium text-[#1d1c19] shadow-[0_2px_16px_-4px_rgba(196,160,48,0.5)] transition-[background-color,box-shadow,transform] duration-200 hover:bg-[var(--accent-hover)] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
+              className="btn btn-primary mt-7 h-12 w-full text-[0.9rem] disabled:cursor-not-allowed"
             >
               {time && days ? `Confirm ${days[day].date} at ${time}` : 'Select a time to continue'}
             </button>

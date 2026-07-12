@@ -47,10 +47,10 @@ export default function SolutionsPage() {
         {/* header */}
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <span className="eyebrow-cine text-[0.72rem] font-semibold">Solutions</span>
+            <span className="eyebrow-pill">Solutions</span>
           </Reveal>
           <Reveal delay={0.06}>
-            <h1 className="mt-4 text-[2.6rem] font-semibold leading-[1.04] tracking-[-0.04em] text-cine sm:text-[3.4rem]">
+            <h1 className="mt-5 text-[2.6rem] font-semibold leading-[1.04] tracking-[-0.04em] text-cine sm:text-[3.4rem]">
               Built for how <span className="gradient-amber">your team works.</span>
             </h1>
           </Reveal>
@@ -123,12 +123,11 @@ export default function SolutionsPage() {
               Tell us how your team works and we’ll show you exactly how Citron
               maps to it.
             </p>
-            <Link
-              href="/demo"
-              className="group mt-8 inline-flex h-[3.5rem] items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-8 text-[1.0625rem] font-semibold text-[#1d1c19] shadow-[0_10px_36px_-10px_rgba(var(--cine-particle),0.8)] transition-[filter,box-shadow,transform] duration-200 hover:brightness-105 active:scale-[0.97]"
-            >
-              Book a Demo
-              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            <Link href="/demo" className="btn btn-primary mt-9 h-[3.25rem] pl-7 pr-2 text-[0.9875rem]">
+              Book a demo
+              <span className="btn-orb">
+                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
+              </span>
             </Link>
           </div>
         </Reveal>

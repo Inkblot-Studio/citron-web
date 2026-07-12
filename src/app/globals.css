@@ -126,9 +126,10 @@
   --cine-amber-bright: var(--inkblot-color-accent-citron-500);
   --cine-amber-soft: var(--inkblot-color-accent-citron-400);
   --cine-amber-deep: var(--inkblot-color-accent-citron-800);
-  --cine-line: rgba(160, 125, 28, 0.26);
-  --cine-card: rgba(255, 255, 255, 0.74);
-  --cine-card-border: rgba(29, 28, 25, 0.1);
+  --cine-line: rgba(29, 28, 25, 0.09);
+  --cine-line-strong: rgba(29, 28, 25, 0.22);
+  --cine-card: #ffffff;
+  --cine-card-border: rgba(29, 28, 25, 0.07);
   --cine-scrim-strong: rgba(250, 250, 247, 0.94);
   --cine-scrim-soft: rgba(250, 250, 247, 0.55);
   --cine-vignette: rgba(70, 58, 28, 0.06);
@@ -242,137 +243,6 @@
   .text-balance {
     text-wrap: balance;
   }
-
-  .bg-grid {
-    background-image:
-      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-    background-size: 64px 64px;
-  }
-
-  .bg-dots {
-    background-image: radial-gradient(var(--grid-line) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  .gradient-text {
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 120%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .gradient-citron {
-    background: linear-gradient(
-      135deg,
-      var(--inkblot-color-accent-citron-300) 0%,
-      var(--inkblot-color-accent-citron-500) 50%,
-      var(--inkblot-color-accent-citron-600) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .glass {
-    background: var(--surface-glass);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-  }
-
-  .glow-citron {
-    box-shadow: var(--inkblot-shadow-glow);
-  }
-
-  .mask-fade-b {
-    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-  }
-
-  .mask-fade-edges {
-    -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-  }
-
-  .citron-divider {
-    background: linear-gradient(
-      to right,
-      transparent,
-      var(--border-default) 20%,
-      var(--border-default) 80%,
-      transparent
-    );
-  }
-
-  /* Animated aurora background blob */
-  .aurora {
-    background: radial-gradient(
-      60% 60% at 50% 40%,
-      color-mix(in srgb, var(--inkblot-color-accent-citron-400) 18%, transparent) 0%,
-      color-mix(in srgb, var(--inkblot-color-accent-citron-500) 8%, transparent) 40%,
-      transparent 70%
-    );
-    filter: blur(20px);
-  }
-}
-
-/* ============================================================
-   Keyframe animations
-   ============================================================ */
-@keyframes float-slow {
-  0%, 100% { transform: translateY(0) translateX(0); }
-  50% { transform: translateY(-18px) translateX(8px); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.04); }
-}
-
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-@keyframes draw-line {
-  to { stroke-dashoffset: 0; }
-}
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-@keyframes spin-slow {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes orbit {
-  from { transform: rotate(0deg) translateX(var(--orbit-r, 140px)) rotate(0deg); }
-  to { transform: rotate(360deg) translateX(var(--orbit-r, 140px)) rotate(-360deg); }
-}
-
-.animate-float-slow { animation: float-slow 9s var(--ease-in-out-soft) infinite; }
-.animate-pulse-glow { animation: pulse-glow 4s var(--ease-in-out-soft) infinite; }
-.animate-marquee { animation: marquee 40s linear infinite; }
-.animate-spin-slow { animation: spin-slow 28s linear infinite; }
-
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    color-mix(in srgb, var(--inkblot-color-accent-citron-500) 12%, transparent) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2.4s linear infinite;
-}
-
-/* ============================================================
-   Cinematic experience layer — the Citron journey
-   ============================================================ */
-.experience-root {
-  color: var(--cine-ink);
 }
 
 /* Radial scrim behind text — guarantees legibility over any layer */
@@ -421,143 +291,131 @@
   color: transparent;
 }
 
-.amber-glow {
-  filter: drop-shadow(0 0 18px rgba(var(--cine-particle), 0.4));
-}
-
+/* Component classes live in the components layer so Tailwind utilities
+   (responsive `hidden`, spacing overrides…) keep winning over them. */
+@layer components {
+/* Solid, machined card surface — hairline ring + soft diffused ambient shadow. */
 .cine-card {
   background: var(--cine-card);
   border: 1px solid var(--cine-card-border);
-  backdrop-filter: blur(8px) saturate(120%);
-  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  box-shadow:
+    0 1px 2px rgba(29, 28, 25, 0.03),
+    0 16px 40px -24px rgba(29, 28, 25, 0.12);
 }
 
-@keyframes data-rise {
-  from { transform: translateY(0); opacity: 0; }
-  10% { opacity: var(--rise-opacity, 0.5); }
-  90% { opacity: var(--rise-opacity, 0.5); }
-  to { transform: translateY(var(--rise-distance, -120px)); opacity: 0; }
+/* Double-bezel shell: wrap a .cine-card (or image) for a nested, hardware feel. */
+.bezel {
+  background: rgba(29, 28, 25, 0.035);
+  border: 1px solid rgba(29, 28, 25, 0.06);
+  border-radius: 2rem;
+  padding: 0.5rem;
 }
-@keyframes pulse-down {
-  from { top: 0%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  to { top: 100%; opacity: 0; }
+.bezel > * {
+  border-radius: calc(2rem - 0.5rem);
 }
-
-@keyframes trunk-flow {
-  to {
-    background-position: 0 240px;
-  }
-}
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.12;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-@keyframes aura-pan {
-  0%,
-  100% {
-    transform: translate3d(-3%, -2%, 0) scale(1.04);
-  }
-  50% {
-    transform: translate3d(3%, 2%, 0) scale(1.12);
-  }
-}
-@keyframes ring-expand {
-  0% {
-    transform: scale(0.88);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(2.4);
-    opacity: 0;
-  }
-}
-@keyframes caret-blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-.animate-aura { animation: aura-pan 18s var(--ease-in-out-soft) infinite; }
 
 /* ============================================================
-   ROI slider — brand-styled native range input
+   Buttons — dark ink primary, quiet secondary. Citron is an
+   accent, never a large fill.
    ============================================================ */
-.roi-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 6px;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
   border-radius: 9999px;
-  background: linear-gradient(
-    to right,
-    var(--cine-amber-bright) 0%,
-    var(--cine-amber-bright) calc((var(--val, 18) - 5) / 115 * 100%),
-    rgba(var(--cine-particle), 0.18) calc((var(--val, 18) - 5) / 115 * 100%),
-    rgba(var(--cine-particle), 0.18) 100%
-  );
-  outline: none;
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
+  transition:
+    transform 0.45s cubic-bezier(0.32, 0.72, 0, 1),
+    background-color 0.3s cubic-bezier(0.32, 0.72, 0, 1),
+    border-color 0.3s cubic-bezier(0.32, 0.72, 0, 1),
+    color 0.3s cubic-bezier(0.32, 0.72, 0, 1),
+    box-shadow 0.45s cubic-bezier(0.32, 0.72, 0, 1);
 }
-.roi-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 9999px;
-  background: var(--cine-amber-bright);
-  border: 3px solid var(--cine-bg-0);
-  box-shadow: 0 4px 14px -2px rgba(var(--cine-particle), 0.6);
-  cursor: grab;
-  transition: transform 0.15s ease-out;
+.btn:active {
+  transform: scale(0.97);
 }
-@media (hover: hover) and (pointer: fine) {
-  .roi-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.12);
-  }
-}
-.roi-slider::-webkit-slider-thumb:active {
-  cursor: grabbing;
-  transform: scale(1.06);
-}
-.roi-slider::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
-  border-radius: 9999px;
-  background: var(--cine-amber-bright);
-  border: 3px solid var(--cine-bg-0);
-  box-shadow: 0 4px 14px -2px rgba(var(--cine-particle), 0.6);
-  cursor: grab;
+.btn:disabled {
+  opacity: 0.55;
+  pointer-events: none;
 }
 
-/* ============================================================
-   Scroll-snap chapters — each section settles before the next
-   ============================================================ */
-html.citron-snap {
-  scroll-snap-type: y proximity;
-  scroll-padding-top: 0;
+.btn-primary {
+  background: var(--cine-ink);
+  color: #fbfaf7;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 2px rgba(29, 28, 25, 0.24),
+    0 12px 28px -12px rgba(29, 28, 25, 0.45);
 }
-.snap-section {
-  scroll-snap-align: start;
+.btn-primary:hover {
+  background: #33312b;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 2px rgba(29, 28, 25, 0.24),
+    0 16px 36px -12px rgba(29, 28, 25, 0.5);
 }
+
+.btn-secondary {
+  background: #ffffff;
+  border: 1px solid var(--cine-line);
+  color: var(--cine-ink);
+  box-shadow: 0 1px 2px rgba(29, 28, 25, 0.04);
+}
+.btn-secondary:hover {
+  border-color: var(--cine-line-strong);
+}
+
+.btn-ghost {
+  color: var(--cine-ink-dim);
+}
+.btn-ghost:hover {
+  color: var(--cine-ink);
+}
+
+/* Nested trailing-icon circle — sits flush with the button's right padding. */
+.btn-orb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 9999px;
+  flex: none;
+  transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.btn-primary .btn-orb {
+  background: rgba(255, 255, 255, 0.14);
+}
+.btn-secondary .btn-orb {
+  background: rgba(29, 28, 25, 0.06);
+}
+.btn:hover .btn-orb {
+  transform: translateX(2px);
+}
+
+/* Eyebrow — microscopic pill badge preceding section headings. */
+.eyebrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(160, 125, 28, 0.25);
+  background: rgba(var(--cine-particle), 0.07);
+  padding: 0.3rem 0.85rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cine-amber);
+}
+} /* end @layer components */
 
 /* ============================================================
    Reduced motion
    ============================================================ */
-@media (prefers-reduced-motion: reduce) {
-  html.citron-snap {
-    scroll-snap-type: none;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

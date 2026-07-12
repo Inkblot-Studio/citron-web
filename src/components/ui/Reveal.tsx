@@ -9,7 +9,7 @@ export function Reveal({
   children,
   className,
   delay = 0,
-  y = 24,
+  y = 16,
   as = 'div',
 }: {
   children: ReactNode;
@@ -24,7 +24,8 @@ export function Reveal({
     show: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], delay },
+      // Fast, weighty entrance — long delays read as lag, not luxury.
+      transition: { duration: 0.5, ease: [0.32, 0.72, 0, 1], delay: Math.min(delay, 0.2) },
     },
   };
   return (

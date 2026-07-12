@@ -5,11 +5,11 @@ export const EASE_SOFT = [0.33, 1, 0.68, 1] as const;
 export const EASE_IN_OUT = [0.65, 0, 0.35, 1] as const;
 
 export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 16 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: EASE_EXPO },
+    transition: { duration: 0.45, ease: EASE_EXPO },
   },
 };
 

@@ -1,10 +1,23 @@
-import { Experience } from '@/components/experience/Experience';
-import { PasswordGate } from '@/components/experience/PasswordGate';
+import { Hero } from '@/components/home/Hero';
+import {
+  AiSection,
+  FinalCtaSection,
+  HowItWorksSection,
+  ModulesSection,
+  PricingTeaserSection,
+  ProofSection,
+} from '@/components/home/sections';
 
 export default function HomePage() {
   return (
-    <PasswordGate>
-      <Experience />
-    </PasswordGate>
+    <>
+      <Hero />
+      <ModulesSection />
+      <AiSection />
+      <HowItWorksSection />
+      <ProofSection />
+      <PricingTeaserSection />
+      <FinalCtaSection />
+    </>
   );
 }

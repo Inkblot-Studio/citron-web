@@ -28,17 +28,11 @@ export default function NotFound() {
           business needs still does.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
-            href="/"
-            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] px-7 text-[0.9375rem] font-semibold text-[#1d1c19] transition-[filter,transform] duration-200 hover:brightness-105 active:scale-[0.97]"
-          >
-            Back to the journey
+          <Link href="/" className="btn btn-primary h-12 px-7 text-[0.9rem]">
+            Back to home
           </Link>
-          <Link
-            href="/demo"
-            className="inline-flex h-12 items-center justify-center rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-7 text-[0.9375rem] font-medium text-cine transition-[border-color,transform] duration-200 hover:border-[var(--cine-amber-bright)] active:scale-[0.97]"
-          >
-            Book a Demo
+          <Link href="/demo" className="btn btn-secondary h-12 px-7 text-[0.9rem]">
+            Book a demo
           </Link>
         </div>
       </div>

@@ -2,26 +2,33 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowRight, User } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Logo } from '@/components/ui/Logo';
 import { NavLink } from '@/components/ui/NavLink';
+import { CartButton } from '@/components/cart/CartButton';
+import { identityUrl } from '@/lib/site';
+import { useSession } from '@/lib/useSession';
 import { cn } from '@/lib/cn';
 
 const NAV_LINKS = [
-  { label: 'Home', href: '/' },
+  { label: 'Product', href: '/#modules' },
   { label: 'Solutions', href: '/solutions' },
   { label: 'Pricing', href: '/pricing' },
+  { label: 'Build your own', href: '/build' },
 ];
+
+const EASE = [0.32, 0.72, 0, 1] as const;
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { user } = useSession();
 
   const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 24));
+  useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 16));
   // Pages can load mid-scroll (refresh, anchor) — sync the initial state.
-  useEffect(() => setScrolled(scrollY.get() > 24), [scrollY]);
+  useEffect(() => setScrolled(scrollY.get() > 16), [scrollY]);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -33,86 +40,137 @@ export function Navbar() {
   const close = () => setOpen(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 sm:px-5">
+      {/* floating island */}
       <div
         className={cn(
-          'mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-3 px-4 transition-[height,max-width,padding,border-radius,border-color,background-color,backdrop-filter] duration-300 ease-[var(--ease-out-expo)] sm:px-6 md:px-8',
-          scrolled &&
-            'mt-2.5 h-14 max-w-[1140px] rounded-full border border-[var(--cine-line)] bg-[var(--cine-card)] px-3 backdrop-blur-xl sm:px-4 md:px-5'
+          'relative z-10 mx-auto mt-3 flex h-[3.5rem] max-w-[1200px] items-center justify-between gap-3 rounded-full border border-[var(--cine-card-border)] bg-[rgba(255,255,255,0.82)] pl-5 pr-2 backdrop-blur-xl transition-shadow duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] sm:mt-4 sm:pl-6',
+          scrolled
+            ? 'shadow-[0_1px_2px_rgba(29,28,25,0.04),0_20px_48px_-20px_rgba(29,28,25,0.18)]'
+            : 'shadow-[0_1px_2px_rgba(29,28,25,0.03)]'
         )}
       >
         <Logo />
 
-        <nav className="hidden items-center gap-0.5 md:flex" aria-label="Main">
+        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Main">
           {NAV_LINKS.map((l) => (
             <NavLink key={l.href} href={l.href} label={l.label} />
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <Link
-            href="/demo"
-            className="group hidden items-center gap-2 rounded-full bg-[var(--cine-amber-bright)] px-4 py-2 text-[0.8125rem] font-semibold text-[#1d1c19] shadow-[0_2px_16px_-6px_rgba(var(--cine-particle),0.7)] transition-[filter,transform] duration-200 hover:brightness-105 active:scale-[0.97] sm:inline-flex sm:px-5"
-          >
-            Book a Demo
-            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-          </Link>
+        <div className="flex items-center gap-1.5">
+          <CartButton />
 
+          {user ? (
+            <Link
+              href="/account"
+              className="btn btn-ghost hidden h-10 items-center gap-1.5 px-3.5 text-[0.8125rem] font-medium lg:inline-flex"
+            >
+              <User className="h-3.5 w-3.5" strokeWidth={1.75} />
+              Account
+            </Link>
+          ) : (
+            <a
+              href={identityUrl('login')}
+              className="btn btn-ghost hidden h-10 px-3.5 text-[0.8125rem] font-medium lg:inline-flex"
+            >
+              Log in
+            </a>
+          )}
+
+          <a
+            href={user ? '/pricing' : identityUrl('signup')}
+            className="btn btn-primary hidden h-10 pl-5 pr-1.5 text-[0.8125rem] sm:inline-flex"
+          >
+            {user ? 'Upgrade' : 'Start free trial'}
+            <span className="btn-orb">
+              <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
+            </span>
+          </a>
+
+          {/* hamburger — morphs into an X */}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--cine-line)] text-cine transition-colors hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)] active:scale-95 md:hidden"
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-cine transition-colors hover:bg-[rgba(29,28,25,0.05)] lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? 'Close menu' : 'Open menu'}
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <span
+              className={cn(
+                'absolute h-[1.5px] w-[18px] rounded-full bg-current transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                open ? 'rotate-45' : '-translate-y-[3.5px]'
+              )}
+            />
+            <span
+              className={cn(
+                'absolute h-[1.5px] w-[18px] rounded-full bg-current transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                open ? '-rotate-45' : 'translate-y-[3.5px]'
+              )}
+            />
           </button>
         </div>
       </div>
 
+      {/* mobile overlay — full-screen glass with staggered reveal */}
       <AnimatePresence>
         {open && (
-          <>
-            <motion.button
-              type="button"
-              aria-label="Close menu"
-              className="fixed inset-0 z-40 bg-[rgba(11,10,8,0.45)] backdrop-blur-sm md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={close}
-            />
-            <motion.nav
-              id="mobile-nav"
-              aria-label="Mobile"
-              className="fixed inset-x-4 top-[4.5rem] z-50 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--cine-line)] bg-[var(--cine-card)] p-4 shadow-[var(--shadow-xl)] backdrop-blur-xl md:hidden"
-              initial={{ opacity: 0, y: -12, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="flex flex-col gap-1">
-                {NAV_LINKS.map((l) => (
-                  <NavLink
-                    key={l.href}
+          <motion.nav
+            id="mobile-nav"
+            aria-label="Mobile"
+            className="fixed inset-0 z-0 flex flex-col justify-between bg-[rgba(250,250,247,0.92)] px-6 pb-10 pt-28 backdrop-blur-3xl lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: EASE }}
+          >
+            <div className="flex flex-col gap-1">
+              {[...NAV_LINKS, { label: 'Cart', href: '/cart' }].map((l, i) => (
+                <motion.div
+                  key={l.href}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, ease: EASE, delay: 0.08 + i * 0.05 }}
+                >
+                  <Link
                     href={l.href}
-                    label={l.label}
-                    onNavigate={close}
-                    className="h-11 px-4"
-                  />
-                ))}
-              </div>
-              <Link
-                href="/demo"
+                    onClick={close}
+                    className="block py-3 font-display text-[2rem] font-semibold tracking-[-0.02em] text-cine transition-colors hover:text-[var(--cine-amber)]"
+                  >
+                    {l.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              className="flex flex-col gap-3"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: EASE, delay: 0.38 }}
+            >
+              <a
+                href={user ? '/pricing' : identityUrl('signup')}
                 onClick={close}
-                className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--cine-amber-bright)] text-[0.9rem] font-semibold text-[#1d1c19] transition active:scale-[0.98]"
+                className="btn btn-primary h-13 w-full py-3.5 pl-6 pr-2 text-[0.9375rem]"
               >
-                Book a Demo
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </motion.nav>
-          </>
+                {user ? 'Upgrade' : 'Start free trial'}
+                <span className="btn-orb">
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
+                </span>
+              </a>
+              {user ? (
+                <Link href="/account" onClick={close} className="btn btn-secondary h-13 w-full py-3.5 text-[0.9375rem]">
+                  Your account
+                </Link>
+              ) : (
+                <a href={identityUrl('login')} className="btn btn-secondary h-13 w-full py-3.5 text-[0.9375rem]">
+                  Log in
+                </a>
+              )}
+            </motion.div>
+          </motion.nav>
         )}
       </AnimatePresence>
     </header>

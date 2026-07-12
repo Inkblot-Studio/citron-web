@@ -3,7 +3,8 @@ import './globals.css';
 import { siteConfig } from '@/lib/site';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { ScrollProgress } from '@/components/effects/ScrollProgress';
+import { CartProvider } from '@/components/cart/CartProvider';
+import { SalesAssistant } from '@/components/assistant/SalesAssistant';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -23,7 +24,10 @@ export const metadata: Metadata = {
     'marketing automation',
     'invoicing',
     'accounting software',
+    'local AI',
+    'private AI for business',
     'Citron',
+    'CitronOS',
     'Inkblot Studio',
   ],
   authors: [{ name: siteConfig.studio.name, url: siteConfig.studio.url }],
@@ -49,9 +53,7 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
   },
   icons: {
-    icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-    ],
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
     apple: [{ url: '/favicon.svg' }],
   },
   category: 'technology',
@@ -70,6 +72,7 @@ const orgJsonLd = {
   name: siteConfig.name,
   url: siteConfig.url,
   description: siteConfig.description,
+  email: siteConfig.contact.email,
   founder: { '@type': 'Organization', name: siteConfig.studio.name, url: siteConfig.studio.url },
   sameAs: [siteConfig.social.x, siteConfig.social.linkedin, siteConfig.social.github],
 };
@@ -81,16 +84,10 @@ const softwareJsonLd = {
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   description: siteConfig.description,
-  offers: {
-    '@type': 'Offer',
-    price: '29',
-    priceCurrency: 'USD',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.9',
-    ratingCount: '128',
-  },
+  offers: [
+    { '@type': 'Offer', name: 'Starter', price: '29', priceCurrency: 'USD' },
+    { '@type': 'Offer', name: 'Growth', price: '69', priceCurrency: 'USD' },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -113,10 +110,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
-        <ScrollProgress />
-        <Navbar />
-        <main id="main">{children}</main>
-        <Footer />
+        <CartProvider>
+          <Navbar />
+          <main id="main">{children}</main>
+          <Footer />
+          <SalesAssistant />
+        </CartProvider>
       </body>
     </html>
   );

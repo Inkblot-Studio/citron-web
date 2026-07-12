@@ -3,16 +3,19 @@ export const siteConfig = {
   tagline: 'The Business Operating System',
   description:
     'Your company. One intelligence. Citron replaces dozens of disconnected tools with a single AI-powered operating system: CRM, marketing, automations, finance, and AI agents, unified.',
-  url: 'https://citron.inkblotstudio.eu',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://citronos.com',
   ogImage: '/og.png',
+  identity: {
+    url: process.env.NEXT_PUBLIC_IDENTITY_URL ?? 'https://identity.citronos.com',
+  },
   studio: {
     name: 'Inkblot Studio',
     url: 'https://inkblotstudio.eu',
   },
   contact: {
-    email: 'hello@citron.app',
-    sales: 'sales@citron.app',
-    support: 'support@citron.app',
+    email: 'hello@citronos.com',
+    sales: 'sales@citronos.com',
+    support: 'support@citronos.com',
   },
   social: {
     x: 'https://x.com',
@@ -20,6 +23,14 @@ export const siteConfig = {
     github: 'https://github.com',
   },
 } as const;
+
+/** URL into the identity portal, with a return destination on this site. */
+export function identityUrl(path: 'login' | 'signup', returnTo?: string) {
+  const base = `${siteConfig.identity.url}/${path}`;
+  if (!returnTo) return base;
+  const dest = returnTo.startsWith('http') ? returnTo : `${siteConfig.url}${returnTo}`;
+  return `${base}?redirect_uri=${encodeURIComponent(dest)}`;
+}
 
 export type Module = {
   slug: string;
@@ -251,67 +262,6 @@ export const aiCommands: AiCommand[] = [
     prompt: 'Summarize every open thread with Northwind and what they need.',
     response: 'Northwind is waiting on a revised SOW and pricing for 3 extra seats.',
     module: 'CRM',
-  },
-];
-
-export type PricingPlan = {
-  name: string;
-  price: { monthly: number | null; annual: number | null };
-  cadence: string;
-  description: string;
-  highlighted?: boolean;
-  cta: { label: string; href: string };
-  features: string[];
-};
-
-export const pricingPlans: PricingPlan[] = [
-  {
-    name: 'Starter',
-    price: { monthly: 29, annual: 24 },
-    cadence: 'per user / month',
-    description: 'For small teams replacing their first stack of tools.',
-    cta: { label: 'Start free trial', href: '/demo' },
-    features: [
-      'CRM & Lead Management',
-      'Sales Pipelines',
-      'Up to 10 users',
-      '5 AI agents',
-      'Core automations',
-      'Email support',
-    ],
-  },
-  {
-    name: 'Growth',
-    price: { monthly: 69, annual: 57 },
-    cadence: 'per user / month',
-    description: 'For scaling teams running the whole business on Citron.',
-    highlighted: true,
-    cta: { label: 'Start free trial', href: '/demo' },
-    features: [
-      'Everything in Starter',
-      'Marketing & Analytics',
-      'Invoicing & Accounting',
-      'Unlimited AI agents',
-      'Advanced automations',
-      'Knowledge engine',
-      'Priority support',
-    ],
-  },
-  {
-    name: 'Enterprise',
-    price: { monthly: null, annual: null },
-    cadence: 'custom',
-    description: 'For organizations that need scale, control, and assurance.',
-    cta: { label: 'Talk to sales', href: '/demo' },
-    features: [
-      'Everything in Growth',
-      'SSO & SCIM',
-      'Custom AI models',
-      'Dedicated success manager',
-      'SLA & uptime guarantees',
-      'Advanced security & audit logs',
-      'Custom integrations',
-    ],
   },
 ];
 

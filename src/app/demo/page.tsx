@@ -57,14 +57,15 @@ export default function DemoPage() {
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
             <span
-              className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-[var(--radius-xl)] border border-[var(--cine-line)] bg-[rgba(var(--cine-particle),0.12)] text-[var(--cine-amber-bright)]"
-              style={{ boxShadow: '0 0 40px -10px rgba(var(--cine-particle),0.55)' }}
+              className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--cine-ink)] text-[var(--cine-amber-soft)] shadow-[0_12px_32px_-12px_rgba(29,28,25,0.5)]"
             >
               <Mascot className="h-7 w-7" animate={false} />
             </span>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="eyebrow-cine text-[0.72rem] font-medium">Book a Demo</p>
+            <p>
+              <span className="eyebrow-pill">Book a demo</span>
+            </p>
           </Reveal>
           <Reveal delay={0.1}>
             <h1 className="mt-4 text-[2.5rem] font-semibold leading-[1.05] tracking-[-0.04em] text-cine sm:text-[3.25rem]">
