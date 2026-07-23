@@ -1,4 +1,4 @@
-const BILLING_URL = process.env.NEXT_PUBLIC_BILLING_URL ?? 'https://billing.citronos.com';
+const BILLING_URL = process.env.NEXT_PUBLIC_BILLING_URL ?? 'https://dashboard.citronos.com';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

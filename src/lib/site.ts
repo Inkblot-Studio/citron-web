@@ -10,7 +10,7 @@ export const siteConfig = {
   },
   /** Billing & usage dashboard — separate subdomain app. */
   billing: {
-    url: process.env.NEXT_PUBLIC_BILLING_URL ?? 'https://billing.citronos.com',
+    url: process.env.NEXT_PUBLIC_BILLING_URL ?? 'https://dashboard.citronos.com',
   },
   studio: {
     name: 'Inkblot Studio',
