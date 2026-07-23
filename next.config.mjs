@@ -2,6 +2,7 @@ const BILLING_URL = process.env.NEXT_PUBLIC_BILLING_URL ?? 'https://dashboard.ci
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,

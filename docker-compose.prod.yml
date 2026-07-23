@@ -1,0 +1,43 @@
+# Marketing / commerce site — production (citronos.com)
+#
+#   docker compose -f docker-compose.prod.yml up -d --build
+name: citron-web-prod
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://citronos.com}
+        NEXT_PUBLIC_BILLING_URL: ${NEXT_PUBLIC_BILLING_URL:-https://dashboard.citronos.com}
+        NEXT_PUBLIC_IDENTITY_URL: ${NEXT_PUBLIC_IDENTITY_URL:-https://identity.citronos.com}
+        NEXT_PUBLIC_CALENDLY_URL: ${NEXT_PUBLIC_CALENDLY_URL:-}
+    environment:
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      CITRON_API_URL: ${CITRON_API_URL:?set CITRON_API_URL}
+      CITRON_API_TOKEN: ${CITRON_API_TOKEN:?set CITRON_API_TOKEN}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      NEXT_PUBLIC_IDENTITY_URL: ${NEXT_PUBLIC_IDENTITY_URL:-https://identity.citronos.com}
+      IDENTITY_API_URL: ${IDENTITY_API_URL:-https://api.identity.citronos.com}
+      SESSION_COOKIE_NAME: ${SESSION_COOKIE_NAME:-citron_session}
+      DEV_FAKE_SESSION: ""
+    ports:
+      - "${WEB_PORT:-3012}:3000"
+    networks:
+      default:
+        aliases:
+          - citron-web
+      caddy:
+        aliases:
+          - citron-web
+    restart: unless-stopped
+
+networks:
+  default:
+    name: citron-web-prod_default
+  caddy:
+    external: true
+    name: citron-admin-api_default
