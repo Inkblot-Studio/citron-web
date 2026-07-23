@@ -65,8 +65,13 @@ export function AccountView() {
       {/* header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[0.8125rem] font-medium text-cine-faint">{user.workspace ?? 'Workspace'}</p>
-          <h1 className="mt-1 text-[1.9rem] font-semibold tracking-[-0.03em] text-cine">Account</h1>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-cine-faint">
+            Workspace
+          </p>
+          <h1 className="mt-1.5 text-[1.9rem] font-semibold tracking-[-0.03em] text-cine">
+            {user.workspace || `${user.name}'s workspace`}
+          </h1>
+          <p className="mt-1 text-[0.875rem] text-cine-dim">Account &amp; profile</p>
         </div>
         <a href={logoutUrl('/')} className="btn btn-secondary h-10 px-4 text-[0.8125rem]">
           <LogOut className="h-3.5 w-3.5" strokeWidth={1.75} /> Log out
@@ -109,7 +114,9 @@ export function AccountView() {
             </div>
             <div>
               <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-cine-faint">Workspace</dt>
-              <dd className="mt-1 text-[0.9375rem] text-cine">{user.workspace ?? '—'}</dd>
+              <dd className="mt-1 text-[0.9375rem] text-cine">
+                {user.workspace || `${user.name}'s workspace`}
+              </dd>
             </div>
           </dl>
 

@@ -41,6 +41,10 @@ export async function fetchUsageByOwner<T>(ownerEmail: string): Promise<T | null
   return call<T>(`/v1/usage/by-owner?owner_email=${encodeURIComponent(ownerEmail)}`);
 }
 
+export async function fetchBillingSummary<T>(ownerEmail: string): Promise<T | null> {
+  return call<T>(`/v1/billing/summary?owner_email=${encodeURIComponent(ownerEmail)}`);
+}
+
 type ProvisionItem =
   | { kind: 'plan'; plan_id: string; seats: number; cadence: string }
   | { kind: 'custom'; module_ids: string[]; seats: number; cadence: string }

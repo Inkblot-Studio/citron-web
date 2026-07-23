@@ -4,15 +4,18 @@ import { NextResponse } from 'next/server';
 export async function POST() {
   const cookieName = process.env.SESSION_COOKIE_NAME ?? 'citron_session';
   const res = NextResponse.json({ ok: true });
-  res.cookies.set({
+  const cleared = {
     name: cookieName,
     value: '',
     httpOnly: true,
     secure: true,
-    sameSite: 'lax',
+    sameSite: 'lax' as const,
     path: '/',
-    domain: '.citronos.com',
     maxAge: 0,
-  });
+    expires: new Date(0),
+  };
+  // Clear both host-only and parent-domain variants.
+  res.cookies.set(cleared);
+  res.cookies.set({ ...cleared, domain: '.citronos.com' });
   return res;
 }
