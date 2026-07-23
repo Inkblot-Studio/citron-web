@@ -44,7 +44,7 @@ ${moduleAddons.map((m) => `- ${m.name}: ${formatUSD(m.seatPrice.monthly)} (${for
 ## AI usage model
 ${CREDITS_EXPLAINER}
 Model rates (credits per action): ${modelRates.map((r) => `${r.model}: ${r.creditsPerAction === 0 ? 'unlimited/free' : r.creditsPerAction}`).join('; ')}.
-Credit top-up packs (one-time): ${creditPacks.map((p) => `${p.name} for ${formatUSD(p.price)}`).join('; ')}. Unused top-up credits roll over. Usage dashboard lives at /account/usage.
+Credit top-up packs (one-time): ${creditPacks.map((p) => `${p.name} for ${formatUSD(p.price)}`).join('; ')}. Unused top-up credits roll over. Usage & billing dashboard lives on the billing subdomain (${siteConfig.billing.url}).
 
 ## Offers
 ${launchOffer.headline}. ${launchOffer.detail}

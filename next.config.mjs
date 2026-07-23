@@ -1,3 +1,5 @@
+const BILLING_URL = process.env.NEXT_PUBLIC_BILLING_URL ?? 'https://billing.citronos.com';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -5,6 +7,14 @@ const nextConfig = {
   compress: true,
   images: {
     formats: ['image/avif', 'image/webp'],
+  },
+  async redirects() {
+    // /account (profile) stays on this site. Usage, billing and invoices live
+    // on the billing subdomain — redirect the old sub-routes there.
+    return [
+      { source: '/account/usage', destination: `${BILLING_URL}/usage`, permanent: false },
+      { source: '/account/billing', destination: `${BILLING_URL}/billing`, permanent: false },
+    ];
   },
   async headers() {
     return [

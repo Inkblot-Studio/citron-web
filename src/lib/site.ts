@@ -8,6 +8,10 @@ export const siteConfig = {
   identity: {
     url: process.env.NEXT_PUBLIC_IDENTITY_URL ?? 'https://identity.citronos.com',
   },
+  /** Billing & usage dashboard — separate subdomain app. */
+  billing: {
+    url: process.env.NEXT_PUBLIC_BILLING_URL ?? 'https://billing.citronos.com',
+  },
   studio: {
     name: 'Inkblot Studio',
     url: 'https://inkblotstudio.eu',
@@ -24,12 +28,28 @@ export const siteConfig = {
   },
 } as const;
 
-/** URL into the identity portal, with a return destination on this site. */
+/** URL into the identity portal, with a return destination. */
 export function identityUrl(path: 'login' | 'signup', returnTo?: string) {
   const base = `${siteConfig.identity.url}/${path}`;
   if (!returnTo) return base;
   const dest = returnTo.startsWith('http') ? returnTo : `${siteConfig.url}${returnTo}`;
   return `${base}?redirect_uri=${encodeURIComponent(dest)}`;
+}
+
+/** Absolute URL into the billing/usage subdomain app. */
+export function billingUrl(path = '/') {
+  return `${siteConfig.billing.url}${path}`;
+}
+
+/** Identity portal — profile & security management (owned by identity). */
+export function identityPortalUrl(path = '/') {
+  return `${siteConfig.identity.url}${path}`;
+}
+
+/** Best-effort sign-out through identity, returning to this site. */
+export function logoutUrl(returnTo = '/') {
+  const dest = returnTo.startsWith('http') ? returnTo : `${siteConfig.url}${returnTo}`;
+  return `${siteConfig.identity.url}/logout?redirect_uri=${encodeURIComponent(dest)}`;
 }
 
 export type Module = {

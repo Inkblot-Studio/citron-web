@@ -50,7 +50,8 @@ type ProvisionItem =
 export async function provisionCheckout(
   stripeSessionId: string,
   ownerEmail: string,
-  items: ProvisionItem[]
+  items: ProvisionItem[],
+  stripeCustomerId?: string | null
 ): Promise<boolean> {
   const res = await call<{ workspace_id: string }>(`/v1/provisioning/checkout`, {
     method: 'POST',
@@ -58,6 +59,80 @@ export async function provisionCheckout(
       stripe_session_id: stripeSessionId,
       owner_email: ownerEmail,
       items,
+      stripe_customer_id: stripeCustomerId ?? undefined,
+    }),
+  });
+  return res !== null;
+}
+
+/** Sync a Stripe subscription's status/seats/period to the workspace. */
+export async function syncSubscription(input: {
+  stripeCustomerId?: string | null;
+  ownerEmail?: string | null;
+  stripeSubscriptionId?: string | null;
+  status: string;
+  seats?: number | null;
+  currentPeriodEnd?: number | null;
+}): Promise<boolean> {
+  const res = await call(`/v1/provisioning/subscription`, {
+    method: 'POST',
+    body: JSON.stringify({
+      stripe_customer_id: input.stripeCustomerId ?? undefined,
+      owner_email: input.ownerEmail ?? undefined,
+      stripe_subscription_id: input.stripeSubscriptionId ?? undefined,
+      status: input.status,
+      seats: input.seats ?? undefined,
+      current_period_end: input.currentPeriodEnd ?? undefined,
+    }),
+  });
+  return res !== null;
+}
+
+/** Flag a workspace for dunning after a failed payment. */
+export async function markPaymentFailed(
+  stripeCustomerId?: string | null,
+  ownerEmail?: string | null
+): Promise<boolean> {
+  const res = await call(`/v1/provisioning/payment-failed`, {
+    method: 'POST',
+    body: JSON.stringify({
+      stripe_customer_id: stripeCustomerId ?? undefined,
+      owner_email: ownerEmail ?? undefined,
+    }),
+  });
+  return res !== null;
+}
+
+/** Store/refresh a Stripe invoice for the billing dashboard. */
+export async function upsertInvoice(input: {
+  id: string;
+  stripeCustomerId?: string | null;
+  ownerEmail?: string | null;
+  number?: string | null;
+  amountDue?: number | null;
+  amountPaid?: number | null;
+  currency?: string | null;
+  status?: string | null;
+  hostedInvoiceUrl?: string | null;
+  invoicePdf?: string | null;
+  periodStart?: number | null;
+  periodEnd?: number | null;
+}): Promise<boolean> {
+  const res = await call(`/v1/billing/invoice`, {
+    method: 'POST',
+    body: JSON.stringify({
+      id: input.id,
+      stripe_customer_id: input.stripeCustomerId ?? undefined,
+      owner_email: input.ownerEmail ?? undefined,
+      number: input.number ?? undefined,
+      amount_due: input.amountDue ?? undefined,
+      amount_paid: input.amountPaid ?? undefined,
+      currency: input.currency ?? undefined,
+      status: input.status ?? undefined,
+      hosted_invoice_url: input.hostedInvoiceUrl ?? undefined,
+      invoice_pdf: input.invoicePdf ?? undefined,
+      period_start: input.periodStart ?? undefined,
+      period_end: input.periodEnd ?? undefined,
     }),
   });
   return res !== null;
