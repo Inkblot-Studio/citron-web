@@ -28,12 +28,19 @@ export const siteConfig = {
   },
 } as const;
 
-/** URL into the identity portal, with a return destination. */
+/**
+ * URL into the identity portal. Always returns via `/auth/callback` so we can
+ * mint the shared `.citronos.com` session cookie from the `#token=` fragment.
+ */
 export function identityUrl(path: 'login' | 'signup', returnTo?: string) {
   const base = `${siteConfig.identity.url}/${path}`;
-  if (!returnTo) return base;
-  const dest = returnTo.startsWith('http') ? returnTo : `${siteConfig.url}${returnTo}`;
-  return `${base}?redirect_uri=${encodeURIComponent(dest)}`;
+  const next = returnTo
+    ? returnTo.startsWith('http')
+      ? returnTo
+      : `${siteConfig.url}${returnTo}`
+    : `${siteConfig.url}/account`;
+  const callback = `${siteConfig.url}/auth/callback?next=${encodeURIComponent(next)}`;
+  return `${base}?redirect_uri=${encodeURIComponent(callback)}`;
 }
 
 /** Absolute URL into the billing/usage subdomain app. */
@@ -46,10 +53,10 @@ export function identityPortalUrl(path = '/') {
   return `${siteConfig.identity.url}${path}`;
 }
 
-/** Best-effort sign-out through identity, returning to this site. */
+/** Clear local session cookie, then Identity portal session. */
 export function logoutUrl(returnTo = '/') {
   const dest = returnTo.startsWith('http') ? returnTo : `${siteConfig.url}${returnTo}`;
-  return `${siteConfig.identity.url}/logout?redirect_uri=${encodeURIComponent(dest)}`;
+  return `/auth/logout?next=${encodeURIComponent(dest)}`;
 }
 
 export type Module = {
