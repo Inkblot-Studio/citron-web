@@ -11,7 +11,7 @@ COPY . .
 # Build-time public env (baked into the client bundle)
 ARG NEXT_PUBLIC_SITE_URL=https://citronos.com
 ARG NEXT_PUBLIC_BILLING_URL=https://dashboard.citronos.com
-ARG NEXT_PUBLIC_SETTINGS_URL=https://setting.citronos.com
+ARG NEXT_PUBLIC_SETTINGS_URL=https://settings.citronos.com
 ARG NEXT_PUBLIC_DOWNLOAD_URL=https://download.citronos.com
 ARG NEXT_PUBLIC_IDENTITY_URL=https://identity.citronos.com
 ARG NEXT_PUBLIC_CALENDLY_URL=

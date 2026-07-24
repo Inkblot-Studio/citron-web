@@ -13,7 +13,7 @@ export const siteConfig = {
     url: process.env.NEXT_PUBLIC_BILLING_URL ?? 'https://dashboard.citronos.com',
   },
   settings: {
-    url: process.env.NEXT_PUBLIC_SETTINGS_URL ?? 'https://setting.citronos.com',
+    url: process.env.NEXT_PUBLIC_SETTINGS_URL ?? 'https://settings.citronos.com',
   },
   download: {
     url: process.env.NEXT_PUBLIC_DOWNLOAD_URL ?? 'https://download.citronos.com',
@@ -60,7 +60,7 @@ export function downloadUrl(path = '/') {
   return `${siteConfig.download.url}${path}`;
 }
 
-/** @deprecated Prefer settingsUrl — profile lives on setting.citronos.com */
+/** @deprecated Prefer settingsUrl — profile lives on settings.citronos.com */
 export function identityPortalUrl(path = '/') {
   return `${siteConfig.identity.url}${path}`;
 }
