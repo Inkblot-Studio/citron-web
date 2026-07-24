@@ -12,6 +12,12 @@ export const siteConfig = {
   billing: {
     url: process.env.NEXT_PUBLIC_BILLING_URL ?? 'https://dashboard.citronos.com',
   },
+  settings: {
+    url: process.env.NEXT_PUBLIC_SETTINGS_URL ?? 'https://setting.citronos.com',
+  },
+  download: {
+    url: process.env.NEXT_PUBLIC_DOWNLOAD_URL ?? 'https://download.citronos.com',
+  },
   studio: {
     name: 'Inkblot Studio',
     url: 'https://inkblotstudio.eu',
@@ -46,7 +52,15 @@ export function billingUrl(path = '/') {
   return `${siteConfig.billing.url}${path}`;
 }
 
-/** Identity portal — profile & security management (owned by identity). */
+export function settingsUrl(path = '/') {
+  return `${siteConfig.settings.url}${path}`;
+}
+
+export function downloadUrl(path = '/') {
+  return `${siteConfig.download.url}${path}`;
+}
+
+/** @deprecated Prefer settingsUrl — profile lives on setting.citronos.com */
 export function identityPortalUrl(path = '/') {
   return `${siteConfig.identity.url}${path}`;
 }

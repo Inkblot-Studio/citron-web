@@ -14,7 +14,7 @@ import {
   User,
 } from 'lucide-react';
 import { useSession } from '@/lib/useSession';
-import { identityUrl, identityPortalUrl, billingUrl, logoutUrl } from '@/lib/site';
+import { identityUrl, billingUrl, settingsUrl, downloadUrl, logoutUrl } from '@/lib/site';
 
 /**
  * Account profile on the main site. Identity data (name, email) is owned by
@@ -121,10 +121,10 @@ export function AccountView() {
           </dl>
 
           <a
-            href={identityPortalUrl('/')}
+            href={settingsUrl('/')}
             className="mt-5 inline-flex items-center gap-1 text-[0.8125rem] font-semibold text-[var(--cine-amber)] hover:underline"
           >
-            Edit profile in Identity <ArrowUpRight className="h-3.5 w-3.5" />
+            Edit profile in Settings <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
         </div>
 
@@ -135,11 +135,24 @@ export function AccountView() {
             <h2 className="text-[1rem] font-semibold text-cine">Security</h2>
           </div>
           <p className="mt-2 max-w-xl text-[0.875rem] leading-relaxed text-cine-dim">
-            Password, two-factor authentication, and connected sign-in methods are
-            managed securely in Citron Identity.
+            Password and security preferences are managed in Citron Settings.
           </p>
-          <a href={identityPortalUrl('/')} className="btn btn-secondary mt-4 h-10 px-4 text-[0.8125rem]">
-            Manage security <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+          <a href={settingsUrl('/')} className="btn btn-secondary mt-4 h-10 px-4 text-[0.8125rem]">
+            Open settings <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+          </a>
+        </div>
+
+        {/* download */}
+        <div className="rounded-[var(--radius-xl)] cine-card p-6">
+          <div className="flex items-center gap-2">
+            <Gauge className="h-4 w-4 text-[var(--cine-amber)]" />
+            <h2 className="text-[1rem] font-semibold text-cine">Desktop app</h2>
+          </div>
+          <p className="mt-2 max-w-xl text-[0.875rem] leading-relaxed text-cine-dim">
+            Download Citron for Windows when your plan is active.
+          </p>
+          <a href={downloadUrl('/')} className="btn btn-secondary mt-4 h-10 px-4 text-[0.8125rem]">
+            Go to downloads <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
           </a>
         </div>
 
