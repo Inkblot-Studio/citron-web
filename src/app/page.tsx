@@ -1,22 +1,14 @@
-import { Hero } from '@/components/home/Hero';
-import {
-  AiSection,
-  FinalCtaSection,
-  HowItWorksSection,
-  ModulesSection,
-  PricingTeaserSection,
-  ProofSection,
-} from '@/components/home/sections';
+import { LineHero } from '@/components/home/LineHero';
+import { BuiltSoFar } from '@/components/home/BuiltSoFar';
+import { ProductLine } from '@/components/products/ProductLine';
+import { FinalCtaSection } from '@/components/home/sections';
 
 export default function HomePage() {
   return (
     <>
-      <Hero />
-      <ModulesSection />
-      <AiSection />
-      <HowItWorksSection />
-      <ProofSection />
-      <PricingTeaserSection />
+      <LineHero />
+      <ProductLine />
+      <BuiltSoFar />
       <FinalCtaSection />
     </>
   );

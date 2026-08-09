@@ -14,7 +14,7 @@ import { cn } from '@/lib/cn';
 const NAV_LINKS = [
   { label: 'Product', href: '/#modules' },
   { label: 'Solutions', href: '/solutions' },
-  { label: 'Pricing', href: '/pricing' },
+  { label: 'Products', href: '/products' },
   { label: 'Build your own', href: '/build' },
 ];
 
@@ -79,7 +79,7 @@ export function Navbar() {
           )}
 
           <a
-            href={user ? '/pricing' : identityUrl('signup')}
+            href={user ? '/products' : identityUrl('signup')}
             className="btn btn-primary hidden h-10 pl-5 pr-1.5 text-[0.8125rem] sm:inline-flex"
           >
             {user ? 'Upgrade' : 'Start free trial'}
@@ -151,7 +151,7 @@ export function Navbar() {
               transition={{ duration: 0.55, ease: EASE, delay: 0.38 }}
             >
               <a
-                href={user ? '/pricing' : identityUrl('signup')}
+                href={user ? '/products' : identityUrl('signup')}
                 onClick={close}
                 className="btn btn-primary h-13 w-full py-3.5 pl-6 pr-2 text-[0.9375rem]"
               >
