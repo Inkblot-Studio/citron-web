@@ -9,7 +9,6 @@ const COLUMNS: { title: string; links: { label: string; href: string; external?:
       { label: 'Overview', href: '/#modules' },
       { label: 'Solutions', href: '/solutions' },
       { label: 'Products', href: '/products' },
-      { label: 'Build your own', href: '/build' },
     ],
   },
   {

@@ -126,8 +126,8 @@ export function ModulesSection() {
         <Reveal>
           <p className="mt-10 text-center text-[0.9rem] text-cine-dim">
             Need only some of it?{' '}
-            <Link href="/build" className="font-semibold text-[var(--cine-amber)] hover:underline">
-              Build your own platform
+            <Link href="/products" className="font-semibold text-[var(--cine-amber)] hover:underline">
+              See the whole line
             </Link>{' '}
             from individual modules.
           </p>
@@ -424,8 +424,8 @@ export function PricingTeaserSection() {
                 <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
               </span>
             </Link>
-            <Link href="/build" className="btn btn-secondary h-12 px-6 text-[0.9rem]">
-              Build your own
+            <Link href="/products" className="btn btn-secondary h-12 px-6 text-[0.9rem]">
+              See the products
             </Link>
           </div>
         </Reveal>

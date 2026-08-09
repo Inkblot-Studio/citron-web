@@ -266,10 +266,10 @@ export function PricingView() {
             </p>
           </div>
           <Link
-            href="/build"
+            href="/products"
             className="group inline-flex h-11 shrink-0 items-center gap-2 rounded-[var(--radius-lg)] border border-[var(--cine-line)] px-5 text-[0.875rem] font-semibold text-cine transition hover:border-[var(--cine-amber-bright)] hover:text-[var(--cine-amber)]"
           >
-            Build your own
+            See the products
             <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>
         </div>

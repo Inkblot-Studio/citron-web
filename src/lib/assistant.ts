@@ -37,10 +37,6 @@ Citron is the AI Business Operating System by Inkblot Studio: one platform repla
 ## Plans (self-serve at /pricing, checkout via Stripe)
 ${planLines()}
 
-## Build-your-own (B2B, at /build)
-Base platform "${basePlatform.name}": ${formatUSD(basePlatform.seatPrice.monthly)}/seat/mo (${formatUSD(basePlatform.seatPrice.annual)} annual) including Command Center, unified data model, unlimited local AI, ${basePlatform.includedCredits} credits/mo. Module add-ons per seat/month:
-${moduleAddons.map((m) => `- ${m.name}: ${formatUSD(m.seatPrice.monthly)} (${formatUSD(m.seatPrice.annual)} annual) — ${m.blurb}`).join('\n')}
-
 ## AI usage model
 ${CREDITS_EXPLAINER}
 Model rates (credits per action): ${modelRates.map((r) => `${r.model}: ${r.creditsPerAction === 0 ? 'unlimited/free' : r.creditsPerAction}`).join('; ')}.
@@ -63,7 +59,7 @@ Rules:
 - Answer only from the product knowledge below. If you don't know something, say so and offer the sales email or a demo.
 - Never invent prices, features, discounts, or commitments.
 - Keep answers short (2-4 sentences) and conversational. Use plain text, no markdown headers.
-- Guide toward the next step when natural: start a free trial (signup), see /pricing, configure /build, or book a /demo for B2B evaluations.
+- Guide toward the next step when natural: start a free trial (signup), see /products, or book a /demo for B2B evaluations.
 - If asked about competitors, be fair and focus on Citron's strengths: one unified system, unlimited private local AI, hosted frontier models via credits.
 
 ${PRODUCT_KNOWLEDGE}`;
@@ -99,7 +95,6 @@ const INTENTS: Intent[] = [
       `Citron has three plans: Starter at ${formatUSD(29)}/seat/mo, Growth at ${formatUSD(69)}/seat/mo (most popular — the full platform), and Enterprise with custom pricing. Annual billing saves ${ANNUAL_DISCOUNT_LABEL}, and every plan includes unlimited local Citron AI. B2B teams can also build a custom bundle from individual modules.`,
     suggestions: [
       { label: 'See plans', href: '/pricing' },
-      { label: 'Build your own', href: '/build' },
       { label: 'How do AI credits work?' },
     ],
   },
@@ -135,10 +130,9 @@ const INTENTS: Intent[] = [
   {
     match: /module|feature|include|what.*(do|does|can)|crm|invoic|accounting|marketing|automation|analytics|task|schedul|collab/i,
     reply: () =>
-      'Citron covers your whole business in one system: CRM, sales pipelines, marketing, lead management, automations, tasks, collaboration, scheduling, invoicing, accounting, analytics, and autonomous AI agents — all sharing one data model, so the AI can act across everything. On Growth you get the full platform; on /build you pick exactly the modules you need.',
+      'Citron covers your whole business in one system: CRM, sales pipelines, marketing, lead management, automations, tasks, collaboration, scheduling, invoicing, accounting, analytics, and autonomous AI agents — all sharing one data model, so the AI can act across everything. One subscription opens every app, so there is nothing to configure.',
     suggestions: [
       { label: 'Explore modules', href: '/#modules' },
-      { label: 'Build your own', href: '/build' },
       { label: 'What does Citron cost?' },
     ],
   },

@@ -218,8 +218,8 @@ export function CartView() {
               <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
             </span>
           </Link>
-          <Link href="/build" className="btn btn-secondary h-11 px-5 text-[0.875rem]">
-            Build your own
+          <Link href="/products" className="btn btn-secondary h-11 px-5 text-[0.875rem]">
+            See the products
           </Link>
         </div>
       </div>
