@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { label: 'Product', href: '/#modules' },
   { label: 'Solutions', href: '/solutions' },
   { label: 'Products', href: '/products' },
+  { label: 'Citron One', href: '/#citron-one' },
   { label: 'Build your own', href: '/build' },
 ];
 

@@ -4,6 +4,14 @@ export type Stage = 'shipping' | 'preview' | 'building';
 
 export type Glyph = 'citron' | 'target' | 'ledger' | 'card' | 'person';
 
+/** Who buys it. Some products genuinely serve both. */
+export type Segment = 'people' | 'business';
+
+export const SEGMENT_LABEL: Record<Segment, string> = {
+  people: 'For people',
+  business: 'For business',
+};
+
 export interface Product {
   slug: string;
   name: string;
@@ -15,6 +23,11 @@ export interface Product {
   glyph: Glyph;
   platform: string;
   stage: Stage;
+  segments: Segment[];
+  /** The person who opens it every day, named plainly. */
+  audience: string;
+  /** The moment it earns its keep. */
+  useCase: string;
   /** What it actually does today — no roadmap, no promises. */
   capabilities: string[];
 }
@@ -36,6 +49,11 @@ export const PRODUCTS: Product[] = [
     glyph: 'citron',
     platform: 'macOS · Windows · Linux',
     stage: 'shipping',
+    segments: ['people', 'business'],
+    audience:
+      'Anyone who cannot send their work to somebody else\u2019s cloud \u2014 lawyers, accountants, clinicians, researchers, and the freelancers who sign the same confidentiality clauses.',
+    useCase:
+      'A client contract, a patient note or an unreleased set of accounts needs summarising, and it must not leave the building to do it.',
     capabilities: [
       'Local-first — models run on your own machine',
       'Documents, email, notes and calendar in one place',
@@ -52,6 +70,11 @@ export const PRODUCTS: Product[] = [
     glyph: 'target',
     platform: 'macOS',
     stage: 'shipping',
+    segments: ['people', 'business'],
+    audience:
+      'The person who did not grow up with this. Parents and grandparents, staff on their first week, anyone handed software nobody had time to teach them \u2014 and the IT desk that fields the same question forty times.',
+    useCase:
+      'Somebody is stuck on a screen they have never seen, and the alternative is a phone call to a relative or a ticket that takes a day.',
     capabilities: [
       'Works in any app that publishes an accessibility tree',
       'Most answers never reach a model, and never leave the machine',
@@ -68,6 +91,11 @@ export const PRODUCTS: Product[] = [
     glyph: 'ledger',
     platform: 'Web',
     stage: 'preview',
+    segments: ['business'],
+    audience:
+      'Owners and back-office of hospitality groups \u2014 the person who signs off stock, the bookkeeper who closes the month, and the accountant who has to defend it.',
+    useCase:
+      'Month end. Stock, sales and the VAT ledger have to agree without a week of spreadsheets stitched together by hand.',
     capabilities: [
       'Real-time inventory depletion from recipes',
       'Automated journal posting, VAT ledgers, fiscal device drivers',
@@ -84,6 +112,11 @@ export const PRODUCTS: Product[] = [
     glyph: 'card',
     platform: 'iPad · Web',
     stage: 'preview',
+    segments: ['business'],
+    audience:
+      'Restaurants, bars and caf\u00e9s \u2014 the floor staff who touch it two hundred times a shift, and the manager who counts the drawer at the end of it.',
+    useCase:
+      'Friday service, full room, and the internet drops. Orders keep going through and reconcile when the line comes back.',
     capabilities: [
       'Offline-first — service continues without a network',
       'Floor plan, order flow, split payments, kitchen display',
@@ -100,6 +133,11 @@ export const PRODUCTS: Product[] = [
     glyph: 'person',
     platform: 'Web',
     stage: 'building',
+    segments: ['business'],
+    audience:
+      'Whoever owns the guest relationship \u2014 the host stand, the marketing lead, the owner who still remembers regulars by name and wants the system to as well.',
+    useCase:
+      'A regular walks in. The table, the allergy, the usual order and the loyalty balance are on one screen before they sit down.',
     capabilities: [
       'A unified guest record across venues',
       'Loyalty ledger attached to real orders',

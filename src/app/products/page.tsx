@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ProductLine } from '@/components/products/ProductLine';
+import { SegmentedLine } from '@/components/products/SegmentedLine';
 
 export const metadata: Metadata = {
   title: 'Products',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function ProductsPage() {
-  return <ProductLine />;
+  return <SegmentedLine />;
 }

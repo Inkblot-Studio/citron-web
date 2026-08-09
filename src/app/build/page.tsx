@@ -1,40 +1,67 @@
 import type { Metadata } from 'next';
-import { Configurator } from '@/components/commerce/Configurator';
-import { Reveal } from '@/components/ui/Reveal';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Build your own platform',
+  title: 'Build your own',
   description:
-    'Configure Citron for your organization: pick modules, set seats, and see your price instantly. Base platform with unlimited local AI included.',
+    'Citron One already includes every app. Build your own is the work beyond it — software built on the Citron platform for how your business actually runs.',
   alternates: { canonical: '/build' },
 };
 
+const WORK = [
+  {
+    heading: 'On top of the platform, not beside it',
+    body: 'Whatever we build for you sits on the same ledger, the same guest record and the same design system as the rest of the line. It is not an integration that has to be kept in step — it is part of the system, and it stays working when the products move.',
+  },
+  {
+    heading: 'For the part nobody else has',
+    body: 'Every business has one process that no product covers, because it is the thing that makes it different. A production kitchen with its own yield maths. A membership that works nothing like a loyalty card. That is what this is for.',
+  },
+  {
+    heading: 'Built by the people who built the products',
+    body: 'The same studio, the same standards, the same code. Not a partner network, not an outsourced delivery arm — the people who wrote the platform are the ones extending it.',
+  },
+  {
+    heading: 'It stays yours',
+    body: 'Run it on your own hardware, on your own terms. If we ever part ways, the data and the deployment are already where you can reach them.',
+  },
+];
+
 export default function BuildPage() {
   return (
-    <section className="relative min-h-screen pb-28 pt-32 sm:pt-36">
-      <div className="mx-auto w-full max-w-[1120px] px-5 sm:px-8 lg:px-10">
-        <div className="mx-auto max-w-2xl text-center">
-          <Reveal>
-            <span className="eyebrow-pill">Build your own</span>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h1 className="mt-5 text-[2.4rem] font-semibold leading-[1.05] tracking-[-0.04em] text-cine sm:text-[3rem]">
-              Exactly the platform <span className="gradient-amber">you need.</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="mx-auto mt-5 max-w-xl text-[1rem] leading-relaxed text-cine-dim">
-              Start with the Citron base platform — Command Center, unified data
-              model, and unlimited local AI — then add modules per seat. Your
-              price updates as you build.
-            </p>
-          </Reveal>
-        </div>
+    <article className="cw-build">
+      <header className="cw-line__head">
+        <p className="cw-eyebrow">Build your own</p>
+        <h1 className="cw-build__title">
+          The apps are included. This is for what they <em>do not</em> cover.
+        </h1>
+        <p className="cw-line__lede">
+          Citron One already opens every app we make, so there is nothing to configure and no
+          modules to pick. Build your own is the work beyond the products — software written for the
+          one process your business does differently, on the platform the rest of it already runs
+          on.
+        </p>
+      </header>
 
-        <div className="mt-14">
-          <Configurator />
-        </div>
+      <div className="cw-work__grid">
+        {WORK.map((item) => (
+          <section key={item.heading} className="cw-work__item">
+            <h2 className="cw-work__heading">{item.heading}</h2>
+            <p className="cw-work__body">{item.body}</p>
+          </section>
+        ))}
       </div>
-    </section>
+
+      <footer className="cw-build__foot">
+        <h2 className="cw-build__cta">Tell us the part that does not fit.</h2>
+        <p className="cw-line__lede">
+          Scoped and quoted per project, after a conversation about what you actually do. We would
+          rather turn down work we cannot do well than sell you a configuration screen.
+        </p>
+        <Link href="/demo" className="cw-btn cw-btn--primary">
+          Start that conversation
+        </Link>
+      </footer>
+    </article>
   );
 }
