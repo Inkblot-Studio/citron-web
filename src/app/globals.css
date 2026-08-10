@@ -1263,3 +1263,221 @@
   font-size: 0.82rem;
   line-height: 1.4;
 }
+
+/* ── pricing ──────────────────────────────────────────────────────────────
+ * Two audiences, one subscription each, and the price left honest at TBD.
+ * The objections sit directly under the plan they belong to, because that is
+ * where they are actually asked.
+ */
+
+.pr {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 6rem) 1.5rem clamp(4rem, 8vw, 6rem);
+}
+
+.pr__head {
+  max-width: 44ch;
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.pr__title {
+  margin: 0;
+  font-size: clamp(2.2rem, 5.5vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+}
+
+.pr__lede {
+  margin: 1.1rem 0 0;
+  color: var(--c-text-muted, #6f6a62);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.pr__seg {
+  padding: clamp(2rem, 5vw, 3rem) 0;
+  border-top: 1px solid var(--c-border, #dcd8d1);
+}
+
+.pr__segTitle {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.pr__segLede {
+  margin: 0.6rem 0 0;
+  max-width: 56ch;
+  color: var(--c-text-muted, #6f6a62);
+  line-height: 1.6;
+}
+
+.pr__plan {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-top: 2rem;
+  padding: 1.75rem;
+  border: 1px solid var(--c-border, #dcd8d1);
+  border-radius: 18px;
+  background: var(--c-surface, #fff);
+}
+
+@media (max-width: 44rem) {
+  .pr__plan {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pr__planName {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.pr__planWho {
+  margin: 0.35rem 0 0;
+  color: var(--c-text-muted, #6f6a62);
+  font-size: 0.95rem;
+}
+
+.pr__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 1.5rem 0 0;
+}
+
+/* A placeholder that reads as deliberate, not as a missing value. */
+.pr__priceValue {
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--c-text-muted, #8a8378);
+}
+
+.pr__priceUnit {
+  color: var(--c-text-muted, #8a8378);
+  font-family: var(--c-font-mono, ui-monospace, monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pr__cta {
+  display: inline-flex;
+  margin-top: 1.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 999px;
+  background: var(--c-ink, #14120f);
+  color: var(--c-paper, #f7f6f4);
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+
+.pr__includes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pr__includes li {
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--c-border, #dcd8d1);
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+.pr__includes li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.pr__faq {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0 0;
+}
+
+.pr__faqItem dt {
+  font-size: 0.94rem;
+  font-weight: 500;
+}
+
+.pr__faqItem dd {
+  margin: 0.3rem 0 0;
+  color: var(--c-text-muted, #6f6a62);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.pr__disc {
+  padding: clamp(2rem, 5vw, 3rem) 0;
+  border-top: 1px solid var(--c-border, #dcd8d1);
+}
+
+.pr__discGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.75rem 1.5rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pr__discName {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+
+.pr__discRate {
+  color: var(--c-text-muted, #8a8378);
+  font-family: var(--c-font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+}
+
+.pr__discWho {
+  margin: 0;
+  color: var(--c-text-muted, #6f6a62);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.pr__discProof {
+  margin: 0.4rem 0 0;
+  color: var(--c-text-muted, #8a8378);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.pr__note {
+  margin-top: 1rem;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--c-border, #dcd8d1);
+  border-radius: 16px;
+  background: var(--c-paper, #f7f6f4);
+}
+
+.pr__note p {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--c-text-muted, #6f6a62);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.pr__noteLink {
+  display: inline-block;
+  margin-top: 0.85rem;
+  color: inherit;
+  font-size: 0.92rem;
+}

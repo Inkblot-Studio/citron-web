@@ -13,7 +13,7 @@ import { cn } from '@/lib/cn';
 
 const NAV_LINKS = [
   { label: 'Products', href: '/products' },
-  { label: 'Citron One', href: '/#citron-one' },
+  { label: 'Pricing', href: '/pricing' },
   { label: 'Download', href: '/download' },
 ];
 

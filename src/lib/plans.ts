@@ -19,6 +19,10 @@ export interface Plan {
   includes: string[];
   /** How it is counted — the honest unit, not a marketing one. */
   unit: string;
+  /** Who it is aimed at, so the page can split B2C from B2B. */
+  audience: 'people' | 'business';
+  /** What the plan answers before anyone asks. */
+  answers: { question: string; answer: string }[];
   featured?: boolean;
 }
 
@@ -27,7 +31,14 @@ export const PLANS: Plan[] = [
     slug: 'personal',
     name: 'Citron One',
     who: 'One person, at home or self-employed.',
-    unit: 'per person',
+    unit: 'per person, per month',
+    audience: 'people',
+    answers: [
+      { question: 'Is there a free tier?', answer: 'The launcher is free. The apps are the subscription.' },
+      { question: 'Do I pay per app?', answer: 'No. One subscription opens all of them, including the ones not out yet.' },
+      { question: 'Is there a usage bill?', answer: 'No. The models run on your machine, so there is nothing to meter.' },
+      { question: 'Can I stop?', answer: 'Monthly, cancel whenever. Annual is cheaper and refundable pro rata.' },
+    ],
     includes: [
       'Citron — the private AI workspace',
       'Citron Guide — on-screen guidance in any app',
@@ -40,7 +51,14 @@ export const PLANS: Plan[] = [
     slug: 'business',
     name: 'Citron One for Business',
     who: 'A venue, or a group of them.',
-    unit: 'per venue',
+    unit: 'per site, per month',
+    audience: 'business',
+    answers: [
+      { question: 'Do you charge per employee?', answer: 'No. Staff accounts are unlimited — you are charged per site.' },
+      { question: 'What about setup?', answer: 'Quoted once, after we have seen how you work. No surprise onboarding fee.' },
+      { question: 'More than one site?', answer: 'Each site is priced the same, and the discount grows with the count.' },
+      { question: 'Who owns the data?', answer: 'You do. It runs on your hardware and leaves with you if we part ways.' },
+    ],
     includes: [
       'Everything in Citron One, for every member of staff',
       'Citron ERP — stock, accounting, VAT and fiscal compliance',
