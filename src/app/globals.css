@@ -833,3 +833,69 @@
 .cw-build__foot .cw-btn {
   margin-top: 1.75rem;
 }
+
+/* ── colour, used with intent ─────────────────────────────────────────────
+ * A product's colour appears where that product is being discussed and
+ * nowhere else: its tile, its stage label, the rule beside its capabilities,
+ * and the edge of its card on hover. The page itself stays paper and ink.
+ */
+
+/* The line of swatches under the hero doubles as a legend for everything below. */
+.cw-swatch {
+  padding: 0.35rem 0.75rem 0.35rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.cw-swatch:hover {
+  border-color: var(--c-border, #dcd8d1);
+}
+
+/* Cards carry a hairline of their own colour along the top edge. */
+.cw-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--c-surface, #fff);
+}
+
+.cw-card::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: 3px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.cw-card:hover::before {
+  opacity: 1;
+}
+
+.cw-card__stage {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* Each section of the plan grid picks up the segment it belongs to. */
+.cw-plan--featured {
+  border-color: color-mix(in srgb, #c9a227 45%, var(--c-border, #dcd8d1));
+}
+
+.cw-plan--featured .cw-plan__name {
+  color: #a8871d;
+}
+
+/* The mark sits a little away from the text now that it is larger. */
+.cw-card {
+  gap: 1.35rem;
+  align-items: flex-start;
+}
+
+.cw-product__head .cw-card__stage {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+}

@@ -12,7 +12,6 @@ import { useSession } from '@/lib/useSession';
 import { cn } from '@/lib/cn';
 
 const NAV_LINKS = [
-  { label: 'Product', href: '/#modules' },
   { label: 'Solutions', href: '/solutions' },
   { label: 'Products', href: '/products' },
   { label: 'Citron One', href: '/#citron-one' },
@@ -52,7 +51,10 @@ export function Navbar() {
       >
         <Logo />
 
-        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Main">
+        <nav
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-0.5 lg:flex"
+          aria-label="Main"
+        >
           {NAV_LINKS.map((l) => (
             <NavLink key={l.href} href={l.href} label={l.label} />
           ))}

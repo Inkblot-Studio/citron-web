@@ -1,13 +1,18 @@
 import type { Glyph } from '@/lib/products';
 
-const WELL = '#14120f';
+/**
+ * The site is paper, not ink. A dark tile punches a hole in a light page, so
+ * the mark inverts: a tinted well in the product's own colour, and the glyph
+ * in the colour itself.
+ */
+const WELL_TINT = 10;
 
 /**
  * One tile, one colour, one glyph — the same marks the launcher uses.
  * Citron itself is the mascot; the others are drawn in the same hand, from
  * solid rectangles on one grid, and never repeat the face.
  */
-function Shape({ glyph, accent }: { glyph: Glyph; accent: string }) {
+function Shape({ glyph, accent, well }: { glyph: Glyph; accent: string; well: string }) {
   switch (glyph) {
     case 'citron':
       return (
@@ -21,7 +26,7 @@ function Shape({ glyph, accent }: { glyph: Glyph; accent: string }) {
       return (
         <>
           <rect x="18" y="18" width="64" height="64" fill={accent} />
-          <rect x="31" y="31" width="38" height="38" fill={WELL} />
+          <rect x="31" y="31" width="38" height="38" fill={well} />
           <rect x="42" y="42" width="16" height="16" fill={accent} />
         </>
       );
@@ -37,7 +42,7 @@ function Shape({ glyph, accent }: { glyph: Glyph; accent: string }) {
       return (
         <>
           <rect x="18" y="26" width="64" height="48" fill={accent} />
-          <rect x="30" y="39" width="40" height="14" fill={WELL} />
+          <rect x="30" y="39" width="40" height="14" fill={well} />
         </>
       );
     case 'person':
@@ -53,16 +58,18 @@ function Shape({ glyph, accent }: { glyph: Glyph; accent: string }) {
 export function ProductMark({
   glyph,
   accent,
-  size = 56,
+  size = 76,
 }: {
   glyph: Glyph;
   accent: string;
   size?: number;
 }) {
+  const well = `color-mix(in srgb, ${accent} ${WELL_TINT}%, #ffffff)`;
+
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden="true">
-      <rect width="100" height="100" rx="24" fill={WELL} />
-      <Shape glyph={glyph} accent={accent} />
+      <rect width="100" height="100" rx="24" fill={well} />
+      <Shape glyph={glyph} accent={accent} well={well} />
     </svg>
   );
 }
