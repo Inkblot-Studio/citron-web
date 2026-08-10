@@ -7,7 +7,6 @@ const COLUMNS: { title: string; links: { label: string; href: string; external?:
     title: 'Product',
     links: [
       { label: 'Overview', href: '/#modules' },
-      { label: 'Solutions', href: '/solutions' },
       { label: 'Products', href: '/products' },
     ],
   },

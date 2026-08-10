@@ -213,62 +213,6 @@ export type Solution = {
   modules: string[];
 };
 
-export const solutions: Solution[] = [
-  {
-    slug: 'startups',
-    audience: 'Startups',
-    headline: 'Run lean. Move fast. Stay coordinated.',
-    description:
-      'One system from day one. Skip the tool sprawl and the integration debt. Citron grows with you from first customer to Series B.',
-    outcomes: ['Set up in a day', 'No integration overhead', 'AI doing the work of a bigger team'],
-    modules: ['CRM', 'Sales Pipelines', 'Automations', 'Invoicing'],
-  },
-  {
-    slug: 'agencies',
-    audience: 'Agencies',
-    headline: 'Every client, every project, one operating system.',
-    description:
-      'Manage clients, campaigns, deliverables, and billing in one place. Give every account the attention of a dedicated team.',
-    outcomes: ['Client-ready reporting', 'Profitability per account', 'Automated retainer billing'],
-    modules: ['Marketing', 'Tasks', 'Invoicing', 'Analytics'],
-  },
-  {
-    slug: 'professional-services',
-    audience: 'Professional Services',
-    headline: 'Bill your expertise, not your admin.',
-    description:
-      'Track engagements, time, and outcomes while Citron handles the operational overhead behind the scenes.',
-    outcomes: ['Engagement-level visibility', 'Automated time-to-invoice', 'Resourcing intelligence'],
-    modules: ['CRM', 'Scheduling', 'Accounting', 'Tasks'],
-  },
-  {
-    slug: 'consultancies',
-    audience: 'Consultancies',
-    headline: 'Institutional knowledge, instantly accessible.',
-    description:
-      'Capture what your firm knows and let AI surface it on every engagement. Onboard faster, deliver sharper.',
-    outcomes: ['Searchable knowledge engine', 'Faster onboarding', 'Consistent delivery'],
-    modules: ['AI Agents', 'Collaboration', 'Tasks', 'Analytics'],
-  },
-  {
-    slug: 'sales-teams',
-    audience: 'Sales Teams',
-    headline: 'Sell more. Update less.',
-    description:
-      'Citron keeps the pipeline current, drafts the follow-ups, and tells reps exactly where to spend the next hour.',
-    outcomes: ['Pipeline that updates itself', 'AI-drafted outreach', 'Accurate forecasting'],
-    modules: ['Sales Pipelines', 'Lead Management', 'AI Agents', 'Analytics'],
-  },
-  {
-    slug: 'operations-teams',
-    audience: 'Operations Teams',
-    headline: 'The control room for the whole business.',
-    description:
-      'Connect every process, automate the busywork, and get a single source of truth that the entire company trusts.',
-    outcomes: ['One source of truth', 'Process automation', 'Cross-team visibility'],
-    modules: ['Automations', 'Analytics', 'Tasks', 'Collaboration'],
-  },
-];
 
 export type AiCommand = {
   prompt: string;

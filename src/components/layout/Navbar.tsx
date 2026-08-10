@@ -12,9 +12,9 @@ import { useSession } from '@/lib/useSession';
 import { cn } from '@/lib/cn';
 
 const NAV_LINKS = [
-  { label: 'Solutions', href: '/solutions' },
   { label: 'Products', href: '/products' },
   { label: 'Citron One', href: '/#citron-one' },
+  { label: 'Download', href: '/download' },
 ];
 
 const EASE = [0.32, 0.72, 0, 1] as const;
