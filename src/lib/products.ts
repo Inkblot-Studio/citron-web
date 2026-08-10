@@ -59,7 +59,7 @@ export const PRODUCTS: Product[] = [
     useCase:
       'A client contract, a patient note or an unreleased set of figures needs reading and summarising, and it must not leave the building to do it.',
     cta: { label: 'Download Citron', href: '/download' },
-    hook: 'The AI that never phones home.',
+    hook: 'A private AI workspace that runs on your own hardware',
     capabilities: [
       'Local-first — models run on your own machine',
       'Documents, email, notes and calendar in one place',
@@ -82,7 +82,7 @@ export const PRODUCTS: Product[] = [
     useCase:
       'Somebody is stuck on a screen they have never seen, and the alternative is a phone call to a relative or a ticket that takes a day.',
     cta: { label: 'Download Citron Guide', href: '/download' },
-    hook: 'Stop hunting for the button.',
+    hook: 'On-screen guidance for any app on your Mac',
     capabilities: [
       'Works in any app that publishes an accessibility tree',
       'Most answers never reach a model, and never leave the machine',
@@ -105,7 +105,7 @@ export const PRODUCTS: Product[] = [
     useCase:
       'Month end. Stock, sales and the VAT ledger have to agree without a week of spreadsheets stitched together by hand.',
     cta: { label: 'Ask about ERP', href: '/demo' },
-    hook: 'Month end, without the spreadsheet.',
+    hook: 'Stock, invoicing and VAT compliance in one system',
     capabilities: [
       'Stock depletes in real time as items are sold',
       'Automated journal posting, VAT ledgers, fiscal device drivers',
@@ -128,7 +128,7 @@ export const PRODUCTS: Product[] = [
     useCase:
       'Saturday, queue at the counter, and the internet drops. Sales keep going through and reconcile when the line comes back.',
     cta: { label: 'Ask about POS', href: '/demo' },
-    hook: 'Keeps selling when the internet stops.',
+    hook: 'Offline-first point of sale software',
     capabilities: [
       'Offline-first — service continues without a network',
       'Order flow, split payments, counter and kitchen displays',
@@ -151,7 +151,7 @@ export const PRODUCTS: Product[] = [
     useCase:
       'A regular walks in. Their history, their preferences and their loyalty balance are on screen before they reach the counter.',
     cta: { label: 'Ask about CRM', href: '/demo' },
-    hook: 'Know them before they reach the counter.',
+    hook: 'One customer record across your whole business',
     capabilities: [
       'One customer record across every site',
       'Loyalty attached to real orders, not a separate card scheme',
@@ -164,7 +164,7 @@ export const LAUNCHER: Product = {
   slug: 'launcher',
   name: 'Inkblot Launcher',
   tagline: 'Every app we make, in one window.',
-  hook: 'One window. Every app.',
+  hook: 'Install and update every Citron app from one place',
   summary:
     'The launcher installs and updates everything in the line, and keeps track of what you already have. Free, and the fastest way to get started — install it once and the apps you are entitled to are a click away.',
   accent: '#14120f',

@@ -28,20 +28,20 @@ export const DICTIONARIES: Record<Locale, Dictionary> = {
   en: {
     hero: {
       eyebrow: 'Inkblot Studio',
-      title: 'Tools that run on your hardware,',
-      titleEm: 'not somebody else’s.',
+      title: 'Business software that runs on',
+      titleEm: 'your own hardware.',
       lede: 'A private AI workspace. On-screen guidance for any app you use. The till, the stock and the customer record a business runs on. Built as one line, so the ones you pick already know about each other.',
       seeLine: 'See the tools',
       talk: 'Talk to us',
     },
     people: {
       eyebrow: 'For people',
-      title: 'For the person at the screen.',
+      title: 'Apps for the person at the screen',
       lede: 'One keeps your work on your own machine. The other makes any software easier to use than it was designed to be. Neither needs you to change how you already work.',
     },
     business: {
       eyebrow: 'For business',
-      title: 'For the business running on it.',
+      title: 'Software a business runs on',
       lede: 'Sell, count what is left, and remember who bought it. Three tools over one ledger, so the till and the books never disagree about what happened.',
     },
     one: {
@@ -63,20 +63,20 @@ export const DICTIONARIES: Record<Locale, Dictionary> = {
   bg: {
     hero: {
       eyebrow: 'Inkblot Studio',
-      title: 'Инструменти, които работят на вашия компютър,',
-      titleEm: 'не на чужд.',
+      title: 'Бизнес софтуер, който работи на',
+      titleEm: 'вашия собствен хардуер.',
       lede: 'Личен AI асистент. Помощ на екрана за всяка програма. Касата, наличностите и клиентският картон, с които се движи един бизнес. Направени като едно семейство, така че тези, които изберете, вече се познават.',
       seeLine: 'Вижте инструментите',
       talk: 'Свържете се с нас',
     },
     people: {
       eyebrow: 'За хора',
-      title: 'За човека пред екрана.',
+      title: 'Приложения за човека пред екрана',
       lede: 'Единият пази работата ви на вашата машина. Другият прави всяка програма по-лесна, отколкото е замислена. Никой от двата не изисква да променяте начина, по който вече работите.',
     },
     business: {
       eyebrow: 'За бизнеса',
-      title: 'За бизнеса, който работи с тях.',
+      title: 'Софтуер, с който работи бизнесът',
       lede: 'Продавайте, следете какво остава и помнете кой го е купил. Три инструмента върху един регистър, за да не се разминават касата и счетоводството.',
     },
     one: {

@@ -17,9 +17,16 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const product = ALL.find((entry) => entry.slug === slug);
   if (!product) return {};
   return {
-    title: product.name,
-    description: product.tagline,
+    title: `${product.name} — ${product.hook}`,
+    // The summary is a complete, quotable answer to "what is this"; the
+    // tagline alone is too short to be useful in a result or to an assistant.
+    description: product.summary,
     alternates: { canonical: `/products/${product.slug}` },
+    openGraph: {
+      title: `${product.name} — ${product.hook}`,
+      description: product.summary,
+      type: 'website',
+    },
   };
 }
 
@@ -30,8 +37,25 @@ export default async function ProductPage({ params }: Params) {
 
   const others = ALL.filter((entry) => entry.slug !== product.slug).slice(0, 3);
 
+  // Schema.org so a search result or an assistant can read the facts rather
+  // than infer them from prose.
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: product.name,
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: product.platform,
+    description: product.summary,
+    featureList: product.capabilities,
+    publisher: { '@type': 'Organization', name: 'Inkblot Studio', url: 'https://inkblotstudio.eu' },
+  };
+
   return (
     <article className="pp" style={{ ['--accent' as string]: product.accent }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       {/* The hook does the selling; the name is just the label on it. */}
       <header className="pp__hero">
         <ProductMark glyph={product.glyph} accent={product.accent} size={96} />
@@ -49,12 +73,13 @@ export default async function ProductPage({ params }: Params) {
 
       {/* One concrete moment beats three paragraphs of capability. */}
       <section className="pp__moment">
-        <p className="pp__momentLabel">The moment it earns its keep</p>
+        <h2 className="pp__momentLabel">What it is for</h2>
         <p className="pp__momentText">{product.useCase}</p>
       </section>
 
       <section className="pp__body">
         <p className="pp__summary">{product.summary}</p>
+        <h2 className="cw-sr-only">What {product.name} does</h2>
         <ul className="pp__caps">
           {product.capabilities.map((capability) => (
             <li key={capability}>{capability}</li>
@@ -63,17 +88,18 @@ export default async function ProductPage({ params }: Params) {
       </section>
 
       <section className="pp__who">
-        <p className="pp__momentLabel">Who it is for</p>
+        <h2 className="pp__momentLabel">Who uses it</h2>
         <p className="pp__whoText">{product.audience}</p>
       </section>
 
       <footer className="pp__end">
-        <h2 className="pp__endTitle">{product.hook}</h2>
+        <h2 className="pp__endTitle">Get {product.name}</h2>
         <Link href={product.cta.href} className="pp__cta">
           {product.cta.label}
         </Link>
       </footer>
 
+      <h2 className="cw-sr-only">Other Citron products</h2>
       <nav className="pp__next" aria-label="Other products">
         {others.map((other) => (
           <Link
