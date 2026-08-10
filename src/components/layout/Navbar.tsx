@@ -84,7 +84,7 @@ export function Navbar() {
             href={user ? '/products' : identityUrl('signup')}
             className="btn btn-primary hidden h-10 pl-5 pr-1.5 text-[0.8125rem] sm:inline-flex"
           >
-            {user ? 'Upgrade' : 'Start free trial'}
+            {user ? 'Upgrade' : 'Download'}
             <span className="btn-orb">
               <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
             </span>
@@ -157,7 +157,7 @@ export function Navbar() {
                 onClick={close}
                 className="btn btn-primary h-13 w-full py-3.5 pl-6 pr-2 text-[0.9375rem]"
               >
-                {user ? 'Upgrade' : 'Start free trial'}
+                {user ? 'Upgrade' : 'Download'}
                 <span className="btn-orb">
                   <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
                 </span>

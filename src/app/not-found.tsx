@@ -32,7 +32,7 @@ export default function NotFound() {
             Back to home
           </Link>
           <Link href="/demo" className="btn btn-secondary h-12 px-7 text-[0.9rem]">
-            Book a demo
+            See the products
           </Link>
         </div>
       </div>

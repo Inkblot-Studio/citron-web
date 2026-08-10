@@ -449,20 +449,20 @@ export function FinalCtaSection() {
               Your business, running on <span className="gradient-amber">one intelligence.</span>
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-[1rem] leading-relaxed text-cine-dim">
-              Start free today, or talk to us about rolling Citron out across your organization.
+              Install the launcher and the apps you are entitled to are a click away. The business tools we set up with you.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <a
                 href={identityUrl('signup')}
                 className="btn btn-primary h-[3.25rem] pl-7 pr-2 text-[0.9875rem]"
               >
-                Start free trial
+                Download the launcher
                 <span className="btn-orb">
                   <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
                 </span>
               </a>
               <Link href="/demo" className="btn btn-secondary h-[3.25rem] px-7 text-[0.9875rem]">
-                Book a demo
+                Talk to us
               </Link>
             </div>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[0.8125rem] text-cine-faint">

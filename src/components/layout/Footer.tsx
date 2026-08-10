@@ -14,9 +14,9 @@ const COLUMNS: { title: string; links: { label: string; href: string; external?:
   {
     title: 'Get started',
     links: [
-      { label: 'Start free trial', href: identityUrl('signup'), external: true },
+      { label: 'Download', href: '/download' },
       { label: 'Log in', href: identityUrl('login'), external: true },
-      { label: 'Book a demo', href: '/demo' },
+      { label: 'Talk to us', href: '/demo' },
       { label: 'Your account', href: '/account' },
     ],
   },

@@ -124,7 +124,7 @@ export default function SolutionsPage() {
               maps to it.
             </p>
             <Link href="/demo" className="btn btn-primary mt-9 h-[3.25rem] pl-7 pr-2 text-[0.9875rem]">
-              Book a demo
+              Talk to us
               <span className="btn-orb">
                 <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
               </span>

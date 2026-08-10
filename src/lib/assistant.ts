@@ -59,7 +59,7 @@ Rules:
 - Answer only from the product knowledge below. If you don't know something, say so and offer the sales email or a demo.
 - Never invent prices, features, discounts, or commitments.
 - Keep answers short (2-4 sentences) and conversational. Use plain text, no markdown headers.
-- Guide toward the next step when natural: start a free trial (signup), see /products, or book a /demo for B2B evaluations.
+- Guide toward the next step when natural: download the launcher (/download), see /products, or leave a number at /demo for the business tools.
 - If asked about competitors, be fair and focus on Citron's strengths: one unified system, unlimited private local AI, hosted frontier models via credits.
 
 ${PRODUCT_KNOWLEDGE}`;
@@ -79,7 +79,7 @@ const DEFAULT_SUGGESTIONS: AssistantSuggestion[] = [
   { label: 'What does Citron cost?' },
   { label: 'How do AI credits work?' },
   { label: 'What’s included?' },
-  { label: 'Book a demo', href: '/demo' },
+  { label: 'Talk to us', href: '/demo' },
 ];
 
 type Intent = {
@@ -105,7 +105,7 @@ const INTENTS: Intent[] = [
     suggestions: [
       { label: 'See credit packs', href: '/pricing#credits' },
       { label: 'What does Citron cost?' },
-      { label: 'Start free trial' },
+      { label: 'Download the launcher', href: '/download' },
     ],
   },
   {
@@ -113,8 +113,8 @@ const INTENTS: Intent[] = [
     reply: () =>
       'You can start a free 14-day trial of Starter or Growth — no credit card required. Most teams are fully live in under a day since there’s no integration project. Want me to point you to signup?',
     suggestions: [
-      { label: 'Start free trial', href: `${siteConfig.identity.url}/signup` },
-      { label: 'Book a demo', href: '/demo' },
+      { label: 'Download the launcher', href: '/download' },
+      { label: 'Talk to us', href: '/demo' },
       { label: 'What’s included?' },
     ],
   },
@@ -123,7 +123,7 @@ const INTENTS: Intent[] = [
     reply: () =>
       `Happy to set that up — we do a focused 30-minute walkthrough mapped to how your team actually works. Book directly at /demo, or email ${siteConfig.contact.sales} for enterprise procurement questions.`,
     suggestions: [
-      { label: 'Book a demo', href: '/demo' },
+      { label: 'Talk to us', href: '/demo' },
       { label: 'What does Citron cost?' },
     ],
   },
@@ -142,7 +142,7 @@ const INTENTS: Intent[] = [
       'Your data stays yours: encrypted in transit and at rest, isolated per tenant, and never used to train models shared with other companies. Local Citron AI runs privately with unlimited usage. Enterprise plans add SSO/SCIM, audit logs, custom AI models, and signed DPAs.',
     suggestions: [
       { label: 'Enterprise plan', href: '/pricing' },
-      { label: 'Book a demo', href: '/demo' },
+      { label: 'Talk to us', href: '/demo' },
     ],
   },
   {
@@ -151,7 +151,7 @@ const INTENTS: Intent[] = [
       `Two ways to save right now: annual billing is ${ANNUAL_DISCOUNT_LABEL} versus monthly, and our launch offer gives 20% off your first 3 months with code ${launchOffer.code} at checkout.`,
     suggestions: [
       { label: 'See plans', href: '/pricing' },
-      { label: 'Start free trial', href: `${siteConfig.identity.url}/signup` },
+      { label: 'Download the launcher', href: '/download' },
     ],
   },
   {
@@ -160,7 +160,7 @@ const INTENTS: Intent[] = [
       'You can upgrade, downgrade, or cancel anytime — changes are prorated and take effect immediately, managed from your account’s billing page. No lock-in.',
     suggestions: [
       { label: 'What does Citron cost?' },
-      { label: 'Start free trial', href: `${siteConfig.identity.url}/signup` },
+      { label: 'Download the launcher', href: '/download' },
     ],
   },
   {

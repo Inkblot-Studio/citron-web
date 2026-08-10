@@ -65,7 +65,7 @@ export function SalesAssistant() {
         {
           role: 'assistant',
           content: 'Sorry — I hit a snag. Try again, or book a demo and we’ll answer everything live.',
-          suggestions: [{ label: 'Book a demo', href: '/demo' }],
+          suggestions: [{ label: 'See the products', href: '/products' }],
         },
       ]);
     } finally {

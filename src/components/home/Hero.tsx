@@ -59,20 +59,20 @@ export function Hero() {
                 href={identityUrl('signup')}
                 className="btn btn-primary h-[3.25rem] pl-7 pr-2 text-[0.9875rem]"
               >
-                Start free trial
+                Download the launcher
                 <span className="btn-orb">
                   <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
                 </span>
               </a>
               <Link href="/demo" className="btn btn-secondary h-[3.25rem] px-7 text-[0.9875rem]">
-                Book a demo
+                Talk to us
               </Link>
             </div>
           </Reveal>
 
           <Reveal delay={0.24}>
             <p className="mt-6 text-[0.8125rem] text-cine-faint">
-              14-day free trial · No credit card required · Live in under a day
+              Free launcher · Runs on your own hardware · Nothing leaves the machine
             </p>
           </Reveal>
         </div>
