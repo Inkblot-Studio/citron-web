@@ -899,3 +899,153 @@
   display: inline-block;
   margin-bottom: 0.6rem;
 }
+
+/* ── inquiry ──────────────────────────────────────────────────────────────
+ * A name and a number is the whole ask. The calendar is the second option,
+ * for people who would rather choose the moment themselves.
+ */
+
+.cw-inq {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.75rem;
+  border: 1px solid var(--c-border, #dcd8d1);
+  border-radius: 18px;
+  background: var(--c-surface, #fff);
+}
+
+.cw-inq__modes {
+  display: flex;
+  padding: 3px;
+  border: 1px solid var(--c-border, #dcd8d1);
+  border-radius: 999px;
+}
+
+.cw-inq__mode {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--c-text-muted, #6f6a62);
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.cw-inq__mode[aria-pressed='true'] {
+  background: var(--c-ink, #14120f);
+  color: var(--c-paper, #f7f6f4);
+}
+
+.cw-inq__lede {
+  margin: 0;
+  color: var(--c-text-muted, #6f6a62);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.cw-inq__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.cw-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cw-field__label {
+  color: var(--c-text-muted, #8a8378);
+  font-family: var(--c-font-mono, ui-monospace, monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cw-field__input {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--c-border, #dcd8d1);
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.cw-field__input:focus-visible {
+  outline: 2px solid var(--c-ink, #14120f);
+  outline-offset: 1px;
+}
+
+.cw-inq__pick {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.cw-inq__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.cw-inq__option {
+  min-inline-size: 4rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--c-border, #dcd8d1);
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.cw-inq__option[aria-pressed='true'] {
+  border-color: var(--c-ink, #14120f);
+  background: color-mix(in srgb, #14120f 5%, transparent);
+}
+
+.cw-inq__weekday {
+  display: block;
+  color: var(--c-text-muted, #8a8378);
+  font-size: 0.7rem;
+}
+
+.cw-inq__date {
+  display: block;
+  font-size: 1.05rem;
+}
+
+.cw-inq__submit {
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.cw-inq__submit:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.cw-inq__note {
+  margin: 0;
+  color: var(--c-text-muted, #8a8378);
+  font-size: 0.78rem;
+}
+
+.cw-inq--done {
+  align-items: flex-start;
+}
+
+.cw-inq__title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+}

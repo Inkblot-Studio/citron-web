@@ -1,176 +1,190 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Clock } from 'lucide-react';
 
-const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL;
+/**
+ * Leave a number, or book a time.
+ *
+ * Asking someone to pick a slot before they have spoken to anyone is a lot of
+ * commitment for a first step, and most people bounce off a calendar. So the
+ * default is the smallest thing that still lets us call back — a name and a
+ * phone number — and the calendar is there for the people who would rather
+ * choose the moment themselves.
+ */
 
-/** The next `count` weekdays, starting tomorrow — the offer never goes stale. */
-function nextBusinessDays(count: number) {
-  const out: { label: string; date: string }[] = [];
-  const d = new Date();
-  d.setDate(d.getDate() + 1);
-  while (out.length < count) {
-    const dow = d.getDay();
-    if (dow !== 0 && dow !== 6) {
-      out.push({
-        label: d.toLocaleDateString('en-US', { weekday: 'short' }),
-        date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      });
-    }
-    d.setDate(d.getDate() + 1);
+type Mode = 'callback' | 'booking';
+
+const DAY_COUNT = 4;
+const TIMES = ['9:00', '10:30', '13:00', '14:30', '16:00'];
+
+function nextWeekdays(count: number): { label: string; date: string }[] {
+  const days: { label: string; date: string }[] = [];
+  const cursor = new Date();
+  while (days.length < count) {
+    cursor.setDate(cursor.getDate() + 1);
+    const weekday = cursor.getDay();
+    if (weekday === 0 || weekday === 6) continue;
+    days.push({
+      label: cursor.toLocaleDateString('en-GB', { weekday: 'short' }),
+      date: String(cursor.getDate()),
+    });
   }
-  return out;
+  return days;
 }
 
-const times = ['9:00 AM', '10:30 AM', '1:00 PM', '2:30 PM', '4:00 PM'];
-
-/** Real Calendly inline embed when configured, with a graceful native fallback. */
 export function DemoScheduler() {
-  const calRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!CALENDLY_URL || !calRef.current) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://assets.calendly.com/assets/external/widget.css';
-    document.head.appendChild(link);
-    const script = document.createElement('script');
-    script.src = 'https://assets.calendly.com/assets/external/widget.js';
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      link.remove();
-      script.remove();
-    };
-  }, []);
-
-  if (CALENDLY_URL) {
-    return (
-      <div
-        ref={calRef}
-        className="calendly-inline-widget min-h-[680px] overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--surface-card)]"
-        data-url={CALENDLY_URL}
-      />
-    );
-  }
-
-  return <FallbackScheduler />;
-}
-
-function FallbackScheduler() {
-  // Computed after mount: the page is statically prerendered, so baking dates
-  // into the HTML would go stale and mismatch on hydration.
+  const [mode, setMode] = useState<Mode>('callback');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
   const [days, setDays] = useState<{ label: string; date: string }[] | null>(null);
   const [day, setDay] = useState(0);
   const [time, setTime] = useState<string | null>(null);
-  const [confirmed, setConfirmed] = useState(false);
+  const [sent, setSent] = useState(false);
+  const firstField = useRef<HTMLInputElement>(null);
 
-  useEffect(() => setDays(nextBusinessDays(4)), []);
+  // Dates are worked out on the client so the markup can stay static.
+  useEffect(() => setDays(nextWeekdays(DAY_COUNT)), []);
+
+  const ready =
+    firstName.trim() !== '' &&
+    lastName.trim() !== '' &&
+    phone.trim().length >= 6 &&
+    (mode === 'callback' || time !== null);
+
+  if (sent) {
+    return (
+      <div className="cw-inq cw-inq--done" role="status">
+        <h3 className="cw-inq__title">Thank you — we have it.</h3>
+        <p className="cw-inq__lede">
+          {mode === 'callback'
+            ? `We will call ${firstName} on ${phone}, usually the same working day.`
+            : `We will call ${firstName} on ${phone} at ${time}. If anything changes, that number reaches us too.`}
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[var(--shadow-md)] sm:p-8">
-      <AnimatePresence mode="wait">
-        {confirmed ? (
-          <motion.div
-            key="confirmed"
-            role="status"
-            aria-live="polite"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex min-h-[440px] flex-col items-center justify-center text-center"
-          >
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-success)]/15 text-[var(--color-success)]">
-              <Check className="h-7 w-7" strokeWidth={2.5} />
-            </span>
-            <h3 className="mt-6 text-[1.5rem] font-semibold text-[var(--text-primary)]">You’re booked</h3>
-            <p className="mt-2 max-w-sm text-[0.9375rem] text-[var(--text-secondary)]">
-              We’ve reserved <strong className="text-[var(--text-primary)]">{days?.[day]?.date} at {time}</strong>.
-              A calendar invite and confirmation are on their way.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                setConfirmed(false);
-                setTime(null);
-              }}
-              className="mt-6 text-[0.875rem] font-medium text-[var(--accent-hover)] hover:underline"
-            >
-              Pick a different time
-            </button>
-          </motion.div>
-        ) : (
-          <motion.div key="picker" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div className="flex items-center gap-2 text-[0.875rem] font-medium text-[var(--text-secondary)]">
-              <Clock className="h-4 w-4 text-[var(--accent)]" />
-              30-minute walkthrough · with a product specialist
-            </div>
+    <form
+      className="cw-inq"
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (ready) setSent(true);
+      }}
+    >
+      <div className="cw-inq__modes" role="group" aria-label="How to reach you">
+        <button
+          type="button"
+          className="cw-inq__mode"
+          aria-pressed={mode === 'callback'}
+          onClick={() => {
+            setMode('callback');
+            firstField.current?.focus();
+          }}
+        >
+          Ask us to call
+        </button>
+        <button
+          type="button"
+          className="cw-inq__mode"
+          aria-pressed={mode === 'booking'}
+          onClick={() => setMode('booking')}
+        >
+          Pick a time
+        </button>
+      </div>
 
-            <div className="mt-6">
-              <span className="mb-2 block text-[0.8125rem] font-medium text-[var(--text-secondary)]">
-                Select a day
-              </span>
-              <div className="grid grid-cols-4 gap-2">
-                {days
-                  ? days.map((d, i) => (
-                      <button
-                        key={d.date}
-                        type="button"
-                        onClick={() => setDay(i)}
-                        className={
-                          i === day
-                            ? 'flex flex-col items-center rounded-[var(--radius-md)] border border-[var(--accent)] bg-[var(--accent)]/10 py-3'
-                            : 'flex flex-col items-center rounded-[var(--radius-md)] border border-[var(--border-default)] py-3 transition-[border-color,transform] duration-150 hover:border-[var(--border-strong)] active:scale-[0.97]'
-                        }
-                      >
-                        <span className="text-[0.75rem] text-[var(--text-muted)]">{d.label}</span>
-                        <span className="text-[0.875rem] font-semibold text-[var(--text-primary)]">{d.date.split(' ')[1]}</span>
-                      </button>
-                    ))
-                  : Array.from({ length: 4 }).map((_, i) => (
-                      <div
-                        key={i}
-                        aria-hidden
-                        className="h-[3.85rem] animate-pulse rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-tertiary)]"
-                      />
-                    ))}
-              </div>
-            </div>
+      <p className="cw-inq__lede">
+        {mode === 'callback'
+          ? 'Leave a name and a number. We call back, usually the same working day — no calendar, no form to fill in twice.'
+          : 'Choose when suits, and we will call then.'}
+      </p>
 
-            <div className="mt-6">
-              <span className="mb-2 block text-[0.8125rem] font-medium text-[var(--text-secondary)]">
-                Available times
-              </span>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {times.map((t) => (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => setTime(t)}
-                    className={
-                      time === t
-                        ? 'rounded-[var(--radius-md)] border border-[var(--accent)] bg-[var(--accent)]/10 py-2.5 text-[0.875rem] font-medium text-[var(--accent-hover)]'
-                        : 'rounded-[var(--radius-md)] border border-[var(--border-default)] py-2.5 text-[0.875rem] font-medium text-[var(--text-secondary)] transition-[border-color,color] duration-150 hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] active:scale-[0.97]'
-                    }
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-            </div>
+      <div className="cw-inq__row">
+        <label className="cw-field">
+          <span className="cw-field__label">First name</span>
+          <input
+            ref={firstField}
+            className="cw-field__input"
+            value={firstName}
+            onChange={(event) => setFirstName(event.target.value)}
+            autoComplete="given-name"
+            required
+          />
+        </label>
+        <label className="cw-field">
+          <span className="cw-field__label">Last name</span>
+          <input
+            className="cw-field__input"
+            value={lastName}
+            onChange={(event) => setLastName(event.target.value)}
+            autoComplete="family-name"
+            required
+          />
+        </label>
+      </div>
 
-            <button
-              type="button"
-              disabled={!time || !days}
-              onClick={() => setConfirmed(true)}
-              className="btn btn-primary mt-7 h-12 w-full text-[0.9rem] disabled:cursor-not-allowed"
-            >
-              {time && days ? `Confirm ${days[day].date} at ${time}` : 'Select a time to continue'}
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      <label className="cw-field">
+        <span className="cw-field__label">Phone</span>
+        <input
+          className="cw-field__input"
+          type="tel"
+          inputMode="tel"
+          value={phone}
+          onChange={(event) => setPhone(event.target.value)}
+          autoComplete="tel"
+          placeholder="+359"
+          required
+        />
+      </label>
+
+      {mode === 'booking' ? (
+        <>
+          <fieldset className="cw-inq__pick">
+            <legend className="cw-field__label">Day</legend>
+            <div className="cw-inq__options">
+              {(days ?? []).map((entry, index) => (
+                <button
+                  key={entry.date}
+                  type="button"
+                  className="cw-inq__option"
+                  aria-pressed={index === day}
+                  onClick={() => setDay(index)}
+                >
+                  <span className="cw-inq__weekday">{entry.label}</span>
+                  <span className="cw-inq__date">{entry.date}</span>
+                </button>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset className="cw-inq__pick">
+            <legend className="cw-field__label">Time</legend>
+            <div className="cw-inq__options">
+              {TIMES.map((slot) => (
+                <button
+                  key={slot}
+                  type="button"
+                  className="cw-inq__option"
+                  aria-pressed={slot === time}
+                  onClick={() => setTime(slot)}
+                >
+                  {slot}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        </>
+      ) : null}
+
+      <button type="submit" className="cw-btn cw-btn--primary cw-inq__submit" disabled={!ready}>
+        {mode === 'callback' ? 'Send my number' : 'Book the call'}
+      </button>
+
+      <p className="cw-inq__note">
+        We use the number to call you about this and nothing else.
+      </p>
+    </form>
   );
 }

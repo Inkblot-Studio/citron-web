@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Check, ShieldCheck, Star } from 'lucide-react';
 import { DemoScheduler } from '@/components/sections/DemoScheduler';
 import { Reveal } from '@/components/ui/Reveal';
-import { Mascot } from '@/components/ui/Logo';
 import { testimonials, stats } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -55,16 +54,9 @@ export default function DemoPage() {
       <div className="mx-auto w-full max-w-[1100px] px-5 sm:px-8 lg:px-10">
         {/* header */}
         <div className="mx-auto max-w-2xl text-center">
-          <Reveal>
-            <span
-              className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--cine-ink)] text-[var(--cine-amber-soft)] shadow-[0_12px_32px_-12px_rgba(29,28,25,0.5)]"
-            >
-              <Mascot className="h-7 w-7" animate={false} />
-            </span>
-          </Reveal>
           <Reveal delay={0.05}>
             <p>
-              <span className="eyebrow-pill">Book a demo</span>
+              <span className="eyebrow-pill">Talk to us</span>
             </p>
           </Reveal>
           <Reveal delay={0.1}>
