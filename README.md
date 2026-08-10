@@ -35,11 +35,26 @@ A conversion-focused site handling the full self-serve funnel: marketing pages, 
 
 - Node.js **18+**
 - npm
+- Optional: [Stripe CLI](https://stripe.com/docs/stripe-cli) for local webhooks
+
+## Quick start (hillcode)
+
+Zero-dep TUI for day-to-day work:
+
+```bash
+npm run hc          # interactive menu
+npm run hillcode -- --cmd setup
+npm run hillcode -- --cmd doctor
+npm run hillcode -- --cmd dev
+```
+
+Menu: **0** setup · **1** dev · **2** build · **3** start · **4** lint · **5** doctor · **6** stripe listen
 
 ## Scripts
 
 | Command | Description |
 |---------|-------------|
+| `npm run hc` / `npm run hillcode` | Hillcode TUI (or `-- --cmd <name>`) |
 | `npm run dev` | Dev server at `http://localhost:3000` |
 | `npm run build` | Production build |
 | `npm run start` | Serve production build |

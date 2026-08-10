@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: 'Citron',
-  tagline: 'The Business Operating System',
+  tagline: 'Tools that run on your own hardware',
   description:
-    'Your company. One intelligence. Citron replaces dozens of disconnected tools with a single AI-powered operating system: CRM, marketing, automations, finance, and AI agents, unified.',
+    'A private AI workspace, on-screen guidance for any app, and the point of sale, stock and customer records a business runs on. One subscription opens all of them, and they run on your own hardware.',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://citronos.com',
   ogImage: '/og.png',
   identity: {

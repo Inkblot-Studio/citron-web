@@ -1,25 +1,18 @@
 import Link from 'next/link';
-import { PRODUCTS, SEGMENT_LABEL, STAGE_LABEL, type Segment } from '@/lib/products';
+import { PRODUCTS, STAGE_LABEL, type Segment } from '@/lib/products';
 import { ProductMark } from './ProductMark';
+import { getDictionary, type Locale } from '@/i18n/dictionaries';
 
-const INTRO: Record<Segment, string> = {
-  people:
-    'Two apps for the person in front of the screen. One keeps your work on your own machine; the other makes any software easier to use than it was designed to be.',
-  business:
-    'The system a hospitality business runs on. One ledger underneath the till, the stock and the guest, so nothing has to be reconciled by hand at the end of the month.',
-};
-
-function Group({ segment }: { segment: Segment }) {
+function Group({ segment, locale }: { segment: Segment; locale: Locale }) {
   const products = PRODUCTS.filter((product) => product.segments.includes(segment));
+  const t = getDictionary(locale)[segment];
 
   return (
     <section className="cw-line" id={segment}>
       <header className="cw-line__head">
-        <p className="cw-eyebrow">{SEGMENT_LABEL[segment]}</p>
-        <h2 className="cw-line__title">
-          {segment === 'people' ? 'For the person using the computer.' : 'For the business running on it.'}
-        </h2>
-        <p className="cw-line__lede">{INTRO[segment]}</p>
+        <p className="cw-eyebrow">{t.eyebrow}</p>
+        <h2 className="cw-line__title">{t.title}</h2>
+        <p className="cw-line__lede">{t.lede}</p>
       </header>
 
       <ul className="cw-grid">
@@ -48,11 +41,11 @@ function Group({ segment }: { segment: Segment }) {
   );
 }
 
-export function SegmentedLine() {
+export function SegmentedLine({ locale = 'en' }: { locale?: Locale }) {
   return (
     <>
-      <Group segment="people" />
-      <Group segment="business" />
+      <Group segment="people" locale={locale} />
+      <Group segment="business" locale={locale} />
     </>
   );
 }

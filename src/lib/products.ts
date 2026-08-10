@@ -53,7 +53,7 @@ export const PRODUCTS: Product[] = [
     audience:
       'Anyone who cannot send their work to somebody else\u2019s cloud \u2014 lawyers, accountants, clinicians, researchers, and the freelancers who sign the same confidentiality clauses.',
     useCase:
-      'A client contract, a patient note or an unreleased set of accounts needs summarising, and it must not leave the building to do it.',
+      'A client contract, a patient note or an unreleased set of figures needs reading and summarising, and it must not leave the building to do it.',
     capabilities: [
       'Local-first — models run on your own machine',
       'Documents, email, notes and calendar in one place',
@@ -84,64 +84,64 @@ export const PRODUCTS: Product[] = [
   {
     slug: 'erp',
     name: 'Citron ERP',
-    tagline: 'Stock, accounting and compliance underneath it all.',
+    tagline: 'Stock, invoicing and the books, without the spreadsheet in between.',
     summary:
-      'The ledger the rest of the line writes into. Recipes deplete stock as orders land, journals post themselves, and the fiscal side is built for Bulgarian requirements rather than bolted on afterwards.',
+      'The ledger everything else writes into. Stock moves as things are sold, journals post themselves, and the fiscal side is built for Bulgarian requirements rather than bolted on afterwards.',
     accent: '#5B8DEF',
     glyph: 'ledger',
     platform: 'Web',
     stage: 'preview',
     segments: ['business'],
     audience:
-      'Owners and back-office of hospitality groups \u2014 the person who signs off stock, the bookkeeper who closes the month, and the accountant who has to defend it.',
+      'Any business that holds stock and files returns \u2014 the owner who signs it off, the bookkeeper who closes the month, and the accountant who has to defend it.',
     useCase:
       'Month end. Stock, sales and the VAT ledger have to agree without a week of spreadsheets stitched together by hand.',
     capabilities: [
-      'Real-time inventory depletion from recipes',
+      'Stock depletes in real time as items are sold',
       'Automated journal posting, VAT ledgers, fiscal device drivers',
-      'Multi-venue, multi-terminal from the first day',
+      'Multi-site and multi-terminal from the first day',
     ],
   },
   {
     slug: 'pos',
     name: 'Citron POS',
-    tagline: 'Floor to payment, offline-first, on any terminal.',
+    tagline: 'Take payment anywhere, even with the internet down.',
     summary:
-      'The till, the floor plan and the kitchen display in one offline-first app. It keeps taking orders when the network drops and reconciles when it returns, because a restaurant does not stop because a router did.',
+      'The till, the order and the counter display in one offline-first app. It keeps selling when the network drops and reconciles when it returns, because trading does not stop because a router did.',
     accent: '#3FB984',
     glyph: 'card',
     platform: 'iPad · Web',
     stage: 'preview',
     segments: ['business'],
     audience:
-      'Restaurants, bars and caf\u00e9s \u2014 the floor staff who touch it two hundred times a shift, and the manager who counts the drawer at the end of it.',
+      'Anyone who takes payment face to face \u2014 the staff who touch it two hundred times a shift, and the manager who counts the drawer at the end of it.',
     useCase:
-      'Friday service, full room, and the internet drops. Orders keep going through and reconcile when the line comes back.',
+      'Saturday, queue at the counter, and the internet drops. Sales keep going through and reconcile when the line comes back.',
     capabilities: [
       'Offline-first — service continues without a network',
-      'Floor plan, order flow, split payments, kitchen display',
+      'Order flow, split payments, counter and kitchen displays',
       'Guest and loyalty attached at the point of sale',
     ],
   },
   {
     slug: 'crm',
     name: 'Citron CRM',
-    tagline: 'One guest record, and everything they ever ordered.',
+    tagline: 'One customer record, and everything they ever bought.',
     summary:
-      'Every visit, every order and every loyalty point against a single guest, joined to the POS rather than kept alongside it. Reservations and events run from the same record.',
+      'Every visit, every order and every loyalty point against one customer, joined to the till rather than kept beside it. Bookings run from the same record.',
     accent: '#E07A5F',
     glyph: 'person',
     platform: 'Web',
     stage: 'building',
     segments: ['business'],
     audience:
-      'Whoever owns the guest relationship \u2014 the host stand, the marketing lead, the owner who still remembers regulars by name and wants the system to as well.',
+      'Whoever owns the customer relationship \u2014 the front desk, the marketing lead, the owner who remembers regulars by name and wants the system to as well.',
     useCase:
-      'A regular walks in. The table, the allergy, the usual order and the loyalty balance are on one screen before they sit down.',
+      'A regular walks in. Their history, their preferences and their loyalty balance are on screen before they reach the counter.',
     capabilities: [
-      'A unified guest record across venues',
-      'Loyalty ledger attached to real orders',
-      'Reservations and events on the same timeline',
+      'One customer record across every site',
+      'Loyalty attached to real orders, not a separate card scheme',
+      'Bookings and events on the same timeline',
     ],
   },
 ];
