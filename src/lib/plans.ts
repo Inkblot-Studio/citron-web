@@ -31,7 +31,7 @@ export const PLANS: Plan[] = [
     slug: 'personal',
     name: 'Citron One',
     who: 'One person, at home or self-employed.',
-    unit: 'per person, per month',
+    unit: 'per month',
     audience: 'people',
     answers: [
       { question: 'Is there a free tier?', answer: 'The launcher is free. The apps are the subscription.' },
@@ -50,21 +50,24 @@ export const PLANS: Plan[] = [
   {
     slug: 'business',
     name: 'Citron One for Business',
-    who: 'A venue, or a group of them.',
-    unit: 'per site, per month',
+    who: 'A business, and everyone who works in it.',
+    unit: 'per month',
     audience: 'business',
     answers: [
-      { question: 'Do you charge per employee?', answer: 'No. Staff accounts are unlimited — you are charged per site.' },
+      {
+        question: 'Do we pay twice for the personal apps?',
+        answer: 'No. Citron and Citron Guide are included for everyone on the team.',
+      },
+      { question: 'Do we pay per app?', answer: 'No. One subscription opens ERP, POS and CRM together.' },
       { question: 'What about setup?', answer: 'Quoted once, after we have seen how you work. No surprise onboarding fee.' },
-      { question: 'More than one site?', answer: 'Each site is priced the same, and the discount grows with the count.' },
       { question: 'Who owns the data?', answer: 'You do. It runs on your hardware and leaves with you if we part ways.' },
     ],
     includes: [
-      'Everything in Citron One, for every member of staff',
-      'Citron ERP — stock, accounting, VAT and fiscal compliance',
-      'Citron POS — floor, orders and payment on every terminal',
-      'Citron CRM — one guest record across the group',
-      'Unlimited staff accounts — priced by venue, not by headcount',
+      'Citron ERP — stock, invoicing, VAT and fiscal compliance',
+      'Citron POS — orders and payment on every terminal',
+      'Citron CRM — one customer record across the business',
+      'Citron and Citron Guide included for everyone on the team',
+      'Every future app for business, at no extra cost',
     ],
   },
 ];
@@ -93,7 +96,7 @@ export const DISCOUNTS: Discount[] = [
   {
     name: 'Schools and universities',
     who: 'Whole-institution access for teaching and administration.',
-    proof: 'A named contact at the institution. Priced per site.',
+    proof: 'A named contact at the institution.',
   },
   {
     name: 'Non-profits and charities',

@@ -5,7 +5,7 @@ import { DISCOUNTS, PLANS } from '@/lib/plans';
 export const metadata: Metadata = {
   title: 'Pricing',
   description:
-    'One subscription opens every Citron app. Priced per person for individuals and per site for business, with rates published before anyone is asked to pay.',
+    'One subscription opens every Citron app. The personal apps on their own, or the business tools with the personal ones included. Rates published before anyone is asked to pay.',
   alternates: { canonical: '/pricing' },
 };
 
@@ -15,14 +15,14 @@ const SEGMENTS = [
   {
     audience: 'people' as const,
     eyebrow: 'For people',
-    title: 'One person, every app.',
-    lede: 'For anyone whose work is their own — freelance, self-employed, or simply not willing to send what they do to somebody else’s server.',
+    title: 'The apps you use yourself.',
+    lede: 'Citron and Citron Guide — the two tools for the person at the screen. For anyone whose work is their own, or who simply is not willing to send it to somebody else’s server.',
   },
   {
     audience: 'business' as const,
     eyebrow: 'For business',
-    title: 'One site, everyone on it.',
-    lede: 'Priced by site rather than by head, so hiring another person never costs you another licence.',
+    title: 'The tools the business runs on — and the personal ones too.',
+    lede: 'ERP, POS and CRM together, with Citron and Citron Guide included for everyone on the team. Nothing bought twice.',
   },
 ];
 

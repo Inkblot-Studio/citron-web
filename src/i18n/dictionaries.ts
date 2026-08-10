@@ -47,7 +47,7 @@ export const DICTIONARIES: Record<Locale, Dictionary> = {
     one: {
       eyebrow: 'Citron One',
       title: 'One subscription. Every app.',
-      lede: 'Not a menu to assemble. One subscription opens everything we make for you, including the apps we have not shipped yet. No per-app licences, nothing withheld for a higher tier, and no meter running while you work.',
+      lede: 'Not a menu to assemble. The personal apps on their own, or the business tools with the personal ones included. No per-app licences, nothing withheld for a higher tier, and no meter running while you work.',
       whoPaysLess: 'Who pays less',
       discountLede: 'Learning on it, teaching on it, or just starting out — none of those should be the expensive case.',
       note: 'Rates are being set now and will be published before anyone is asked to pay. If you want to be told when they are,',
