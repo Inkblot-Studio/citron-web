@@ -1140,6 +1140,92 @@
   font-size: 0.7rem;
 }
 
+/* ── download page: live release ──────────────────────────────────────── */
+
+/* The other platforms sit quietly under the one we picked for this visitor. */
+.dl__others {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.25rem;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dl__others li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-family: var(--c-font-mono, ui-monospace, monospace);
+  font-size: 0.7rem;
+}
+
+.dl__others a {
+  color: var(--c-text-muted, #8a8378);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.dl__others a:hover {
+  color: var(--c-text, #14120f);
+  border-bottom-color: currentColor;
+}
+
+.dl__others span {
+  color: var(--c-border, #dcd8d1);
+}
+
+.dl__released,
+.dl__pending {
+  margin: 0.75rem 0 0;
+  color: var(--c-text-muted, #8a8378);
+  font-family: var(--c-font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+}
+
+.dl__pending {
+  margin-top: 1.5rem;
+}
+
+.dl__notes {
+  max-width: 46rem;
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.9rem;
+}
+
+.notes__heading {
+  margin: 0.6rem 0 0.1rem;
+  font-family: var(--c-font-mono, ui-monospace, monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.notes__bullet,
+.notes__line {
+  margin: 0;
+  color: var(--c-text-muted, #8a8378);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.notes__bullet {
+  padding-left: 1rem;
+  text-indent: -1rem;
+}
+
+.notes__bullet::before {
+  content: '— ';
+  color: var(--c-border, #dcd8d1);
+}
+
 /* A single concrete scene, given the weight of a pull quote. */
 .pp__moment {
   padding: clamp(2rem, 5vw, 3rem) 0;

@@ -10,6 +10,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: base, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${base}/pricing`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${base}/demo`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    // Linked from the navbar, the footer and every product CTA, so it belongs here.
+    { url: `${base}/download`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
   ];
 
   for (const doc of legalDocs) {

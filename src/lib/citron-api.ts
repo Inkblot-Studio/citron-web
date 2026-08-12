@@ -36,6 +36,52 @@ async function call<T>(path: string, init?: RequestInit): Promise<T | null> {
   }
 }
 
+/**
+ * The release feed is public — citron-api serves /v1/releases* without a bearer
+ * token so the desktop launcher can read it with no credential of its own. That
+ * means it needs its own fetch: call() refuses to run without CITRON_API_TOKEN,
+ * which would leave the download page blank on a deployment that only has a URL.
+ */
+async function callPublic<T>(path: string): Promise<T | null> {
+  if (!BASE) return null;
+  try {
+    const res = await fetch(`${BASE}${path}`, { cache: 'no-store' });
+    if (!res.ok) {
+      console.error(`[citron-api] ${path} -> ${res.status}`);
+      return null;
+    }
+    return (await res.json()) as T;
+  } catch (e) {
+    console.error(`[citron-api] ${path} failed:`, e);
+    return null;
+  }
+}
+
+/** One platform's build of a release. */
+export interface ReleaseAsset {
+  sizeBytes: number;
+  filename: string;
+}
+
+export interface LauncherRelease {
+  version: string;
+  publishedAt: string;
+  title: string;
+  /** Markdown, straight from the GitHub release body. */
+  notes: string;
+  platforms: Record<string, ReleaseAsset>;
+}
+
+/** Latest launcher build + its patch notes. null when unreleased or unreachable. */
+export async function fetchLauncherRelease(): Promise<LauncherRelease | null> {
+  return callPublic<LauncherRelease>('/v1/launcher');
+}
+
+/** Where a given platform's launcher installer is downloaded from. */
+export function launcherDownloadUrl(platform: string): string | null {
+  return BASE ? `${BASE}/v1/launcher/download/${platform}` : null;
+}
+
 /** UsageSummary for an account — same contract as src/lib/usage.ts. */
 export async function fetchUsageByOwner<T>(ownerEmail: string): Promise<T | null> {
   return call<T>(`/v1/usage/by-owner?owner_email=${encodeURIComponent(ownerEmail)}`);
